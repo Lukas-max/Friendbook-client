@@ -1,0 +1,10 @@
+<app-navbar></app-navbar>
+<div class="user-main-window">
+    <div class="list-left">
+        <div [routerLink]="['/user', 'starter', 'main-feed']">Start</div>
+        <div [routerLink]="['/user', 'starter', 'user-profile']">Profil</div>
+        <div [routerLink]="['/user', 'starter', 'options']">Opcje</div>
+        <div [routerLink]="['/']">Wyloguj się</div>
+    </div>
+    <router-outlet class="main-router"></router-outlet>
+</div>

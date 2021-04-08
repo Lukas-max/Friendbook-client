@@ -1,0 +1,11 @@
+<div *ngIf="response">
+    <p>ta da</p>
+</div>
+
+<div *ngIf="error">
+    <p>{{ message }}</p>
+</div>
+
+<ng-template *ngIf="!response">
+    <p>Czekam na odpowiedź z serwera</p>
+</ng-template>

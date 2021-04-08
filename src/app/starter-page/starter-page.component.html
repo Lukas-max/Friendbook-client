@@ -1,0 +1,6 @@
+<div class="starter-page-box">
+    <app-login></app-login>
+    <a href="#" (click)="register()">Zarejestruj się</a>
+</div>
+
+<app-register *ngIf="registerAttempt" (closeComponent)="closeRegisterWindow()"></app-register>
