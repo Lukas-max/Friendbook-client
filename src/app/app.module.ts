@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { StarterPageComponent } from './starter-page/starter-page.component';
 import { UsersMainComponent } from './users-main/users-main.component';
@@ -15,6 +15,7 @@ import { NavbarComponent } from './core/navbar/navbar.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { ConfirmRegistrationComponent } from './components/auth/confirm-registration/confirm-registration.component';
 import { LoginComponent } from './components/auth/login/login.component';
+import { AuthorizationInterceptor } from './interceptors/authorization.interceptor';
 
 
 const routes: Routes = [
@@ -51,7 +52,9 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthorizationInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

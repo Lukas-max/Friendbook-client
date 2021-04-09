@@ -1,4 +1,4 @@
-<div class="form-login">
+<div class="form-login" *ngIf="!isLogged()">
     <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
         <div class="mb-3">
             <label for="email" class="form-label">Email użytkownika</label>
@@ -10,4 +10,8 @@
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+</div>
+
+<div *ngIf="isLogged()">
+    <button class="btn btn-warning" (click)="logout()">Wyloguj się</button>
 </div>
