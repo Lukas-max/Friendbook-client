@@ -16,6 +16,8 @@ import { RegisterComponent } from './components/auth/register/register.component
 import { ConfirmRegistrationComponent } from './components/auth/confirm-registration/confirm-registration.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { AuthorizationInterceptor } from './interceptors/authorization.interceptor';
+import { UserSearchComponent } from './users-main/user-search/user-search.component';
+import { AlienProfileComponent } from './users-main/alien-profile/alien-profile.component';
 
 
 const routes: Routes = [
@@ -24,6 +26,8 @@ const routes: Routes = [
       { path: 'main-feed', component: MainFeedComponent },
       { path: 'user-profile', component: UserProfileComponent },
       { path: 'options', component: OptionsComponent },
+      { path: 'user-search', component: UserSearchComponent },
+      { path: 'profile/:uuid', component: AlienProfileComponent }
     ]
   },
   { path: '', component: StarterPageComponent },
@@ -42,7 +46,9 @@ const routes: Routes = [
     NavbarComponent,
     RegisterComponent,
     ConfirmRegistrationComponent,
-    LoginComponent
+    LoginComponent,
+    UserSearchComponent,
+    AlienProfileComponent
   ],
   imports: [
     BrowserModule,

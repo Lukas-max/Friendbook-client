@@ -1,0 +1,13 @@
+.user-folders {
+    margin: 50px 100px;
+
+    .folder {
+        margin: 20px 20px;
+        cursor: pointer;
+
+        span {
+            font-weight: bolder;
+            text-transform: uppercase;
+        }
+    }
+}

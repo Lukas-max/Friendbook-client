@@ -1,0 +1,6 @@
+<div *ngIf="users">
+    <div *ngFor="let user of users, let i = index">
+        <div [routerLink]="['/user', 'starter', 'profile', user.userUUID]" [state]="{ user: user }">
+            {{ user.username }}</div>
+    </div>
+</div>

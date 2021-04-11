@@ -1,5 +1,6 @@
 export interface IUserDto {
     userId?: number;
+    userUUID?: string;
     username: string;
     email: string;
     password: string;

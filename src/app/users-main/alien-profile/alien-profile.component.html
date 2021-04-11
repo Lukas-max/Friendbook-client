@@ -1,0 +1,16 @@
+<div *ngIf="isUuid && user; else empty">
+    <p>{{ user.username}}</p>
+</div>
+
+<div *ngIf="folders" class="user-folders">
+    <span *ngFor="let folder of folders">
+        <span class="folder">
+            <img src="../../../assets/folder_icon128.png">
+            <span>{{ folder }}</span>
+        </span>
+    </span>
+</div>
+
+<ng-template #empty>
+    <p>Brak uuid uzytkownika</p>
+</ng-template>

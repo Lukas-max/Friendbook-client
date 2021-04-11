@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FileStorageService } from 'src/app/services/file-storage.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserProfileComponent implements OnInit {
 
-  constructor() { }
+  constructor(private fileStorageService: FileStorageService) { }
 
   ngOnInit(): void {
+    this.fileStorageService.getFolders().subscribe(data => console.log(data));
   }
 
 }
