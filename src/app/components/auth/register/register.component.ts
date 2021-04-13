@@ -35,7 +35,7 @@ export class RegisterComponent implements OnInit {
     const userDto: UserDto = new UserDto(
       this.form.value.username,
       this.form.value.email,
-      this.form.value.password
+      btoa(this.form.value.password)
     );
     this.accountService.register(userDto).subscribe(data => {
       this.sendingMail = true;

@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     const credentials = new LoginCredentials(
       this.form.value.email,
-      this.form.value.password);
+      btoa(this.form.value.password));
 
     this.authenticationService.login(credentials).subscribe((res) => {
       this.router.navigate(['/user', 'starter', 'main-feed']);

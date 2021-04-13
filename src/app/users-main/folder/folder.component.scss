@@ -1,0 +1,23 @@
+.files-tab {
+    margin: 50px;
+
+
+    .file-view {
+        display: inline-block;
+        margin: 5px;
+    }
+
+    img {
+        width: 300px;
+        transition: transform 0.4s;
+    }
+
+    img:hover {
+        transform: scale(1.1);
+    }
+
+    video {
+        height: 300px;
+    }
+
+}

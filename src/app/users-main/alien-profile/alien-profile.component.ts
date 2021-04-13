@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserDto } from 'src/app/model/userDto';
 import { map } from 'rxjs/operators';
 import { FileStorageService } from 'src/app/services/file-storage.service';
@@ -10,11 +10,14 @@ import { FileStorageService } from 'src/app/services/file-storage.service';
   styleUrls: ['./alien-profile.component.scss']
 })
 export class AlienProfileComponent implements OnInit {
-  isUuid: boolean = false;
   user: UserDto;
   folders: string[] = [];
+  userUUID: string;
 
-  constructor(private route: ActivatedRoute, private fileStorageService: FileStorageService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private fileStorageService: FileStorageService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.init();
@@ -25,9 +28,9 @@ export class AlienProfileComponent implements OnInit {
       .subscribe(data => {
         this.user = data;
       });
-    this.isUuid = this.route.snapshot.paramMap.has('uuid');
-    const uuid = this.route.snapshot.paramMap.get('uuid');
-    this.getFolders(uuid);
+
+    this.userUUID = this.route.snapshot.paramMap.get('uuid');
+    this.getFolders(this.userUUID);
   }
 
   getFolders(uuid: string) {
@@ -36,6 +39,12 @@ export class AlienProfileComponent implements OnInit {
         return path.split('\\').reverse()[0];
       });
     });
+  }
+
+  onFolderClick(folder: string) {
+    const uuidEncoded = btoa(this.userUUID);
+    const folderEncoded = btoa(folder);
+    this.router.navigate(['/user', 'starter', 'folder', uuidEncoded, folderEncoded]);
   }
 
 }

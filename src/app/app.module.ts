@@ -18,6 +18,8 @@ import { LoginComponent } from './components/auth/login/login.component';
 import { AuthorizationInterceptor } from './interceptors/authorization.interceptor';
 import { UserSearchComponent } from './users-main/user-search/user-search.component';
 import { AlienProfileComponent } from './users-main/alien-profile/alien-profile.component';
+import { FolderComponent } from './users-main/folder/folder.component';
+import { FileUploadComponent } from './utils/file-upload/file-upload.component';
 
 
 const routes: Routes = [
@@ -27,7 +29,8 @@ const routes: Routes = [
       { path: 'user-profile', component: UserProfileComponent },
       { path: 'options', component: OptionsComponent },
       { path: 'user-search', component: UserSearchComponent },
-      { path: 'profile/:uuid', component: AlienProfileComponent }
+      { path: 'profile/:uuid', component: AlienProfileComponent },
+      { path: 'folder/:uuid/:dir', component: FolderComponent },
     ]
   },
   { path: '', component: StarterPageComponent },
@@ -48,7 +51,9 @@ const routes: Routes = [
     ConfirmRegistrationComponent,
     LoginComponent,
     UserSearchComponent,
-    AlienProfileComponent
+    AlienProfileComponent,
+    FolderComponent,
+    FileUploadComponent
   ],
   imports: [
     BrowserModule,

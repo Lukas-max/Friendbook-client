@@ -1,16 +1,17 @@
-<div *ngIf="isUuid && user; else empty">
+<div *ngIf="userUUID && user; else empty">
     <p>{{ user.username}}</p>
-</div>
 
-<div *ngIf="folders" class="user-folders">
-    <span *ngFor="let folder of folders">
-        <span class="folder">
-            <img src="../../../assets/folder_icon128.png">
-            <span>{{ folder }}</span>
+    <div *ngIf="folders" class="user-folders">
+        <span *ngFor="let folder of folders">
+            <span class="folder" (click)="onFolderClick(folder)">
+                <img src="../../../assets/folder_icon128.png">
+                <span>{{ folder }}</span>
+            </span>
         </span>
-    </span>
+    </div>
+
 </div>
 
 <ng-template #empty>
-    <p>Brak uuid uzytkownika</p>
+    <p>Brak użytkownika</p>
 </ng-template>
