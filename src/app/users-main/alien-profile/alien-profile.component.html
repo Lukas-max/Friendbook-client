@@ -2,12 +2,15 @@
     <p>{{ user.username}}</p>
 
     <div *ngIf="folders" class="user-folders">
+        <div>FOLDERY:</div>
+
         <span *ngFor="let folder of folders">
             <span class="folder" (click)="onFolderClick(folder)">
                 <img src="../../../assets/folder_icon128.png">
                 <span>{{ folder }}</span>
             </span>
         </span>
+
     </div>
 
 </div>

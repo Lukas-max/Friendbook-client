@@ -1,9 +1,9 @@
-<div *ngIf="userUUID && folder" class="files-tab">
+<div *ngIf="userUUIDEncoded && folderEncoded" class="files-tab">
 
-    <app-file-upload></app-file-upload>
+    <app-file-upload [folderEncoded]="folderEncoded" [uuidEncoded]="userUUIDEncoded"></app-file-upload>
 
+    <button class="btn btn-outline-primary" (click)="onClick()">Wróć</button>
     <div>
-        <div>FOLDERY:</div>
         <div *ngIf="fileData">
             <div *ngFor="let file of fileData">
 
@@ -22,12 +22,10 @@
                         <i class="fas fa-file" style="font-size: 110px;"></i>
                         <p>{{ file.fileName }}</p>
                     </div>
-
                 </div>
 
             </div>
         </div>
     </div>
-    <button class="btn btn-outline-primary" (click)="onClick()">Wróć</button>
 
 </div>

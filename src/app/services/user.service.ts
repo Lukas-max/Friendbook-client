@@ -13,4 +13,8 @@ export class UserService {
     getAllUsers(): Observable<UserDto[]> {
         return this.http.get<UserDto[]>(`http://localhost:9010/api/user`);
     }
+
+    getUserByUUID(uuid: string): Observable<UserDto> {
+        return this.http.get<UserDto>(`http://localhost:9010/api/user/${uuid}`)
+    }
 }

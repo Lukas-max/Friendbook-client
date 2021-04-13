@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpRequest, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FileDataDto } from '../model/fileDataDto';
 
@@ -23,5 +23,16 @@ export class FileStorageService {
 
     downloadFile(uuid: string, folder: string, fileName: string) {
         return this.http.get(`http://localhost:9010/api/storage/${uuid}/${folder}/${fileName}`);
+    }
+
+    uploadFile(form: FormData, folder: string) {
+        const param = new HttpParams().append('directory', folder);
+        const request = new HttpRequest('POST', `http://localhost:9010/api/storage`, form, {
+            reportProgress: true,
+            responseType: 'json',
+            params: param
+        });
+
+        return this.http.request(request);
     }
 }

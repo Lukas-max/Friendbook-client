@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserDto } from 'src/app/model/userDto';
 import { map } from 'rxjs/operators';
 import { FileStorageService } from 'src/app/services/file-storage.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-alien-profile',
@@ -17,20 +18,21 @@ export class AlienProfileComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private fileStorageService: FileStorageService,
-    private router: Router) { }
+    private router: Router,
+    private userService: UserService) { }
 
   ngOnInit(): void {
     this.init();
   }
 
   init() {
-    this.route.paramMap.pipe(map(() => window.history.state.user))
-      .subscribe(data => {
-        this.user = data;
-      });
-
     this.userUUID = this.route.snapshot.paramMap.get('uuid');
+    this.getUser();
     this.getFolders(this.userUUID);
+  }
+
+  getUser() {
+    this.userService.getUserByUUID(this.userUUID).subscribe(data => this.user = data);
   }
 
   getFolders(uuid: string) {
