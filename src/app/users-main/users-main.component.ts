@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../services/authentication.service';
+import { SocketService } from '../services/socketService';
 
 @Component({
   selector: 'app-users-main',
@@ -8,12 +9,13 @@ import { AuthenticationService } from '../services/authentication.service';
 })
 export class UsersMainComponent implements OnInit {
 
-  constructor(private authenticationService: AuthenticationService) { }
+  constructor(private authenticationService: AuthenticationService, private socketService: SocketService) { }
 
   ngOnInit(): void {
   }
 
   logout() {
+    this.socketService._disconnect();
     this.authenticationService.logout();
   }
 }

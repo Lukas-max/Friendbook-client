@@ -14,6 +14,7 @@ export class AuthenticationService {
     USER_ROLES = 'user-roles';
     TOKEN_EXPIRATION = 'jwt-expiration';
     USER_DATA = 'user_data';
+    USERNAME = 'username';
 
     constructor(private http: HttpClient, private router: Router) { }
 
@@ -31,30 +32,42 @@ export class AuthenticationService {
         sessionStorage.setItem(this.USER_ROLES, res.headers.get('roles'));
         sessionStorage.setItem(this.TOKEN_EXPIRATION, res.headers.get('jwt-expiration'));
         sessionStorage.setItem(this.USER_DATA, res.headers.get('user'));
+        sessionStorage.setItem(this.USERNAME, res.headers.get('username'));
     }
 
-    logout() {
+    logout(): void {
         sessionStorage.removeItem(this.JWT_TOKEN);
         sessionStorage.removeItem(this.USER_ROLES);
         sessionStorage.removeItem(this.TOKEN_EXPIRATION);
         sessionStorage.removeItem(this.USER_DATA);
+        sessionStorage.removeItem(this.USERNAME);
         this.router.navigate(['/']);
     }
 
-    getLoggedUser() {
+    getLoggedUserId(): string {
         return sessionStorage.getItem(this.USER_DATA);
     }
 
-    getJwtToken() {
+    getJwtToken(): string {
         return sessionStorage.getItem(this.JWT_TOKEN);
     }
 
-    isLogged() {
-        const user = sessionStorage.getItem(this.USER_DATA);
-        return user !== null;
+    getUsername(): string {
+        return sessionStorage.getItem(this.USERNAME);
     }
 
-    logoutUserIfTokenExpired() {
+    isLogged(): boolean {
+        const user = sessionStorage.getItem(this.USER_DATA);
+        const token = sessionStorage.getItem(this.JWT_TOKEN);
+        return user && token ? true : false;
+    }
+
+    isTheSameId(id: string): boolean {
+        const sessionId = sessionStorage.getItem(this.USER_DATA);
+        return id === sessionId;
+    }
+
+    logoutUserIfTokenExpired(): void {
         if (!this.isLogged()) return;
 
         if (this.isTokenExpired()) {

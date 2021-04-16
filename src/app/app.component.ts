@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from './services/authentication.service';
+import { SocketService } from './services/socketService';
 
 @Component({
   selector: 'app-root',
@@ -9,11 +10,18 @@ import { AuthenticationService } from './services/authentication.service';
 export class AppComponent implements OnInit {
   title = 'FriendBook';
 
-  constructor(private authenticationService: AuthenticationService) {
+  constructor(private authenticationService: AuthenticationService, private socketService: SocketService) {
   }
 
   ngOnInit(): void {
+
     this.authenticationService.logoutUserIfTokenExpired();
+    this.socketConnect();
+  }
+
+  socketConnect() {
+    if (this.authenticationService.isLogged() && !this.socketService.isConnected())
+      this.socketService.connect();
   }
 
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { UserDto, IUserDto } from '../model/userDto';
 import { Observable } from 'rxjs';
+import { UserDto } from '../model/userDto';
 
 
 @Injectable({
@@ -16,8 +16,8 @@ export class AccountService {
         return this.http.get<boolean>(`http://localhost:9010/api/account/email`, { params: new HttpParams().set('email', typedEmail) });
     }
 
-    register(userDto: UserDto): Observable<IUserDto> {
-        return this.http.post<IUserDto>(`http://localhost:9010/api/account/register`, userDto);
+    register(userDto: UserDto): Observable<UserDto> {
+        return this.http.post<UserDto>(`http://localhost:9010/api/account/register`, userDto);
     }
 
     sendVerificationToken(tokenUUID: string): Observable<any> {

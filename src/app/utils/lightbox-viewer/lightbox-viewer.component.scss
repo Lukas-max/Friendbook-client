@@ -1,0 +1,69 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color:  rgba(0, 0, 0 ,0.6);
+    backdrop-filter: blur(1px);
+    z-index: 1;
+}
+
+.arrow {
+    padding: 30px;
+    z-index: 10;
+    cursor: pointer;
+
+    .chevron {
+        font-size: 80px;
+        color: white;
+    }
+}
+
+.arrow-left { 
+    position: fixed;
+    left: 10%;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+.arrow-right {
+    position: fixed;
+    right: 10%;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+.box {
+
+    .display {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 15px;
+        background: white;
+        border-radius: 4px;
+        z-index: 2;
+    }
+
+    .fa-times {
+        font-size: 50px;
+        color: rgba(0, 0, 0 ,0.6);
+    }
+
+    .fa-times {
+        font-size: 50px;
+        color: rgba(0, 0, 0 ,0.6);
+    }
+    
+    img {
+        max-width: 120vh;
+        max-height: 90vh;
+    }
+    
+    video {
+        max-height: 90vh;
+    }
+
+}

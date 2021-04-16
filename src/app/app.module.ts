@@ -20,17 +20,22 @@ import { UserSearchComponent } from './users-main/user-search/user-search.compon
 import { AlienProfileComponent } from './users-main/alien-profile/alien-profile.component';
 import { FolderComponent } from './users-main/folder/folder.component';
 import { FileUploadComponent } from './utils/file-upload/file-upload.component';
+import { LightboxViewerComponent } from './utils/lightbox-viewer/lightbox-viewer.component';
+import { DummyComponent } from './utils/dummy/dummy.component';
+import { PublicChatComponent } from './users-main/public-chat/public-chat.component';
 
 
 const routes: Routes = [
   {
     path: 'user/starter', component: UsersMainComponent, children: [
       { path: 'main-feed', component: MainFeedComponent },
-      { path: 'user-profile', component: UserProfileComponent },
+      { path: 'user-profile/:uuid', component: UserProfileComponent },
       { path: 'options', component: OptionsComponent },
       { path: 'user-search', component: UserSearchComponent },
-      { path: 'profile/:uuid', component: AlienProfileComponent },
+      // { path: 'profile/:uuid', component: AlienProfileComponent },
       { path: 'folder/:uuid/:dir', component: FolderComponent },
+      { path: 'dummy', component: DummyComponent },
+      { path: 'chat', component: PublicChatComponent },
     ]
   },
   { path: '', component: StarterPageComponent },
@@ -53,7 +58,10 @@ const routes: Routes = [
     UserSearchComponent,
     AlienProfileComponent,
     FolderComponent,
-    FileUploadComponent
+    FileUploadComponent,
+    LightboxViewerComponent,
+    DummyComponent,
+    PublicChatComponent,
   ],
   imports: [
     BrowserModule,

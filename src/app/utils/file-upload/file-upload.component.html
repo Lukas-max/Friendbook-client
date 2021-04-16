@@ -3,7 +3,7 @@
         <input type="file" multiple (change)="selectFiles($event)" />
     </label>
     <p *ngIf="compressingFiles">KOMPRESUJE!</p>
-    <button class="btn btn-outline-success" (click)="onUpload()" [disabled]="!filesSelected && compressingFiles">
+    <button class="btn btn-outline-success" (click)="onUpload()" [disabled]="!filesSelected || compressingFiles">
         Załaduj pliki
     </button>
 </div>

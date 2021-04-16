@@ -1,15 +1,27 @@
 <div *ngIf="userUUID && user; else empty">
     <p>{{ user.username}}</p>
 
-    <div *ngIf="folders" class="user-folders">
-        <div>FOLDERY:</div>
+    <div class="box">
 
-        <span *ngFor="let folder of folders">
-            <span class="folder" (click)="onFolderClick(folder)">
-                <img src="../../../assets/folder_icon128.png">
-                <span>{{ folder }}</span>
+        <div *ngIf="folders" class="folder-block">
+            <div>FOLDERY:</div>
+
+            <span *ngFor="let folder of folders">
+                <div class="folder" (click)="onFolderClick(folder)">
+                    <i class="fas fa-folder-open folder-icon"></i>
+                    <span>{{ folder }}</span>
+                </div>
+                <button class="btn btn-outline-warning" (click)="deleteFolder(folder)">Usuń</button>
             </span>
-        </span>
+
+        </div>
+
+        <div class="folder">
+            <div (click)="createFolder()">
+                <i class="fas fa-folder-plus folder-icon"></i>
+                <span>Dodaj folder</span>
+            </div>
+        </div>
 
     </div>
 

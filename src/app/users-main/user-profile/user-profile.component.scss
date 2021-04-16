@@ -1,0 +1,23 @@
+.box {
+    margin: 50px 100px;
+}
+
+.folder-block {
+    display: inline-block;
+}
+
+.folder-icon {
+    font-size: 100px;
+    color: rgb(11, 36, 165);
+}
+
+.folder {
+    display:  inline-block;
+    margin: 20px 20px;
+    cursor: pointer;
+
+    span {
+        font-weight: bolder;
+        text-transform: uppercase;
+    }
+}

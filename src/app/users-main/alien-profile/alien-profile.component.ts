@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserDto } from 'src/app/model/userDto';
-import { map } from 'rxjs/operators';
 import { FileStorageService } from 'src/app/services/file-storage.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -31,7 +30,7 @@ export class AlienProfileComponent implements OnInit {
     this.getFolders(this.userUUID);
   }
 
-  getUser() {
+  getUser(): void {
     this.userService.getUserByUUID(this.userUUID).subscribe(data => this.user = data);
   }
 
@@ -47,6 +46,42 @@ export class AlienProfileComponent implements OnInit {
     const uuidEncoded = btoa(this.userUUID);
     const folderEncoded = btoa(folder);
     this.router.navigate(['/user', 'starter', 'folder', uuidEncoded, folderEncoded]);
+  }
+
+  createFolder() {
+    const folderName = window.prompt('Nazwa folderu: ');
+    if (!folderName) return;
+
+    this._investigateFolderName(folderName);
+    this.fileStorageService.createFolder(folderName).subscribe(() => {
+      this._reloadComponent();
+    }, (err: any) => {
+      console.error(err);
+    });
+  }
+
+  deleteFolder(name: string) {
+    if (confirm('Chcesz usunąć folder ' + name + ' wraz z całą jego zawartością?'))
+      this.fileStorageService.deleteFolder(name).subscribe((data: boolean) => {
+        if (data) {
+          this._reloadComponent();
+        }
+        else
+          console.log("Nie usuneło.")
+      }, (error: any) => {
+        console.error(error);
+      });
+  }
+
+  _investigateFolderName(folderName: string) {
+    if (folderName.includes('/') || folderName.includes('\\')) {
+      throw new Error('Nazwa katologu nie może zawierać znaku / ani znaku \\');
+    }
+  }
+
+  _reloadComponent() {
+    this.router.navigate(['/user', 'starter', 'dummy'], { skipLocationChange: true }).then(() =>
+      this.router.navigate(['/user', 'starter', 'profile', this.userUUID]));
   }
 
 }

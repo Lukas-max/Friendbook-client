@@ -15,8 +15,8 @@ export class FileUploadComponent implements OnInit {
   compressingFiles: boolean = false;
   filesSelected: FileList;
   // here types of file to send:
-  compressed: File[] = [];
-  allFiles: File[] = [];
+  imageFiles: File[] = [];
+  otherFilesAndCompressedImages: File[] = [];
 
   constructor(private fileStorageService: FileStorageService, private router: Router) { }
 
@@ -24,41 +24,61 @@ export class FileUploadComponent implements OnInit {
     this.decodedFolder = atob(this.folderEncoded);
   }
 
-  selectFiles(event: any) {
-    this.compressingFiles = true;
+  selectFiles(event: any): void {
     this.filesSelected = event.target.files;
 
     Array.from(this.filesSelected).forEach(file => {
       const fileType = file.type.split('/')[0];
       if (fileType === 'image') {
-        this.compressImage(file);
+        this._compressImage(file);
+        this.imageFiles.push(file);
       } else {
-        this.allFiles.push(file);
+        this.otherFilesAndCompressedImages.push(file);
       }
     });
-
-    this.compressingFiles = false;
   }
 
   onUpload() {
+    if (!this.filesSelected) return;
+    if (this.otherFilesAndCompressedImages.length > 0)
+      this._uploadFiles();
+    if (this.imageFiles.length > 0)
+      this._uploadImages();
+
+  }
+
+  _uploadFiles() {
     const form = new FormData();
-    const files: FileList = this.filesSelected;
-    Array.from(files).forEach(file => {
-      form.append('files', file);
-    });
+    this.otherFilesAndCompressedImages.forEach(file => form.append('files', file));
 
     this.fileStorageService.uploadFile(form, this.decodedFolder).subscribe((event: any) => {
       if (event.type === HttpEventType.Response) {
-        this.reloadFolder();
+        this._reloadFolder();
       }
     }, (error: any) => {
       console.error(error);
-      this.reloadFolder();
-    })
+      this._reloadFolder();
+    });
   }
 
-  compressImage(file: File) {
-    console.log(file);
+  _uploadImages() {
+    const form = new FormData();
+    this.imageFiles.forEach(file => form.append('files', file));
+    this.fileStorageService.uploadImage(form, this.decodedFolder).subscribe((event: any) => {
+      if (event.type === HttpEventType.Response) {
+        this._reloadFolder();
+      };
+    }, (error: any) => {
+      console.error(error);
+      this._reloadFolder();
+    });
+  }
+
+
+  //----------------------------------------------------------------------------------
+  //----------------------------------------------------------------------------------
+  _compressImage(file: File): void {
+    this.compressingFiles = true;
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = (event: any) => {
@@ -66,13 +86,14 @@ export class FileUploadComponent implements OnInit {
       img.src = event.target.result;
 
       img.onload = (event: any) => {
-        const canvas = this.defineCanvas(event);
-        this.createBlob(canvas, event);
+        const canvas = this._defineCanvas(event);
+        this._createBlob(canvas, event, file);
+        this.compressingFiles = false;
       };
     };
   }
 
-  private defineCanvas(event: any): HTMLCanvasElement {
+  _defineCanvas(event: any): HTMLCanvasElement {
     const canvas = document.createElement('canvas');
     const MAX_WIDTH = 250;
     const scale = MAX_WIDTH / event.target.width;
@@ -81,18 +102,26 @@ export class FileUploadComponent implements OnInit {
     return canvas;
   }
 
-  private createBlob(canvas: HTMLCanvasElement, event: any) {
+  _createBlob(canvas: HTMLCanvasElement, event: any, file: File): void {
     const ctx = <CanvasRenderingContext2D>canvas.getContext('2d');
     ctx.drawImage(event.target, 0, 0, canvas.width, canvas.height);
     ctx.canvas.toBlob((blob: Blob) => {
-      console.log(blob);
-    });
+      const newFile: File = new File([blob], file.name, { lastModified: new Date().getTime(), type: blob.type });
+      this.otherFilesAndCompressedImages.push(newFile);
+    }, 'image/jpeg', 0.3);
   }
 
-  reloadFolder() {
-    const uuid = atob(this.uuidEncoded);
-    // const folder = btoa(this.folderEncoded);  do wywalenia, sprawdź
-    this.router.navigate(['/user', 'starter', 'profile', uuid])
+  _renameFileExtension(name: string): string {
+    const fileSplit = name.split('.');
+    const length = fileSplit.length;
+    fileSplit[length - 1] = 'jpeg';
+    return fileSplit.join('.');
+  }
+  //----------------------------------------------------------------------------------------
+  //----------------------------------------------------------------------------------------
+
+  _reloadFolder(): void {
+    this.router.navigate(['/user', 'starter', 'dummy'], { skipLocationChange: true })
       .then(() => this.router.navigate(['/user', 'starter', 'folder', this.uuidEncoded, this.folderEncoded]));
   }
 

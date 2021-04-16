@@ -2,8 +2,9 @@
 <div class="user-main-window">
     <div class="list-left">
         <div [routerLink]="['/user', 'starter', 'main-feed']">Start</div>
-        <div [routerLink]="['/user', 'starter', 'user-profile']">Profil</div>
+        <div [routerLink]="['/user', 'starter', 'user-profile', '']">Profil</div>
         <div [routerLink]="['/user', 'starter', 'user-search']">Członkowie</div>
+        <div [routerLink]="['/user', 'starter', 'chat']">Chat</div>
         <div [routerLink]="['/user', 'starter', 'options']">Opcje</div>
         <div [routerLink]="['/']" (click)="logout()">Wyloguj się</div>
     </div>

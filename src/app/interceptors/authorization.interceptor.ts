@@ -12,7 +12,7 @@ export class AuthorizationInterceptor implements HttpInterceptor {
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const token = this.authenticationService.getJwtToken();
-        const user = this.authenticationService.getLoggedUser();
+        const user = this.authenticationService.getLoggedUserId();
 
         if (token && user) {
             req = req.clone({
