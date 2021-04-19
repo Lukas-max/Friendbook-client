@@ -1,0 +1,57 @@
+.open {
+    display: none;
+}
+
+.chat-window {
+    position: fixed;
+    bottom: 0;
+    right: 10px;
+    width: 400px;
+    height: 450px;
+    background-color: rgb(245, 245, 245);
+    border: 1px solid rgba(0, 0, 0, 0.445);
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+
+    .top {
+        margin: 2px 10px;
+        font-weight: 600;
+    }
+
+    .inner-window {
+        position: absolute;
+        bottom: 3px;
+        left: 10px;
+
+        .form-control {
+            width: 300px;
+        }
+    }
+}
+
+.chat-box {
+    height: 100%;
+    width: 100%;
+    border: 5px solid black;
+    overflow: hidden;
+}
+
+.closed-bar {
+    position: fixed;
+    bottom: 0;
+    right: 10px;
+    width: 300px;
+    height: 35px;
+    background-color: rgb(245, 245, 245);
+    border: 1px solid rgba(0, 0, 0, 0.445);
+}
+
+.open-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 35px;
+    background-color: rgba(26, 18, 18, 0.651);
+    color: white;
+    border-radius: 5px;
+}

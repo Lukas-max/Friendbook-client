@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { UserDto } from '../model/userDto';
-import { filter } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
 import { UserResponseDto } from '../model/userResponseDto';
+import { ConnectedUser } from '../model/connectedUser';
 
 @Injectable({
     providedIn: 'root'
 })
 export class UserService {
+    chosenUser: Subject<ConnectedUser> = new Subject<ConnectedUser>();
 
     constructor(private http: HttpClient) { }
 

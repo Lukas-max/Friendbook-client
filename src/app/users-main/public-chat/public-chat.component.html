@@ -2,8 +2,8 @@
 
     <div *ngIf="connectedUsers">
         <div>ONLINE:</div>
-        <div *ngFor="let user of connectedUsers">
-            <span style="color: green;">{{ user.username }}</span>
+        <div *ngFor="let user of connectedUsers; let i = index">
+            <span style="color: green; cursor: pointer;" (click)="openChat(user)">{{ user.username }}</span>
         </div>
     </div>
 

@@ -23,6 +23,7 @@ import { FileUploadComponent } from './utils/file-upload/file-upload.component';
 import { LightboxViewerComponent } from './utils/lightbox-viewer/lightbox-viewer.component';
 import { DummyComponent } from './utils/dummy/dummy.component';
 import { PublicChatComponent } from './users-main/public-chat/public-chat.component';
+import { ChatWindowComponent } from './users-main/chat-window/chat-window.component';
 
 
 const routes: Routes = [
@@ -62,6 +63,7 @@ const routes: Routes = [
     LightboxViewerComponent,
     DummyComponent,
     PublicChatComponent,
+    ChatWindowComponent,
   ],
   imports: [
     BrowserModule,

@@ -32,10 +32,10 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  // logout() {
-  //   this.socketService._disconnect();
-  //   this.authenticationService.logout();
-  // }
+  logout() {
+    this.socketService._disconnect();
+    this.authenticationService.logout();
+  }
 
   isLogged() {
     return this.authenticationService.isLogged();

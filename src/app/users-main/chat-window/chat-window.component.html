@@ -1,0 +1,31 @@
+<div class="chat-window" [class.open]="!isOpen">
+    <div class="top">
+        <button class="open-close" (click)="openClose()">__</button>
+        <p>{{ receiverName }}</p>
+    </div>
+
+    <div class="chat-box">
+        <div class="inner-window">
+            <div *ngIf="chatMessages">
+                <div *ngFor="let chat of chatMessages">
+                    <p> <span style="font-weight: bolder;">{{ chat.senderName }}</span>
+                        {{ chat.content }}</p>
+                </div>
+            </div>
+
+            <form class="form-inline">
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="message" class="form-control" name="name"> <br>
+                </div>
+                <button (click)="sendMessage()" class="btn btn-primary" type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<div class="closed-bar" [class.open]="isOpen">
+    <div>
+        <button class="open-close" (click)="openClose()">__</button>
+    </div>
+</div>

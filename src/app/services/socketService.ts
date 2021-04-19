@@ -5,6 +5,7 @@ import { Subscription, Subject, BehaviorSubject } from 'rxjs';
 import { PublicChatMessage } from '../model/publicChatMessage';
 import { ConnectedUser } from '../model/connectedUser';
 import { AuthenticationService } from './authentication.service';
+import { PrivateChatMessage } from '../model/privateChatMessage';
 
 @Injectable({
     providedIn: 'root'
@@ -16,6 +17,8 @@ export class SocketService implements OnDestroy {
     connectionSubject: BehaviorSubject<ConnectedUser[]> = new BehaviorSubject<ConnectedUser[]>(null);
     publicSubscription: Subscription;
     publicSubject: Subject<PublicChatMessage> = new Subject<PublicChatMessage>();
+    privateSubscription: Subscription;
+    privateSubject: Subject<PrivateChatMessage> = new Subject<PrivateChatMessage>();
 
     constructor(private authenticationService: AuthenticationService) { }
 
@@ -34,6 +37,8 @@ export class SocketService implements OnDestroy {
     }
 
     _onConnect() {
+        const uuid = this.authenticationService.getLoggedUserId();
+
         this.connectionSubscription = this.stomp.subscribe(`/topic/connection`, (data) => {
             const body: ConnectedUser[] = JSON.parse(data.body);;
             this.connectionSubject.next(body);
@@ -43,6 +48,12 @@ export class SocketService implements OnDestroy {
             const body: PublicChatMessage = JSON.parse(chat.body);
             this.publicSubject.next(body);
         });
+
+        this.privateSubscription = this.stomp.subscribe(`/topic/private.` + uuid, (chat) => {
+            const body: PrivateChatMessage = JSON.parse(chat.body);
+            console.log(body)
+            this.privateSubject.next(body);
+        })
 
         this._sendWhenConnected();
         window.onbeforeunload = window.onunload = () => this._disconnect();
@@ -74,15 +85,12 @@ export class SocketService implements OnDestroy {
         this.stomp.send('/app/exit', {}, JSON.stringify(userConnected));
     }
 
-    send(body: string, username: string, uuid: string): void {
-        const model: PublicChatMessage = {
-            content: body,
-            username: username,
-            userUUID: uuid,
-            timestamp: new Date().getTime()
-        }
+    send(publicMessage: PublicChatMessage): void {
+        this.stomp.send('/app/public', {}, JSON.stringify(publicMessage));
+    }
 
-        this.stomp.send('/app/send', {}, JSON.stringify(model));
+    sendPrivate(privateMessage: PrivateChatMessage) {
+        this.stomp.send('/app/private', {}, JSON.stringify(privateMessage));
     }
 
     isConnected(): boolean {
@@ -104,6 +112,7 @@ export class SocketService implements OnDestroy {
         this.socketJs.close();
         this.socketJs = undefined;
         this.publicSubscription.unsubscribe();
+        this.privateSubscription.unsubscribe();
         this.connectionSubscription.unsubscribe();
     }
 
