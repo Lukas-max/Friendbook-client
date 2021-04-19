@@ -1,6 +1,6 @@
 <div *ngIf="users">
     <div *ngFor="let user of users, let i = index">
-        <div [routerLink]="['/user', 'starter', 'user-profile', user.userUUID]">
+        <div [routerLink]="['/user', 'starter', 'user-profile', user.userUUID]" class="link-user">
             {{ user.username }}</div>
     </div>
 </div>

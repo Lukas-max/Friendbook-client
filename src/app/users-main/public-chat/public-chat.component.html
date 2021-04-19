@@ -1,8 +1,14 @@
 <div style="margin: 50px;">
 
+    <div *ngIf="connectedUsers">
+        <div>ONLINE:</div>
+        <div *ngFor="let user of connectedUsers">
+            <span style="color: green;">{{ user.username }}</span>
+        </div>
+    </div>
+
     <form class="form-inline">
         <div class="form-group">
-            <!-- <label for="name">Wiadomość</label> -->
             <input type="text" [(ngModel)]="message" class="form-control" name="name"> <br>
         </div>
         <button (click)="sendMessage()" class="btn btn-primary" type="submit">Send</button>
@@ -10,7 +16,7 @@
 
     <div *ngIf="chatMessages">
         <div *ngFor="let chat of chatMessages">
-            <span> <span style="font-weight: bolder;">{{ chat.user }}</span> {{ chat.content }}</span>
+            <span> <span style="font-weight: bolder;">{{ chat.username }}</span> {{ chat.content }}</span>
         </div>
     </div>
 
