@@ -13,7 +13,7 @@
                 </div>
             </div>
 
-            <form class="form-inline">
+            <form class="form-inline" *ngIf="receiverUUID">
                 <div class="form-group">
                     <input type="text" [(ngModel)]="message" class="form-control" name="name"> <br>
                 </div>
@@ -24,7 +24,8 @@
 
 </div>
 
-<div class="closed-bar" [class.open]="isOpen">
+<div class="closed-bar" [class.open]="isOpen" *ngIf="receiverUUID">
+    <span *ngIf="notificationAwaiting"><i class="far fa-envelope"></i></span>
     <div>
         <button class="open-close" (click)="openClose()">__</button>
     </div>

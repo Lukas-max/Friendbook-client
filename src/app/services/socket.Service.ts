@@ -16,9 +16,9 @@ export class SocketService implements OnDestroy {
     connectionSubscription: Subscription;
     connectionSubject: BehaviorSubject<ConnectedUser[]> = new BehaviorSubject<ConnectedUser[]>(null);
     publicSubscription: Subscription;
-    publicSubject: Subject<PublicChatMessage> = new Subject<PublicChatMessage>();
+    publicNotificationSubject: Subject<PublicChatMessage> = new Subject<PublicChatMessage>();
     privateSubscription: Subscription;
-    privateSubject: Subject<PrivateChatMessage> = new Subject<PrivateChatMessage>();
+    privateNotificationSubject: Subject<PrivateChatMessage> = new Subject<PrivateChatMessage>();
 
     constructor(private authenticationService: AuthenticationService) { }
 
@@ -28,7 +28,6 @@ export class SocketService implements OnDestroy {
         this.stomp.debug = null;
 
         this.stomp.connect({}, (frame) => {
-            console.log('FRAME ' + frame);
             this._onConnect();
 
         }, err => {
@@ -46,13 +45,12 @@ export class SocketService implements OnDestroy {
 
         this.publicSubscription = this.stomp.subscribe(`/topic/public`, (chat) => {
             const body: PublicChatMessage = JSON.parse(chat.body);
-            this.publicSubject.next(body);
+            this.publicNotificationSubject.next(body);
         });
 
         this.privateSubscription = this.stomp.subscribe(`/topic/private.` + uuid, (chat) => {
             const body: PrivateChatMessage = JSON.parse(chat.body);
-            console.log(body)
-            this.privateSubject.next(body);
+            this.privateNotificationSubject.next(body);
         })
 
         this._sendWhenConnected();
@@ -70,7 +68,7 @@ export class SocketService implements OnDestroy {
 
         const userConnected: ConnectedUser = {
             username: username,
-            userUUID: uuid
+            userUUID: uuid,
         };
 
         this.stomp.send('/app/logged', {}, JSON.stringify(userConnected));
@@ -79,7 +77,7 @@ export class SocketService implements OnDestroy {
     _sendWhenDisconnected() {
         const userConnected: ConnectedUser = {
             username: this.authenticationService.getUsername(),
-            userUUID: this.authenticationService.getLoggedUserId()
+            userUUID: this.authenticationService.getLoggedUserId(),
         };
 
         this.stomp.send('/app/exit', {}, JSON.stringify(userConnected));

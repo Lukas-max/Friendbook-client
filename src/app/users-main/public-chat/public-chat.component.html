@@ -1,12 +1,5 @@
 <div style="margin: 50px;">
 
-    <div *ngIf="connectedUsers">
-        <div>ONLINE:</div>
-        <div *ngFor="let user of connectedUsers; let i = index">
-            <span style="color: green; cursor: pointer;" (click)="openChat(user)">{{ user.username }}</span>
-        </div>
-    </div>
-
     <form class="form-inline">
         <div class="form-group">
             <input type="text" [(ngModel)]="message" class="form-control" name="name"> <br>

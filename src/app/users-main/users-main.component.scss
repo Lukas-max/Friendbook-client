@@ -1,5 +1,10 @@
 .user-main-window { 
 
+    .inner-window {
+        display: grid;
+        grid-template-columns: 1fr 0fr 10fr 1fr;
+    }
+
     .list-left {
         margin: 20px;
 

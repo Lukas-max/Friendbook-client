@@ -24,6 +24,7 @@ import { LightboxViewerComponent } from './utils/lightbox-viewer/lightbox-viewer
 import { DummyComponent } from './utils/dummy/dummy.component';
 import { PublicChatComponent } from './users-main/public-chat/public-chat.component';
 import { ChatWindowComponent } from './users-main/chat-window/chat-window.component';
+import { OnlineUsersComponent } from './users-main/online-users/online-users.component';
 
 
 const routes: Routes = [
@@ -64,6 +65,7 @@ const routes: Routes = [
     DummyComponent,
     PublicChatComponent,
     ChatWindowComponent,
+    OnlineUsersComponent,
   ],
   imports: [
     BrowserModule,

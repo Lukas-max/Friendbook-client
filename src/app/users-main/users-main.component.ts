@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../services/authentication.service';
-import { SocketService } from '../services/socketService';
+import { SocketService } from '../services/socket.Service';
 
 @Component({
   selector: 'app-users-main',
@@ -15,6 +15,8 @@ export class UsersMainComponent implements OnInit {
   }
 
   logout() {
+    // if (!confirm('Chcesz się wylogować?')) return;
+
     this.socketService._disconnect();
     this.authenticationService.logout();
   }

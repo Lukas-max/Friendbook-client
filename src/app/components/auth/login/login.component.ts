@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { NgForm } from '@angular/forms';
 import { LoginCredentials } from 'src/app/model/LoginCredentials';
-import { SocketService } from 'src/app/services/socketService';
+import { SocketService } from 'src/app/services/socket.Service';
 
 @Component({
   selector: 'app-login',

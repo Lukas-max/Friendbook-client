@@ -1,4 +1,13 @@
 <div class="main-feed">
+
+    <form #feed="ngForm" (ngSubmit)="submit()">
+        <div class="form-group">
+            <label for="nowy-wpis">Nowy wpis:</label>
+            <textarea class="form-control" name="nowy-wpis" rows="7" cols="60" ngModel required></textarea>
+        </div>
+        <button class="btn btn-primary" [disabled]="!feed.valid">Wyślij</button>
+    </form>
+
     <div class="feed-border">
         <p>Lorem ipsum dolor sit amet.</p>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut commodi maiores ab nihil at numquam rerum illo
