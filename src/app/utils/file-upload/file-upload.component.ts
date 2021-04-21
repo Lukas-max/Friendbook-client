@@ -1,21 +1,24 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FileStorageService } from 'src/app/services/file-storage.service';
 import { HttpEventType } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CompressService } from 'src/app/services/compress.Service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-file-upload',
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.scss']
 })
-export class FileUploadComponent implements OnInit {
+export class FileUploadComponent implements OnInit, OnDestroy {
   @Input() uuidEncoded: string;
   @Input() folderEncoded: string;
   decodedFolder: string;
   compressingFiles: boolean = false;
   filesSelected: FileList;
-  // here types of file to send:
+  compressingFileSubscription: Subscription;
+  compressedImageSubscription: Subscription;
+  // here are the types of file to send:
   imageFiles: File[] = [];
   otherFilesAndCompressedImages: File[] = [];
 
@@ -24,11 +27,13 @@ export class FileUploadComponent implements OnInit {
   ngOnInit(): void {
     this.decodedFolder = atob(this.folderEncoded);
 
-    this.compressService.compressingFileSubject.subscribe((flag: boolean) => this.compressingFiles = flag);
-    this.compressService.compressedImageSubject.subscribe((file: File) => this.otherFilesAndCompressedImages.push(file))
+    this.compressingFileSubscription = this.compressService.compressingFileSubject.subscribe((flag: boolean) => this.compressingFiles = flag);
+    this.compressedImageSubscription = this.compressService.compressedImageSubject.subscribe((file: File) => this.otherFilesAndCompressedImages.push(file))
   }
 
   selectFiles(event: any): void {
+    this.otherFilesAndCompressedImages = [];
+    this.imageFiles = [];
     this.filesSelected = event.target.files;
 
     Array.from(this.filesSelected).forEach(file => {
@@ -81,6 +86,11 @@ export class FileUploadComponent implements OnInit {
   _reloadFolder(): void {
     this.router.navigate(['/user', 'starter', 'dummy'], { skipLocationChange: true })
       .then(() => this.router.navigate(['/user', 'starter', 'folder', this.uuidEncoded, this.folderEncoded]));
+  }
+
+  ngOnDestroy() {
+    this.compressedImageSubscription.unsubscribe();
+    this.compressingFileSubscription.unsubscribe();
   }
 
 }
