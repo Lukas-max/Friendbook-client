@@ -25,6 +25,7 @@ import { DummyComponent } from './utils/dummy/dummy.component';
 import { PublicChatComponent } from './users-main/public-chat/public-chat.component';
 import { ChatWindowComponent } from './users-main/chat-window/chat-window.component';
 import { OnlineUsersComponent } from './users-main/online-users/online-users.component';
+import { FeedComponent } from './users-main/main-feed/feed/feed.component';
 
 
 const routes: Routes = [
@@ -66,6 +67,7 @@ const routes: Routes = [
     PublicChatComponent,
     ChatWindowComponent,
     OnlineUsersComponent,
+    FeedComponent,
   ],
   imports: [
     BrowserModule,

@@ -2,29 +2,25 @@
 
     <div class="user-input">
         <form #feed="ngForm" (ngSubmit)="submit()">
+
             <div class="form-group">
                 <label for="nowy-wpis">Nowy wpis:</label>
                 <textarea class="form-control" name="nowy-wpis" rows="7" cols="60" ngModel required></textarea>
             </div>
-
             <div>
                 <label>
                     <input type="file" multiple (change)="selectFiles($event)" #filesInput />
                 </label>
                 <p *ngIf="compressingFiles">KOMPRESUJE!</p>
-                <!-- <button class="btn btn-outline-success" (click)="onUpload()"
-                    [disabled]="!filesSelected || compressingFiles">
-                    Załaduj pliki
-                </button> -->
             </div>
 
             <button class="btn btn-primary" [disabled]="!feed.valid || compressingFiles">Wyślij</button>
         </form>
     </div>
+    <button class="btn btn-primary" (click)="getFeed()">Download</button>
 
-    <div class="feed-border">
-        <p>Lorem ipsum dolor sit amet.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut commodi maiores ab nihil at numquam rerum illo
-            nobis esse!</p>
+    <div *ngIf="feedData" class="feed-border">
+        <app-feed *ngFor="let feed of feedData" [feed]=feed></app-feed>
     </div>
+
 </div>

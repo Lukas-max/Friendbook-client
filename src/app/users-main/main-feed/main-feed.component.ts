@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MainFeedService } from 'src/app/services/mainFeed.service';
 import { CompressService } from 'src/app/services/compress.Service';
 import { Subscription } from 'rxjs';
+import { FeedModelDto } from 'src/app/model/feedModelDto';
 
 @Component({
   selector: 'app-main-feed',
@@ -18,15 +19,25 @@ export class MainFeedComponent implements OnInit, OnDestroy {
   otherFilesAndCompressedImages: File[] = [];
   compressingFileSubscription: Subscription;
   compressedImageSubscription: Subscription;
+  feedData: FeedModelDto[];
 
   constructor(private mainFeedService: MainFeedService, private compressService: CompressService) { }
 
   ngOnInit(): void {
     this.compressingFileSubscription = this.compressService.compressingFileSubject.subscribe((flag: boolean) => this.compressingFiles = flag);
     this.compressedImageSubscription = this.compressService.compressedImageSubject.subscribe((file: File) => this.otherFilesAndCompressedImages.push(file));
+    this.mainFeedService.getFeed().subscribe((feed: FeedModelDto[]) => {
+      this.feedData = feed;
+    });
   }
 
-  selectFiles(event: any) {
+  getFeed(): void {
+    this.mainFeedService.getFeed().subscribe((feed: FeedModelDto[]) => {
+      this.feedData = feed;
+    });
+  }
+
+  selectFiles(event: any): void {
     this.otherFilesAndCompressedImages = [];
     this.imageFiles = [];
     this.filesSelected = event.target.files;
@@ -42,8 +53,7 @@ export class MainFeedComponent implements OnInit, OnDestroy {
     });
   }
 
-  submit() {
-    console.log(this.filesInput.nativeElement.files);
+  submit(): void {
     const text = this.form.value['nowy-wpis'];
     if (!text) return;
 
@@ -55,27 +65,23 @@ export class MainFeedComponent implements OnInit, OnDestroy {
       this._uploadFilesWithCompressedImgs(text);
   }
 
-  _uploadEmptyText(text: string) {
-    console.log('EMPTY');
+  _uploadEmptyText(text: string): void {
     this.mainFeedService.postFeed(text).subscribe(data => {
       this.form.reset();
     });
   }
 
-  _uploadFiles(text: string) {
-    console.log('WITH FILES');
+  _uploadFiles(text: string): void {
     const form = new FormData();
     this.otherFilesAndCompressedImages.forEach(file => form.append('files', file));
 
     this.mainFeedService.postFeedWithFiles(form, text).subscribe(data => {
       this.form.reset();
-      this.filesInput.nativeElement.files = FileList;
       // this.filesInput.nativeElement.value = '';
     }, (err: any) => console.error(err));
   }
 
-  _uploadFilesWithCompressedImgs(text: string) {
-    console.log('FILES PLUS COMPRESSED');
+  _uploadFilesWithCompressedImgs(text: string): void {
     const form = new FormData();
     this.otherFilesAndCompressedImages.forEach(file => form.append('files', file));
     this.imageFiles.forEach(file => form.append('images', file));
@@ -86,7 +92,7 @@ export class MainFeedComponent implements OnInit, OnDestroy {
     }, (err: any) => console.error(err));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.compressedImageSubscription.unsubscribe();
     this.compressingFileSubscription.unsubscribe();
   }
