@@ -17,7 +17,6 @@
             <button class="btn btn-primary" [disabled]="!feed.valid || compressingFiles">Wyślij</button>
         </form>
     </div>
-    <button class="btn btn-primary" (click)="getFeed()">Download</button>
 
     <div *ngIf="feedData" class="feed-border">
         <app-feed *ngFor="let feed of feedData" [feed]=feed></app-feed>

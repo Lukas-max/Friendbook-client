@@ -6,6 +6,7 @@ import { PublicChatMessage } from '../model/publicChatMessage';
 import { ConnectedUser } from '../model/connectedUser';
 import { AuthenticationService } from './authentication.service';
 import { PrivateChatMessage } from '../model/privateChatMessage';
+import { FeedModelDto } from '../model/feedModelDto';
 
 @Injectable({
     providedIn: 'root'
@@ -15,7 +16,11 @@ export class SocketService implements OnDestroy {
     stomp: any;
     connectionSubscription: Subscription;
     connectionSubject: BehaviorSubject<ConnectedUser[]> = new BehaviorSubject<ConnectedUser[]>(null);
+    feedSubscription: Subscription;
+    feedSubject: Subject<FeedModelDto> = new Subject<FeedModelDto>();
     publicSubscription: Subscription;
+    deleteFeedSubscription: Subscription;
+    deleteFeedSubject: Subject<number> = new Subject<number>();
     publicNotificationSubject: Subject<PublicChatMessage> = new Subject<PublicChatMessage>();
     privateSubscription: Subscription;
     privateNotificationSubject: Subject<PrivateChatMessage> = new Subject<PrivateChatMessage>();
@@ -41,6 +46,16 @@ export class SocketService implements OnDestroy {
         this.connectionSubscription = this.stomp.subscribe(`/topic/connection`, (data) => {
             const body: ConnectedUser[] = JSON.parse(data.body);;
             this.connectionSubject.next(body);
+        });
+
+        this.feedSubscription = this.stomp.subscribe(`/topic/feed`, (feed) => {
+            const body: FeedModelDto = JSON.parse(feed.body);
+            this.feedSubject.next(body);
+        });
+
+        this.deleteFeedSubscription = this.stomp.subscribe(`/topic/delete-feed`, (data) => {
+            const body: number = JSON.parse(data.body);
+            this.deleteFeedSubject.next(body);
         });
 
         this.publicSubscription = this.stomp.subscribe(`/topic/public`, (chat) => {
@@ -111,6 +126,8 @@ export class SocketService implements OnDestroy {
         this.socketJs = undefined;
         this.publicSubscription.unsubscribe();
         this.privateSubscription.unsubscribe();
+        this.feedSubscription.unsubscribe();
+        this.deleteFeedSubscription.unsubscribe();
         this.connectionSubscription.unsubscribe();
     }
 

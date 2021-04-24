@@ -1,0 +1,26 @@
+<div *ngFor="let file of fileData; let i = index">
+
+    <div [ngSwitch]="file.type" (click)="clickFile(i)">
+        <div *ngSwitchCase="'image'" class="file-view">
+            <img [src]="file.url" [alt]="file.fileName" [title]="file.fileName">
+        </div>
+        <div *ngSwitchCase="'audio'" class="file-view">
+            <audio [src]="file.url" controls="controls" [alt]="file.fileName"></audio>
+            <p>{{ file.fileName }}</p>
+        </div>
+        <div *ngSwitchCase="'video'" class=" file-view">
+            <video [src]="file.url" controls="controls" [alt]="file.fileName" [title]="
+                file.fileName"></video>
+        </div>
+        <div *ngSwitchDefault class="file-view">
+            <i class="fas fa-file" style="font-size: 110px;"></i>
+            <p>{{ file.fileName }}</p>
+        </div>
+    </div>
+    <button *ngIf="_isLoggedUser() && showDeleteButton" (click)="deleteFile(file.fileName)">Usuń</button>
+
+</div>
+
+<app-lightbox-viewer *ngIf="selectedFile" [selectedFile]="selectedFile" (closeLightbox)="closeLightbox()"
+    (previousFile)="previous()" (nextFile)="next()">
+</app-lightbox-viewer>

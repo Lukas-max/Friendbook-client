@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FileStorageService } from 'src/app/services/file-storage.service';
 import { FileDataDto } from 'src/app/model/fileDataDto';
-import { Location } from '@angular/common';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
@@ -14,13 +13,10 @@ export class FolderComponent implements OnInit {
   userUUIDEncoded: string;
   folderEncoded: string;
   fileData: FileDataDto[];
-  selectedFile: FileDataDto;
-  index: number = 0;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private fileStorageService: FileStorageService,
-    private location: Location,
     private router: Router,
     private authenticationService: AuthenticationService) { }
 
@@ -42,20 +38,6 @@ export class FolderComponent implements OnInit {
     });
   }
 
-  deleteFile(fileName: string): void {
-    if (!confirm(`Chcesz usunąć plik ${fileName}?`))
-      return;
-
-    const folder = atob(this.folderEncoded);
-    if (!folder) return;
-
-    this.fileStorageService.deleteFile(folder, fileName).subscribe(() => {
-      this._reloadFolder();
-    }, (error: any) => {
-      console.error(error);
-    });
-  }
-
   return(): void {
     const uuid = atob(this.userUUIDEncoded);
     const isLoggedUser = this.authenticationService.isTheSameId(uuid);
@@ -63,29 +45,6 @@ export class FolderComponent implements OnInit {
       this.router.navigate(['/user', 'starter', 'user-profile', '']);
     else
       this.router.navigate(['/user', 'starter', 'user-profile', uuid]);
-  }
-
-  clickFile(idx: number): void {
-    this.index = idx;
-    this.selectedFile = this.fileData[this.index];
-  }
-
-  closeLightbox() {
-    this.selectedFile = undefined;
-  }
-
-  previous() {
-    if (this.index === 0) return;
-
-    this.index--;
-    this.selectedFile = this.fileData[this.index];
-  }
-
-  next() {
-    if (this.index === this.fileData.length - 1) return;
-
-    this.index++;
-    this.selectedFile = this.fileData[this.index];
   }
 
   _reloadFolder(): void {

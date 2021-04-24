@@ -1,7 +1,7 @@
 import { FileDataDto } from './fileDataDto';
 
 export class FeedModelDto {
-    id: number;
+    feedId: number;
     text: string;
     files: boolean;
     images: boolean;

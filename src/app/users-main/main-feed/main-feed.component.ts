@@ -4,6 +4,7 @@ import { MainFeedService } from 'src/app/services/mainFeed.service';
 import { CompressService } from 'src/app/services/compress.Service';
 import { Subscription } from 'rxjs';
 import { FeedModelDto } from 'src/app/model/feedModelDto';
+import { SocketService } from 'src/app/services/socket.Service';
 
 @Component({
   selector: 'app-main-feed',
@@ -20,20 +21,31 @@ export class MainFeedComponent implements OnInit, OnDestroy {
   compressingFileSubscription: Subscription;
   compressedImageSubscription: Subscription;
   feedData: FeedModelDto[];
+  feedSocketSubscription: Subscription;
+  deleteFeedSocketSubscription: Subscription;
 
-  constructor(private mainFeedService: MainFeedService, private compressService: CompressService) { }
+  constructor(
+    private mainFeedService: MainFeedService,
+    private compressService: CompressService,
+    private socketService: SocketService) { }
 
   ngOnInit(): void {
+    this.initializeMainFeed();
+  }
+
+  initializeMainFeed() {
     this.compressingFileSubscription = this.compressService.compressingFileSubject.subscribe((flag: boolean) => this.compressingFiles = flag);
     this.compressedImageSubscription = this.compressService.compressedImageSubject.subscribe((file: File) => this.otherFilesAndCompressedImages.push(file));
     this.mainFeedService.getFeed().subscribe((feed: FeedModelDto[]) => {
       this.feedData = feed;
     });
-  }
-
-  getFeed(): void {
-    this.mainFeedService.getFeed().subscribe((feed: FeedModelDto[]) => {
-      this.feedData = feed;
+    this.feedSocketSubscription = this.socketService.feedSubject.subscribe((feed: FeedModelDto) => {
+      this.feedData.unshift(feed);
+    });
+    this.deleteFeedSocketSubscription = this.socketService.deleteFeedSubject.subscribe((id: number) => {
+      console.log(id);
+      const index = this.feedData.findIndex(feed => feed.feedId === id);
+      this.feedData.splice(index, 1);
     });
   }
 
@@ -95,5 +107,6 @@ export class MainFeedComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.compressedImageSubscription.unsubscribe();
     this.compressingFileSubscription.unsubscribe();
+    this.feedSocketSubscription.unsubscribe();
   }
 }
