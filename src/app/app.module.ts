@@ -17,7 +17,6 @@ import { ConfirmRegistrationComponent } from './components/auth/confirm-registra
 import { LoginComponent } from './components/auth/login/login.component';
 import { AuthorizationInterceptor } from './interceptors/authorization.interceptor';
 import { UserSearchComponent } from './users-main/user-search/user-search.component';
-import { AlienProfileComponent } from './users-main/alien-profile/alien-profile.component';
 import { FolderComponent } from './users-main/folder/folder.component';
 import { FileUploadComponent } from './utils/file-upload/file-upload.component';
 import { LightboxViewerComponent } from './utils/lightbox-viewer/lightbox-viewer.component';
@@ -27,6 +26,8 @@ import { ChatWindowComponent } from './users-main/chat-window/chat-window.compon
 import { OnlineUsersComponent } from './users-main/online-users/online-users.component';
 import { FeedComponent } from './users-main/main-feed/feed/feed.component';
 import { FileDisplayComponent } from './utils/file-display/file-display.component';
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { IntersectionObserverService } from './services/intersectionObserver.service';
 
 
 const routes: Routes = [
@@ -36,7 +37,6 @@ const routes: Routes = [
       { path: 'user-profile/:uuid', component: UserProfileComponent },
       { path: 'options', component: OptionsComponent },
       { path: 'user-search', component: UserSearchComponent },
-      // { path: 'profile/:uuid', component: AlienProfileComponent },
       { path: 'folder/:uuid/:dir', component: FolderComponent },
       { path: 'dummy', component: DummyComponent },
       { path: 'chat', component: PublicChatComponent },
@@ -60,7 +60,6 @@ const routes: Routes = [
     ConfirmRegistrationComponent,
     LoginComponent,
     UserSearchComponent,
-    AlienProfileComponent,
     FolderComponent,
     FileUploadComponent,
     LightboxViewerComponent,
@@ -69,7 +68,7 @@ const routes: Routes = [
     ChatWindowComponent,
     OnlineUsersComponent,
     FeedComponent,
-    FileDisplayComponent,
+    FileDisplayComponent
   ],
   imports: [
     BrowserModule,
@@ -77,7 +76,8 @@ const routes: Routes = [
     HttpClientModule,
     RouterModule.forRoot(routes),
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgbPaginationModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizationInterceptor, multi: true }

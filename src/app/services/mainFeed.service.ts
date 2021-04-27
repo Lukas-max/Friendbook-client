@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { FeedModelDto } from '../model/feedModelDto';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Page } from '../model/page';
+import { Chunk } from '../model/chunk';
 
 
 @Injectable({
@@ -13,9 +15,8 @@ export class MainFeedService {
     constructor(private http: HttpClient) { }
 
 
-    getFeed(): Observable<FeedModelDto[]> {
-        return this.http.get<FeedModelDto[]>(`http://localhost:9010/api/feed`)
-            .pipe(map(feed => feed.reverse()));
+    getFeed(limit: string, offset: string): Observable<Chunk<FeedModelDto>> {
+        return this.http.get<Chunk<FeedModelDto>>(`http://localhost:9010/api/feed`, { params: { limit: limit, offset: offset } });
     }
 
     postFeed(text: string): Observable<any> {
