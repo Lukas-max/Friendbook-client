@@ -1,16 +1,17 @@
-<div style="margin: 50px;">
-
-    <form class="form-inline">
-        <div class="form-group">
-            <input type="text" [(ngModel)]="message" class="form-control" name="name"> <br>
-        </div>
-        <button (click)="sendMessage()" class="btn btn-primary" type="submit">Send</button>
-    </form>
-
-    <div *ngIf="chatMessages">
-        <div *ngFor="let chat of chatMessages">
-            <span> <span style="font-weight: bolder;">{{ chat.username }}</span> {{ chat.content }}</span>
+<div class="chat-header">korytko</div>
+<div class="chat-box">
+    <div class="chat-window">
+        <div *ngIf="chatMessages">
+            <div *ngFor="let chat of chatMessages">
+                <div> <span style="font-weight: bolder;">{{ chat.username }}</span> {{ chat.content }}</div>
+            </div>
         </div>
     </div>
 
+    <form class="form-inline chat-input">
+        <div class="form-group">
+            <input type="text" [(ngModel)]="message" class="form-control" name="name"> <br>
+        </div>
+        <button (click)="sendMessage()" class="btn btn-primary" type="submit">Wyślij</button>
+    </form>
 </div>

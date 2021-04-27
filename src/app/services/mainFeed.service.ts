@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FeedModelDto } from '../model/feedModelDto';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Page } from '../model/page';
 import { Chunk } from '../model/chunk';
 
 

@@ -42,6 +42,10 @@ export class SocketService implements OnDestroy {
 
     _onConnect() {
         const uuid = this.authenticationService.getLoggedUserId();
+        if (!uuid) {
+            this.authenticationService.logout();
+            throw new Error('Brak poprawnego uwierzytelnienia. Wylogowano.');
+        }
 
         this.connectionSubscription = this.stomp.subscribe(`/topic/connection`, (data) => {
             const body: ConnectedUser[] = JSON.parse(data.body);;

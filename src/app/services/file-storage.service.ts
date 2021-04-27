@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpRequest, HttpParams, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FileDataDto } from '../model/fileDataDto';
+import { Chunk } from '../model/chunk';
 
 @Injectable({
     providedIn: 'root',
@@ -14,8 +15,9 @@ export class FileStorageService {
         return this.http.get<string[]>(`http://localhost:9010/api/storage`, { params: { 'userUUID': uuid } });
     }
 
-    getFileData(uuid: string, folder: string): Observable<FileDataDto[]> {
-        return this.http.get<FileDataDto[]>(`http://localhost:9010/api/storage/files`, { params: { 'userUUID': uuid, 'directory': folder } });
+    getFileData(uuid: string, folder: string, limit: string, offset: string): Observable<Chunk<FileDataDto>> {
+        return this.http.get<Chunk<FileDataDto>>(`http://localhost:9010/api/storage/files`,
+            { params: { 'userUUID': uuid, 'directory': folder, 'limit': limit, 'offset': offset } });
     }
 
     uploadFile(form: FormData, folder: string): Observable<HttpEvent<any>> {

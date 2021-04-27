@@ -56,7 +56,6 @@ export class MainFeedComponent implements AfterViewInit, OnDestroy {
       filter((isIntersecting: boolean) => isIntersecting),
       switchMap(() => this.mainFeedService.getFeed(this.limit.toString(), this.offset.toString())))
       .subscribe((chunk: Chunk<FeedModelDto>) => {
-        console.log(chunk);
         chunk.content.forEach(feed => this.feedData.push(feed));
         this.offset = this.feedData.length;
       });
@@ -131,11 +130,6 @@ export class MainFeedComponent implements AfterViewInit, OnDestroy {
       // this.filesInput.nativeElement.value = '';
     }, (err: any) => console.error(err));
   }
-
-  // changePage(event: number) {
-  //   this.page = event;
-  //   this.loadFeed();
-  // }
 
   ngOnDestroy(): void {
     this.compressedImageSubscription.unsubscribe();
