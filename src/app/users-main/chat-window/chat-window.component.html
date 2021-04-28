@@ -1,32 +1,35 @@
 <div class="chat-window" [class.open]="!isOpen">
     <div class="top">
-        <button class="open-close" (click)="openClose()">__</button>
+        <button class="open-close" (click)="openClose()"> X </button>
         <p>{{ receiverName }}</p>
     </div>
+    <div class="bar"></div>
 
-    <div class="chat-box">
-        <div class="inner-window">
-            <div *ngIf="chatMessages">
-                <div *ngFor="let chat of chatMessages">
-                    <p> <span style="font-weight: bolder;">{{ chat.senderName }}</span>
-                        {{ chat.content }}</p>
-                </div>
+    <div class="inner-window">
+        <div *ngIf="chatMessages" #overflow>
+            <div #observed></div>
+            <div *ngFor="let chat of chatMessages">
+                <span class="username">{{ chat.senderName }} </span>
+                <span class="time"> ({{ chat.timestamp | date: 'dd/MM/yyyy, hh:mm'}})</span> <br>
+                <span> {{ chat.content }}</span>
             </div>
-
-            <form class="form-inline" *ngIf="receiverUUID">
-                <div class="form-group">
-                    <input type="text" [(ngModel)]="message" class="form-control" name="name"> <br>
-                </div>
-                <button (click)="sendMessage()" class="btn btn-primary" type="submit">Send</button>
-            </form>
+            <span #scrollSpan></span>
         </div>
+
     </div>
+    <form autocomplete="off" class="form-inline" *ngIf="receiverUUID">
+        <div class="form-group">
+            <input type="text" [(ngModel)]="message" class="form-control" name="name"> <br>
+        </div>
+        <button (click)="sendMessage()" class="btn btn-primary" type="submit">Send</button>
+    </form>
+
 
 </div>
 
-<div class="closed-bar" [class.open]="isOpen" *ngIf="receiverUUID">
+<div class="closed-bar" [class.open]="isOpen" *ngIf="receiverUUID" (click)="openClose()">
     <span *ngIf="notificationAwaiting"><i class="far fa-envelope"></i></span>
     <div>
-        <button class="open-close" (click)="openClose()">__</button>
+        <button class="open-close">__</button>
     </div>
 </div>

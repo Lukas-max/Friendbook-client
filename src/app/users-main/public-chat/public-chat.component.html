@@ -1,14 +1,17 @@
 <div class="chat-header">korytko</div>
 <div class="chat-box">
-    <div class="chat-window">
-        <div *ngIf="chatMessages">
+    <div class="chat-window" #overflow>
+        <div *ngIf="chatMessages" class="messages">
+            <div #observed></div>
             <div *ngFor="let chat of chatMessages">
-                <div> <span style="font-weight: bolder;">{{ chat.username }}</span> {{ chat.content }}</div>
+                <span class="username">{{ chat.username }} </span>
+                <span class="time">({{ chat.timestamp | date: 'dd/MM/yyyy, hh:mm' }})</span><br>
+                <span>{{ chat.content }}</span>
             </div>
         </div>
     </div>
 
-    <form class="form-inline chat-input">
+    <form autocomplete="off" class="form-inline chat-input">
         <div class="form-group">
             <input type="text" [(ngModel)]="message" class="form-control" name="name"> <br>
         </div>
