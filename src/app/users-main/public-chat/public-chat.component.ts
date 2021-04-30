@@ -7,6 +7,7 @@ import { ChatService } from 'src/app/services/chat.service';
 import { IntersectionObserverService } from 'src/app/services/intersectionObserver.service';
 import { filter, switchMap } from 'rxjs/operators';
 import { Chunk } from 'src/app/model/chunk';
+import { Utils } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-public-chat',
@@ -15,7 +16,7 @@ import { Chunk } from 'src/app/model/chunk';
 })
 export class PublicChatComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
   @ViewChild('observed', { read: ElementRef }) observedElement: ElementRef;
-  @ViewChild('overflow', { read: ElementRef }) overflowElement: ElementRef;
+  @ViewChild('scroll', { read: ElementRef }) scrollElement: ElementRef;
   chatMessages: PublicChatMessage[] = [];
   publicSubscription: Subscription;
   message: string;
@@ -35,7 +36,7 @@ export class PublicChatComponent implements OnInit, AfterViewInit, AfterViewChec
     this.publicSubscription = this.socketService.publicNotificationSubject.subscribe((chat: PublicChatMessage) => {
       this.chatMessages.push(chat);
       this.offset = this.chatMessages.length;
-      this.overflowElement.nativeElement.scrollTo(0, this.overflowElement.nativeElement.scrollHeight);
+      Utils.scroll(this.scrollElement.nativeElement, 0);
     });
   }
 
@@ -51,7 +52,7 @@ export class PublicChatComponent implements OnInit, AfterViewInit, AfterViewChec
 
   ngAfterViewChecked(): void {
     if (this.componentStart) {
-      this.overflowElement.nativeElement.scrollTop = this.overflowElement.nativeElement.scrollHeight;
+      Utils.scroll(this.scrollElement.nativeElement, 0);
     }
   }
 

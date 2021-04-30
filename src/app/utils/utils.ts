@@ -1,4 +1,7 @@
+import { AuthenticationService } from '../services/authentication.service';
+
 export class Utils {
+
 
     static decodeBase64(base64: string) {
         const atb = atob(base64);
@@ -9,5 +12,9 @@ export class Utils {
         }
         const decoder = new TextDecoder('utf-8');
         return decoder.decode(bytes);
+    }
+
+    static scroll(element: HTMLElement, timeout: number) {
+        setTimeout(() => element.scrollIntoView(), timeout);
     }
 }

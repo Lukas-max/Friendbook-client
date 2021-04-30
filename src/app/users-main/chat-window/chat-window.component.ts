@@ -7,8 +7,6 @@ import { Subscription } from 'rxjs';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ChatService } from 'src/app/services/chat.service';
 import { Utils } from 'src/app/utils/utils';
-import { IntersectionObserverService } from 'src/app/services/intersectionObserver.service';
-import { filter, switchMap } from 'rxjs/operators';
 import { Chunk } from 'src/app/model/chunk';
 
 @Component({
@@ -16,10 +14,8 @@ import { Chunk } from 'src/app/model/chunk';
   templateUrl: './chat-window.component.html',
   styleUrls: ['./chat-window.component.scss']
 })
-export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('observed', { read: ElementRef }) observedElement: ElementRef;
+export class ChatWindowComponent implements OnInit, OnDestroy {
   @ViewChild('scrollSpan', { read: ElementRef }) scrollElement: ElementRef;
-  @ViewChild('overflow', { read: ElementRef }) overflowElement: ElementRef;
   chatMessages: PrivateChatMessage[] = [];
   privSubscription: Subscription;
   userSelectSubscription: Subscription;
@@ -37,19 +33,15 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
     private userService: UserService,
     private socketService: SocketService,
     private authenticationService: AuthenticationService,
-    private chatService: ChatService,
-    private intersector: IntersectionObserverService) { }
+    private chatService: ChatService) { }
 
   ngOnInit(): void {
     this.initializeSender();
-  }
-
-  ngAfterViewInit(): void {
-    this.fetchChosenUser();
+    this.fetchMessagesAtStart();
     this.subscribeToSocket();
   }
 
-  private initializeSender(): void {
+  initializeSender(): void {
     this.senderName = this.authenticationService.getUsername();
     this.senderUUID = this.authenticationService.getLoggedUserId();
 
@@ -59,7 +51,7 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private fetchChosenUser(): void {
+  fetchMessagesAtStart(): void {
     this.userSelectSubscription = this.userService.chosenUser.subscribe((user: ConnectedUser) => {
       if (this.receiverUUID === user.userUUID) return;
 
@@ -69,25 +61,27 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
       this.offset = 0;
       this.isOpen = true;
 
-      this.intersector.createAndObserve(this.observedElement).pipe(
-        filter((isIntersecting: boolean) => isIntersecting),
-        switchMap(() => this.chatService.findPrivateMessages(this.senderUUID, this.receiverUUID, this.limit.toString(), this.offset.toString()))
-      ).subscribe((chunk: Chunk<PrivateChatMessage>) => {
-        console.log(chunk);
-        chunk.content.forEach((data: PrivateChatMessage) => data.content = Utils.decodeBase64(data.content));
-        chunk.content.forEach((chat: PrivateChatMessage) => this.chatMessages.unshift(chat));
-        this.offset = this.chatMessages.length;
-      }, (err: any) => console.error(err));
+      this.loadMessages(true);
     });
   }
 
-  private subscribeToSocket(): void {
+  loadMessages(scrollDown: boolean) {
+    this.chatService.findPrivateMessages(this.senderUUID, this.receiverUUID, this.limit.toString(), this.offset.toString())
+      .subscribe((chunk: Chunk<PrivateChatMessage>) => {
+        chunk.content.forEach((data: PrivateChatMessage) => data.content = Utils.decodeBase64(data.content));
+        chunk.content.forEach((chat: PrivateChatMessage) => this.chatMessages.unshift(chat));
+        this.offset = this.chatMessages.length;
+        if (scrollDown)
+          Utils.scroll(this.scrollElement.nativeElement, 0);
+      }, (err: any) => console.error(err));
+  }
+
+  subscribeToSocket(): void {
     this.privSubscription = this.socketService.privateNotificationSubject.subscribe((chat: PrivateChatMessage) => {
       if (this.receiverUUID === chat.senderUUID) {
-        const offsetStart = this.chatMessages.length;
         this.chatMessages.push(chat);
-        this.updateOffset(offsetStart)
-        this.scroll(1)
+        this.offset = this.chatMessages.length;
+        Utils.scroll(this.scrollElement.nativeElement, 0);
       }
 
       if (!this.isOpen && chat.senderUUID === this.receiverUUID) {
@@ -109,34 +103,16 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
       timestamp: new Date().getTime()
     };
 
-    const offsetStart = this.chatMessages.length;
     this.socketService.sendPrivate(privateMessage);
     this.chatMessages.push(privateMessage);
     this.message = '';
-    this.updateOffset(offsetStart)
-    this.scroll(1);
+    this.offset = this.chatMessages.length;
+    Utils.scroll(this.scrollElement.nativeElement, 0);
   }
 
   openClose(): void {
     this.isOpen = !this.isOpen;
     this.notificationAwaiting = false;
-  }
-
-  private updateOffset(offsetStart: number) {
-    const offsetChange = this.chatMessages.length - offsetStart;
-    this.offset += offsetChange;
-  }
-
-  private scroll(timeout: number): void {
-    const el2: HTMLElement = this.scrollElement.nativeElement;
-    setTimeout(() => el2.scrollIntoView(), timeout);
-    // setTimeout(() => {
-    //   const el: HTMLElement = this.overflowElement.nativeElement;
-    //   el.scroll({
-    //     top: this.overflowElement.nativeElement.scrollHeight,
-    //     left: 0
-    //   })
-    // }, 200)
   }
 
   ngOnDestroy(): void {

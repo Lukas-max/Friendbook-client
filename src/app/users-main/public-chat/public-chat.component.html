@@ -2,12 +2,13 @@
 <div class="chat-box">
     <div class="chat-window" #overflow>
         <div *ngIf="chatMessages" class="messages">
-            <div #observed></div>
+            <span #observed></span>
             <div *ngFor="let chat of chatMessages">
                 <span class="username">{{ chat.username }} </span>
                 <span class="time">({{ chat.timestamp | date: 'dd/MM/yyyy, hh:mm' }})</span><br>
                 <span>{{ chat.content }}</span>
             </div>
+            <span #scroll></span>
         </div>
     </div>
 

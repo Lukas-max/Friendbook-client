@@ -1,3 +1,16 @@
+.user-tab {
+    margin-top: 10px;
+
+    .online {
+        color: green;
+        cursor: pointer;
+    }
+
+    .offline {
+        cursor: pointer;
+    }
+}
+
 .fa-envelope {
     margin: 0 5px;
     color: crimson;
