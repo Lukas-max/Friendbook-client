@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from '../services/authentication.service';
-import { SocketService } from '../services/socket.Service';
+import { AuthenticationService } from 'src/app/services/authentication.service';
+import { SocketService } from 'src/app/services/socket.Service';
 
 @Component({
   selector: 'app-users-main',

@@ -3,31 +3,31 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
-import { StarterPageComponent } from './starter-page/starter-page.component';
-import { UsersMainComponent } from './users-main/users-main.component';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { UserProfileComponent } from './users-main/user-profile/user-profile.component';
-import { MainFeedComponent } from './users-main/main-feed/main-feed.component';
-import { OptionsComponent } from './users-main/options/options.component';
-import { NavbarComponent } from './core/navbar/navbar.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { ConfirmRegistrationComponent } from './components/auth/confirm-registration/confirm-registration.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { AuthorizationInterceptor } from './interceptors/authorization.interceptor';
-import { UserSearchComponent } from './users-main/user-search/user-search.component';
-import { FolderComponent } from './users-main/folder/folder.component';
 import { FileUploadComponent } from './utils/file-upload/file-upload.component';
 import { LightboxViewerComponent } from './utils/lightbox-viewer/lightbox-viewer.component';
 import { DummyComponent } from './utils/dummy/dummy.component';
-import { PublicChatComponent } from './users-main/public-chat/public-chat.component';
-import { ChatWindowComponent } from './users-main/chat-window/chat-window.component';
-import { OnlineUsersComponent } from './users-main/online-users/online-users.component';
-import { FeedComponent } from './users-main/main-feed/feed/feed.component';
 import { FileDisplayComponent } from './utils/file-display/file-display.component';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
-import { IntersectionObserverService } from './services/intersectionObserver.service';
+import { UsersMainComponent } from './components/users-main/users-main.component';
+import { MainFeedComponent } from './components/users-main/main-feed/main-feed.component';
+import { UserProfileComponent } from './components/users-main/user-profile/user-profile.component';
+import { OptionsComponent } from './components/users-main/options/options.component';
+import { UserSearchComponent } from './components/users-main/user-search/user-search.component';
+import { FolderComponent } from './components/users-main/folder/folder.component';
+import { PublicChatComponent } from './components/users-main/public-chat/public-chat.component';
+import { StarterPageComponent } from './components/starter-page/starter-page.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { ChatWindowComponent } from './components/users-main/chat-window/chat-window.component';
+import { OnlineUsersComponent } from './components/users-main/online-users/online-users.component';
+import { FeedComponent } from './components/users-main/main-feed/feed/feed.component';
+import { CommentsComponent } from './components/users-main/main-feed/feed/comments/comments.component';
 
 
 const routes: Routes = [
@@ -68,7 +68,8 @@ const routes: Routes = [
     ChatWindowComponent,
     OnlineUsersComponent,
     FeedComponent,
-    FileDisplayComponent
+    FileDisplayComponent,
+    CommentsComponent
   ],
   imports: [
     BrowserModule,

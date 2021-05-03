@@ -20,7 +20,7 @@ export class MainFeedCommentService {
         return this.http.post<any>(`http://localhost:9010/api/feed-comment/`, feedComment);
     }
 
-    deleteFeedComments(feedId: number): Observable<any> {
-        return this.http.delete<any>(`http://localhost:9010/api/feed-comment/` + feedId);
+    deleteFeedComments(commentId: number): Observable<any> {
+        return this.http.delete<any>(`http://localhost:9010/api/feed-comment/` + commentId);
     }
 }

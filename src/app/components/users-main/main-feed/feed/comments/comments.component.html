@@ -1,0 +1,24 @@
+<div #observerLoader></div>
+<div class="comment-button">
+    <button *ngIf="commentsLoaded && !allCommentsLoaded" class="btn btn-outline-primary" (click)="loadComments()">
+        Pokaż komentarze
+    </button>
+</div>
+
+<div *ngFor="let comment of commentsArray; let i = index">
+    <span>{{ comment.username }} </span>
+    <span class="time"> ({{ comment.timestamp | date: 'dd/MM/yyyy, hh:mm' }}) </span>
+    <button *ngIf="userUUID === comment.userUUID" (click)="deleteComment(i)">Usuń</button>
+    <br>
+    <span> {{ comment.content }} </span>
+</div>
+<div *ngIf="commentsArray.length === 0">Brak komentarzy</div>
+
+<div class="comment-poster">
+    <form autocomplete="off" class="form-inline" #commentForm="ngForm">
+        <div class="form-group">
+            <input type="text" ngModel class="form-control" name="comment"> <br>
+        </div>
+        <button (click)="postComment(commentForm)" class="btn btn-primary" type="submit">Wyślij</button>
+    </form>
+</div>

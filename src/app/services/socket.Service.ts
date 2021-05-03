@@ -7,6 +7,7 @@ import { ConnectedUser } from '../model/connectedUser';
 import { AuthenticationService } from './authentication.service';
 import { PrivateChatMessage } from '../model/privateChatMessage';
 import { FeedModelDto } from '../model/feedModelDto';
+import { FeedComment } from '../model/feedComment';
 
 @Injectable({
     providedIn: 'root'
@@ -18,9 +19,11 @@ export class SocketService implements OnDestroy {
     connectionSubject: BehaviorSubject<ConnectedUser[]> = new BehaviorSubject<ConnectedUser[]>(null);
     feedSubscription: Subscription;
     feedSubject: Subject<FeedModelDto> = new Subject<FeedModelDto>();
-    publicSubscription: Subscription;
     deleteFeedSubscription: Subscription;
     deleteFeedSubject: Subject<number> = new Subject<number>();
+    commentFeedSubscription: Subscription;
+    commentFeedSubject: Subject<FeedComment> = new Subject<FeedComment>();
+    publicSubscription: Subscription;
     publicNotificationSubject: Subject<PublicChatMessage> = new Subject<PublicChatMessage>();
     privateSubscription: Subscription;
     privateNotificationSubject: Subject<PrivateChatMessage> = new Subject<PrivateChatMessage>();
@@ -37,6 +40,7 @@ export class SocketService implements OnDestroy {
 
         }, err => {
             console.error(err);
+            setTimeout(() => this.connect(), 3000);
         });
     }
 
@@ -62,6 +66,11 @@ export class SocketService implements OnDestroy {
             this.deleteFeedSubject.next(body);
         });
 
+        this.commentFeedSubscription = this.stomp.subscribe(`/topic/comment`, (comm) => {
+            const body: FeedComment = JSON.parse(comm.body);
+            this.commentFeedSubject.next(body);
+        });
+
         this.publicSubscription = this.stomp.subscribe(`/topic/public`, (chat) => {
             const body: PublicChatMessage = JSON.parse(chat.body);
             this.publicNotificationSubject.next(body);
@@ -70,7 +79,7 @@ export class SocketService implements OnDestroy {
         this.privateSubscription = this.stomp.subscribe(`/topic/private.` + uuid, (chat) => {
             const body: PrivateChatMessage = JSON.parse(chat.body);
             this.privateNotificationSubject.next(body);
-        })
+        });
 
         this._sendWhenConnected();
         window.onbeforeunload = window.onunload = () => this._disconnect();
@@ -128,11 +137,12 @@ export class SocketService implements OnDestroy {
         this.stomp = undefined;
         this.socketJs.close();
         this.socketJs = undefined;
-        this.publicSubscription.unsubscribe();
-        this.privateSubscription.unsubscribe();
         this.feedSubscription.unsubscribe();
         this.deleteFeedSubscription.unsubscribe();
         this.connectionSubscription.unsubscribe();
+        this.commentFeedSubscription.unsubscribe();
+        this.publicSubscription.unsubscribe();
+        this.privateSubscription.unsubscribe();
     }
 
 }

@@ -19,18 +19,5 @@
     </app-file-display>
 </div>
 
-<div class="comment-section">
-    <button class="btn btn-outline-primary" *ngIf="showCommentButton" (click)="loadComments()">Pokaż komentarze</button>
-
-    <div *ngFor="let comment of comments"></div>
-
-    <div>
-        <form autocomplete="off" class="form-inline">
-            <div class="form-group">
-                <input type="text" [(ngModel)]="userComment" class="form-control" name="comment"> <br>
-            </div>
-            <button (click)="postComment()" class="btn btn-primary" type="submit">Wyślij</button>
-        </form>
-    </div>
-</div>
+<app-comments [feed]="feed"></app-comments>
 <hr>
