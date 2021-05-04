@@ -6,4 +6,5 @@ export class PrivateChatMessage {
     receiverName: string;
     content: string;
     timestamp: number;
+    status?: string;
 }

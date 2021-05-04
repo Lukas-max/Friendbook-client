@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { PrivateChatMessage } from '../model/privateChatMessage';
 import { PublicChatMessage } from '../model/publicChatMessage';
 import { Chunk } from '../model/chunk';
+import { UserData } from '../model/userData';
 
 @Injectable({
     providedIn: 'root'
@@ -20,4 +21,9 @@ export class ChatService {
         return this.http.get<Chunk<PrivateChatMessage>>(`http://localhost:9010/api/chat/${senderUUID}/${receiverUUID}`,
             { params: { limit: limit, offset: offset } });
     }
+
+    getUserData(): Observable<UserData[]> {
+        return this.http.get<UserData[]>(`http://localhost:9010/api/chat/pending-messages`);
+    }
+
 }

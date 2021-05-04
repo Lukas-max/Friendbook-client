@@ -11,9 +11,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./file-upload.component.scss']
 })
 export class FileUploadComponent implements OnInit, OnDestroy {
-  @Input() uuidEncoded: string;
-  @Input() folderEncoded: string;
-  decodedFolder: string;
+  @Input() userUUID: string;
+  @Input() folder: string;
   compressingFiles: boolean = false;
   filesSelected: FileList;
   compressingFileSubscription: Subscription;
@@ -22,11 +21,12 @@ export class FileUploadComponent implements OnInit, OnDestroy {
   imageFiles: File[] = [];
   otherFilesAndCompressedImages: File[] = [];
 
-  constructor(private fileStorageService: FileStorageService, private router: Router, private compressService: CompressService) { }
+  constructor(
+    private fileStorageService: FileStorageService,
+    private router: Router,
+    private compressService: CompressService) { }
 
   ngOnInit(): void {
-    this.decodedFolder = atob(this.folderEncoded);
-
     this.compressingFileSubscription = this.compressService.compressingFileSubject.subscribe((flag: boolean) => this.compressingFiles = flag);
     this.compressedImageSubscription = this.compressService.compressedImageSubject.subscribe((file: File) => this.otherFilesAndCompressedImages.push(file))
   }
@@ -60,7 +60,7 @@ export class FileUploadComponent implements OnInit, OnDestroy {
     const form = new FormData();
     this.otherFilesAndCompressedImages.forEach(file => form.append('files', file));
 
-    this.fileStorageService.uploadFile(form, this.decodedFolder).subscribe((event: any) => {
+    this.fileStorageService.uploadFile(form, this.folder).subscribe((event: any) => {
       if (event.type === HttpEventType.Response) {
         this._reloadFolder();
       }
@@ -73,7 +73,7 @@ export class FileUploadComponent implements OnInit, OnDestroy {
   _uploadImages() {
     const form = new FormData();
     this.imageFiles.forEach(file => form.append('files', file));
-    this.fileStorageService.uploadImage(form, this.decodedFolder).subscribe((event: any) => {
+    this.fileStorageService.uploadImage(form, this.folder).subscribe((event: any) => {
       if (event.type === HttpEventType.Response) {
         this._reloadFolder();
       };
@@ -85,7 +85,7 @@ export class FileUploadComponent implements OnInit, OnDestroy {
 
   _reloadFolder(): void {
     this.router.navigate(['/user', 'starter', 'dummy'], { skipLocationChange: true })
-      .then(() => this.router.navigate(['/user', 'starter', 'folder', this.uuidEncoded, this.folderEncoded]));
+      .then(() => this.router.navigate(['/user', 'starter', 'folder', this.userUUID, this.folder]));
   }
 
   ngOnDestroy() {

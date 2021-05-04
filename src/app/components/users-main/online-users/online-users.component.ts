@@ -6,6 +6,8 @@ import { Subscription } from 'rxjs';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { PrivateChatMessage } from 'src/app/model/privateChatMessage';
 import { UserResponseDto } from 'src/app/model/userResponseDto';
+import { ChatService } from 'src/app/services/chat.service';
+import { UserData } from 'src/app/model/userData';
 
 @Component({
   selector: 'app-online-users',
@@ -23,22 +25,24 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
   constructor(
     private socketService: SocketService,
     private userService: UserService,
-    private authenticationService: AuthenticationService) { }
+    private authenticationService: AuthenticationService,
+    private chatService: ChatService) { }
 
   ngOnInit(): void {
     this.getConnectedUsers();
-    this.getNotificationConnection();
     this.getUsers();
+    this.getPending();
+    this.getNotificationConnection();
   }
 
-  getConnectedUsers() {
+  getConnectedUsers(): void {
     this.connectionSubscription = this.socketService.connectionSubject.subscribe((connected: ConnectedUser[]) => {
       this.connectedUsers = connected;
       this.populateOfflineUsers();
     });
   }
 
-  getNotificationConnection() {
+  getNotificationConnection(): void {
     this.privateSubscription = this.socketService.privateNotificationSubject.subscribe((notification: PrivateChatMessage) => {
       if (notification.senderUUID === this.chosenUserUUID) return;
 
@@ -47,15 +51,32 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
     });
   }
 
-  getUsers() {
+  getUsers(): void {
     this.userService.getAllUsers().subscribe((users: UserResponseDto[]) => {
       this.users = users;
     });
   }
 
+  getPending(): void {
+    this.chatService.getUserData().subscribe((data: UserData[]) => {
+      this.setPendingMessages(data);
+    });
+  }
+
+  setPendingMessages(data: UserData[]) {
+    if (!this.offlineUsers || !this.connectedUsers) {
+      setTimeout(() => this.setPendingMessages(data), 150);
+    } else {
+      data.forEach((user: UserData) => {
+        console.log(user.username);
+      });
+    }
+
+  }
+
   populateOfflineUsers() {
     if (!this.connectedUsers || !this.users) {
-      setTimeout(() => this.populateOfflineUsers(), 500)
+      setTimeout(() => this.populateOfflineUsers(), 100)
     } else {
       this.offlineUsers = this.users.slice();
       this.connectedUsers.forEach((user: ConnectedUser) => {

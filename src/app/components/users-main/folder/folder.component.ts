@@ -14,8 +14,8 @@ import { filter, switchMap } from 'rxjs/operators';
 })
 export class FolderComponent implements OnInit, AfterViewInit {
   @ViewChild('observed', { read: ElementRef }) element: ElementRef;
-  userUUIDEncoded: string;
-  folderEncoded: string;
+  userUUID: string;
+  folder: string;
   fileData: FileDataDto[] = [];
   limit = 10;
   offset = 0;
@@ -37,15 +37,15 @@ export class FolderComponent implements OnInit, AfterViewInit {
 
   getUserParams(): void {
     this.activatedRoute.params.subscribe((param: Params) => {
-      this.userUUIDEncoded = param['uuid'];
-      this.folderEncoded = param['dir'];
+      this.userUUID = param['uuid'];
+      this.folder = param['dir'];
     });
   }
 
   getFileData(): void {
     this.intersector.createAndObserve(this.element).pipe(
       filter((isIntersecting: boolean) => isIntersecting),
-      switchMap(() => this.fileStorageService.getFileData(this.userUUIDEncoded, this.folderEncoded, this.limit.toString(), this.offset.toString()))
+      switchMap(() => this.fileStorageService.getFileData(this.userUUID, this.folder, this.limit.toString(), this.offset.toString()))
     ).subscribe((chunk: Chunk<FileDataDto>) => {
       chunk.content.forEach((file: FileDataDto) => this.fileData.push(file));
       this.offset = this.fileData.length;
@@ -53,21 +53,19 @@ export class FolderComponent implements OnInit, AfterViewInit {
   }
 
   return(): void {
-    const uuid = atob(this.userUUIDEncoded);
-    const isLoggedUser = this.authenticationService.isTheSameId(uuid);
+    const isLoggedUser = this.authenticationService.isTheSameId(this.userUUID);
     if (isLoggedUser)
       this.router.navigate(['/user', 'starter', 'user-profile', '']);
     else
-      this.router.navigate(['/user', 'starter', 'user-profile', uuid]);
+      this.router.navigate(['/user', 'starter', 'user-profile', this.userUUID]);
   }
 
   _reloadFolder(): void {
     this.router.navigate(['/user', 'starter', 'dummy'], { skipLocationChange: true })
-      .then(() => this.router.navigate(['/user', 'starter', 'folder', this.userUUIDEncoded, this.folderEncoded]));
+      .then(() => this.router.navigate(['/user', 'starter', 'folder', this.userUUID, this.folder]));
   }
 
   _isLoggedUser() {
-    const uuid = atob(this.userUUIDEncoded);
-    return this.authenticationService.isTheSameId(uuid);
+    return this.authenticationService.isTheSameId(this.userUUID);
   }
 }

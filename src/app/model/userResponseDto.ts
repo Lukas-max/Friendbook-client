@@ -3,4 +3,5 @@ export interface UserResponseDto {
     username: string;
     email: string;
     password: string;
+    messagePending?: boolean;
 }

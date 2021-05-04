@@ -11,8 +11,8 @@ import { FileStorageService } from 'src/app/services/file-storage.service';
 export class FileDisplayComponent implements OnInit {
   @Output() reload: EventEmitter<void> = new EventEmitter<void>();
   @Input() fileData: FileDataDto[];
-  @Input() userUUIDEncoded: string;
-  @Input() folderEncoded: string;
+  @Input() userUUID: string;
+  @Input() folder: string;
   @Input() showDeleteButton: boolean;
   selectedFile: FileDataDto;
   index: number = 0;
@@ -26,10 +26,9 @@ export class FileDisplayComponent implements OnInit {
     if (!confirm(`Chcesz usunąć plik ${fileName}?`))
       return;
 
-    const folder = atob(this.folderEncoded);
-    if (!folder) return;
+    if (!this.folder) return;
 
-    this.fileStorageService.deleteFile(folder, fileName).subscribe(() => {
+    this.fileStorageService.deleteFile(this.folder, fileName).subscribe(() => {
       this.reload.emit();
     }, (error: any) => {
       console.error(error);
@@ -60,7 +59,6 @@ export class FileDisplayComponent implements OnInit {
   }
 
   _isLoggedUser() {
-    const uuid = atob(this.userUUIDEncoded);
-    return this.authenticationService.isTheSameId(uuid);
+    return this.authenticationService.isTheSameId(this.userUUID);
   }
 }

@@ -1,13 +1,13 @@
-<div *ngIf="userUUIDEncoded && folderEncoded" class="files-tab">
+<div *ngIf="userUUID && folder" class="files-tab">
 
-    <app-file-upload *ngIf="_isLoggedUser()" [folderEncoded]="folderEncoded" [uuidEncoded]="userUUIDEncoded">
+    <app-file-upload *ngIf="_isLoggedUser()" [folder]="folder" [userUUID]="userUUID">
     </app-file-upload>
 
     <button class="btn btn-outline-primary" (click)="return()">Wróć</button>
     <div>
         <div *ngIf="fileData">
-            <app-file-display [fileData]="fileData" [userUUIDEncoded]="userUUIDEncoded" [folderEncoded]="folderEncoded"
-                [showDeleteButton]="true" (reload)="_reloadFolder()">
+            <app-file-display [fileData]="fileData" [userUUID]="userUUID" [folder]="folder" [showDeleteButton]="true"
+                (reload)="_reloadFolder()">
             </app-file-display>
         </div>
     </div>

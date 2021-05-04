@@ -53,9 +53,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   onFolderClick(folder: string) {
-    const uuidEncoded = btoa(this.userUUID);
-    const folderEncoded = btoa(folder);
-    this.router.navigate(['/user', 'starter', 'folder', uuidEncoded, folderEncoded]);
+    this.router.navigate(['/user', 'starter', 'folder', this.userUUID, folder]);
   }
 
   createFolder() {
