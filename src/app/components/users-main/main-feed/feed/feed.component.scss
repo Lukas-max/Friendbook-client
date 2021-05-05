@@ -28,8 +28,20 @@
     margin: 5px;
 }
 
+.more-files {
+    width: 200px;
+    height: 150px;
+    background: gray;
+    text-align: center;
+    line-height: 150px;
+
+    .fa-binoculars {
+        font-size: 70px;
+    }
+}
+
 img {
-    width: 300px;
+    width: 250px;
     transition: transform 0.4s;
 }
 

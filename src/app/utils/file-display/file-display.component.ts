@@ -14,6 +14,7 @@ export class FileDisplayComponent implements OnInit {
   @Input() userUUID: string;
   @Input() folder: string;
   @Input() showDeleteButton: boolean;
+  @Input() length: number;
   selectedFile: FileDataDto;
   index: number = 0;
 

@@ -1,4 +1,4 @@
-<div *ngFor="let file of fileData; let i = index">
+<div *ngFor="let file of fileData | slice:0:length; let i = index">
 
     <div [ngSwitch]="file.type" (click)="clickFile(i)">
         <div *ngSwitchCase="'image'" class="file-view">
@@ -10,7 +10,7 @@
         </div>
         <div *ngSwitchCase="'video'" class=" file-view">
             <video [src]="file.url" controls="controls" [alt]="file.fileName" [title]="
-                file.fileName"></video>
+                    file.fileName"></video>
         </div>
         <div *ngSwitchDefault class="file-view">
             <i class="fas fa-file" style="font-size: 110px;"></i>

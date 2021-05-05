@@ -8,6 +8,7 @@ import { AuthenticationService } from './authentication.service';
 import { PrivateChatMessage } from '../model/privateChatMessage';
 import { FeedModelDto } from '../model/feedModelDto';
 import { FeedComment } from '../model/feedComment';
+import { UserData } from '../model/userData';
 
 @Injectable({
     providedIn: 'root'
@@ -16,7 +17,7 @@ export class SocketService implements OnDestroy {
     socketJs: any;
     stomp: any;
     connectionSubscription: Subscription;
-    connectionSubject: BehaviorSubject<ConnectedUser[]> = new BehaviorSubject<ConnectedUser[]>(null);
+    connectionSubject: BehaviorSubject<UserData[]> = new BehaviorSubject<UserData[]>(null);
     feedSubscription: Subscription;
     feedSubject: Subject<FeedModelDto> = new Subject<FeedModelDto>();
     deleteFeedSubscription: Subscription;
@@ -52,7 +53,7 @@ export class SocketService implements OnDestroy {
         }
 
         this.connectionSubscription = this.stomp.subscribe(`/topic/connection`, (data) => {
-            const body: ConnectedUser[] = JSON.parse(data.body);;
+            const body: UserData[] = JSON.parse(data.body);;
             this.connectionSubject.next(body);
         });
 

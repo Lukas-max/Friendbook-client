@@ -15,9 +15,10 @@ import { UserData } from 'src/app/model/userData';
   styleUrls: ['./online-users.component.scss']
 })
 export class OnlineUsersComponent implements OnInit, OnDestroy {
-  connectedUsers: ConnectedUser[];
+  connectedUsers: UserData[];
   users: UserResponseDto[];
   offlineUsers: UserResponseDto[];
+  pending: UserData[];
   connectionSubscription: Subscription;
   privateSubscription: Subscription;
   chosenUserUUID: string;
@@ -35,13 +36,23 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
     this.getNotificationConnection();
   }
 
+  /**
+   * Here we get UserData of connected by stomp and online users from BehaviourSubject in SocketService. We delete the offlineUsers array to repopulate them in a minute.
+   * When we got that we evoke populateOfflineUsers();
+   */
   getConnectedUsers(): void {
-    this.connectionSubscription = this.socketService.connectionSubject.subscribe((connected: ConnectedUser[]) => {
+    this.connectionSubscription = this.socketService.connectionSubject.subscribe((connected: UserData[]) => {
+      this.offlineUsers = undefined;
       this.connectedUsers = connected;
       this.populateOfflineUsers();
+      this.setPendingMessages();
     });
   }
 
+  /**
+   * Here we fetch every message send by an other user on the private user stomp channel subscription. But only for that to set the messagePending field of that user to true.
+   * That will change the view. If we chat with the an other user and a message comes from him we return; the method.
+   */
   getNotificationConnection(): void {
     this.privateSubscription = this.socketService.privateNotificationSubject.subscribe((notification: PrivateChatMessage) => {
       if (notification.senderUUID === this.chosenUserUUID) return;
@@ -51,30 +62,19 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * We get the UserData of all users registered on the server.
+   */
   getUsers(): void {
     this.userService.getAllUsers().subscribe((users: UserResponseDto[]) => {
       this.users = users;
     });
   }
 
-  getPending(): void {
-    this.chatService.getUserData().subscribe((data: UserData[]) => {
-      this.setPendingMessages(data);
-    });
-  }
-
-  setPendingMessages(data: UserData[]) {
-    if (!this.offlineUsers || !this.connectedUsers) {
-      setTimeout(() => this.setPendingMessages(data), 150);
-    } else {
-      data.forEach((user: UserData) => {
-        console.log(user.username);
-      });
-    }
-
-  }
-
-  populateOfflineUsers() {
+  /**
+   * We set the offlineUsers array with all the registered users then we remove from that array all the connectedUsers.
+   */
+  populateOfflineUsers(): void {
     if (!this.connectedUsers || !this.users) {
       setTimeout(() => this.populateOfflineUsers(), 100)
     } else {
@@ -85,20 +85,81 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
     }
   }
 
-  removeOnlineUser(connectedUser: ConnectedUser) {
+  removeOnlineUser(connectedUser: ConnectedUser): void {
     const index = this.offlineUsers.findIndex((usr) => usr.userUUID === connectedUser.userUUID);
 
     this.offlineUsers.splice(index, 1);
   }
 
-  openChat(connectedUser: ConnectedUser): void {
+  /**
+   * Will check if there are pending messages from other users.
+   * It calls setPendingMessages(pendingMessageUser: UserData[]).
+   */
+  getPending(): void {
+    this.chatService.getUserData().subscribe((data: UserData[]) => {
+      this.pending = data;
+    });
+  }
+
+  /**
+   * 
+   * We use here this.pending: UserData[].  To get the array of user with pending messages.
+   * 
+   * First this method checks if the connectedUsers and offlineUsers are ready, if not it waits. 
+   * Then for each of the pending (user with message or messages not read) we iterate and check the connectedUsers array and if not found the offlineUsers array 
+   * to find the searched user. Then when found we stamp him by setting messagePending field to true. So the view will change accordingly.
+   */
+  setPendingMessages(): void {
+    if (!this.pending || !this.offlineUsers || !this.connectedUsers) {
+      setTimeout(() => this.setPendingMessages(), 150);
+    } else {
+      this.pending.forEach((user: UserData) => {
+        let userWithMessagePending: any = this.connectedUsers.find((connectedUser: UserData) => connectedUser.userUUID === user.userUUID);
+
+        if (userWithMessagePending)
+          userWithMessagePending.messagePending = true;
+        else {
+          userWithMessagePending = this.offlineUsers.find((offlineUser: UserResponseDto) => offlineUser.userUUID === user.userUUID);
+          userWithMessagePending.messagePending = true;
+        }
+      });
+    }
+  }
+
+
+  /**
+   * 
+   * @param connectedUser - It's the user we have clicked to open chat window with him. 
+   * 
+   * When clicked on a connectedUser or offline user we evoke this method. First we chek by the userUUID if the user havent clicked himself. If no, we use userService 
+   * Subject to pass the user .next(). That will open the chat window. If we had a notification of a PENDING message from the clicked user
+   * we erase it by setting messagePending to false.
+   * We also set chosenUserUUID to this user. So in .getNotificationConnection(): void we can check when a message comes to this active chosen user and we wont set his
+   * messagePending to true. Thats why we will not have PENDING status message while chatting with the active user.
+   */
+  openChat(connectedUser: UserData): void {
     if (connectedUser.userUUID === this.authenticationService.getLoggedUserId()) return;
 
+    this.resetPending(connectedUser);
     this.chosenUserUUID = connectedUser.userUUID;
-    connectedUser.messagePending = false;
     this.userService.chosenUser.next(connectedUser);
   }
 
+  /**
+   * 
+   * @param connectedUser - user passed from the method:  openChat(connectedUser: UserData): void
+   * 
+   * It will set messagePending to false and/or remove the pending status from pending array.
+   */
+  resetPending(connectedUser: UserData): void {
+    connectedUser.messagePending = false;
+    const index = this.pending.findIndex((user: UserData) => user.userUUID === connectedUser.userUUID);
+    this.pending.splice(index, 1);
+  }
+
+  /**
+   * Unsubscribing.
+   */
   ngOnDestroy(): void {
     this.connectionSubscription.unsubscribe();
     this.privateSubscription.unsubscribe();

@@ -4,7 +4,7 @@
         <div>ONLINE:</div>
         <div *ngFor="let user of connectedUsers; let i = index">
             <span class="online" (click)="openChat(user)">{{ user.username }}</span>
-            <span *ngIf="user.messagePending">+++ <i class="far fa-envelope"></i></span>
+            <span *ngIf="user.messagePending"><i class="far fa-envelope"></i></span>
         </div>
     </div>
 
@@ -12,7 +12,7 @@
         <div>OFFLINE:</div>
         <div *ngFor="let user of offlineUsers">
             <span class="offline" (click)="openChat(user)">{{ user.username }}</span>
-            <span *ngIf="user.messagePending">+++ <i class="far fa-envelope"></i></span>
+            <span *ngIf="user.messagePending"><i class="far fa-envelope"></i></span>
         </div>
     </div>
 

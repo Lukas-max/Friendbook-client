@@ -15,8 +15,13 @@
 </div>
 
 <div *ngIf="feed.fileData">
-    <app-file-display [fileData]="feed.fileData" [userUUIDEncoded]="userUUIDEncoded" [showDeleteButton]="false">
+    <app-file-display [fileData]="feed.fileData" [userUUIDEncoded]="userUUIDEncoded" [showDeleteButton]="false"
+        [length]="4">
     </app-file-display>
+
+    <div *ngIf="feed.fileData.length > 4" class="more-files">
+        <i class="fas fa-binoculars"></i>
+    </div>
 </div>
 
 <app-comments [feed]="feed"></app-comments>

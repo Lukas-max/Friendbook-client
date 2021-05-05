@@ -23,7 +23,7 @@ export class FileStorageService {
     uploadFile(form: FormData, folder: string): Observable<HttpEvent<any>> {
         const param = new HttpParams().append('directory', folder);
         const request = new HttpRequest('POST', `http://localhost:9010/api/storage`, form, {
-            reportProgress: true,
+            // reportProgress: true,
             responseType: 'json',
             params: param
         });
@@ -34,7 +34,7 @@ export class FileStorageService {
     uploadImage(form: FormData, folder: string): Observable<HttpEvent<any>> {
         const param = new HttpParams().append('directory', folder);
         const request = new HttpRequest('POST', `http://localhost:9010/api/storage/images`, form, {
-            reportProgress: true,
+            // reportProgress: true,
             responseType: 'json',
             params: param
         });

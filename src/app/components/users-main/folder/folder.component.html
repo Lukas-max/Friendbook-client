@@ -7,7 +7,7 @@
     <div>
         <div *ngIf="fileData">
             <app-file-display [fileData]="fileData" [userUUID]="userUUID" [folder]="folder" [showDeleteButton]="true"
-                (reload)="_reloadFolder()">
+                [length]="fileData.length" (reload)="_reloadFolder()">
             </app-file-display>
         </div>
     </div>

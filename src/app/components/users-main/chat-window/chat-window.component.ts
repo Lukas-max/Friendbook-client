@@ -1,13 +1,13 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { PrivateChatMessage } from 'src/app/model/privateChatMessage';
 import { UserService } from 'src/app/services/user.service';
-import { ConnectedUser } from 'src/app/model/connectedUser';
 import { SocketService } from 'src/app/services/socket.Service';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ChatService } from 'src/app/services/chat.service';
 import { Utils } from 'src/app/utils/utils';
 import { Chunk } from 'src/app/model/chunk';
+import { UserData } from 'src/app/model/userData';
 
 @Component({
   selector: 'app-chat-window',
@@ -52,7 +52,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
   }
 
   fetchMessagesAtStart(): void {
-    this.userSelectSubscription = this.userService.chosenUser.subscribe((user: ConnectedUser) => {
+    this.userSelectSubscription = this.userService.chosenUser.subscribe((user: UserData) => {
       if (this.receiverUUID === user.userUUID) return;
 
       this.receiverName = user.username;
