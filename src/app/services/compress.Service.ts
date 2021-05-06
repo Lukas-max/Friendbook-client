@@ -9,7 +9,7 @@ export class CompressService {
     compressedImageSubject: Subject<File> = new Subject<File>();
 
 
-    _compressImage(file: File, width: number, quality: number): void {
+    compressImage(file: File, width: number, quality: number): void {
         this.compressingFileSubject.next(true);
         const reader = new FileReader();
         reader.readAsDataURL(file);

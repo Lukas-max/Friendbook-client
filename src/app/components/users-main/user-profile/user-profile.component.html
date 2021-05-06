@@ -1,5 +1,5 @@
 <div *ngIf="userUUID && user; else empty">
-    <p>{{ user.username}}</p>
+    <app-profile-head [user]="user"></app-profile-head>
 
     <div class="box">
 

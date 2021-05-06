@@ -28,6 +28,7 @@ import { ChatWindowComponent } from './components/users-main/chat-window/chat-wi
 import { OnlineUsersComponent } from './components/users-main/online-users/online-users.component';
 import { FeedComponent } from './components/users-main/main-feed/feed/feed.component';
 import { CommentsComponent } from './components/users-main/main-feed/feed/comments/comments.component';
+import { ProfileHeadComponent } from './components/users-main/user-profile/profile-head/profile-head.component';
 
 
 const routes: Routes = [
@@ -69,7 +70,8 @@ const routes: Routes = [
     OnlineUsersComponent,
     FeedComponent,
     FileDisplayComponent,
-    CommentsComponent
+    CommentsComponent,
+    ProfileHeadComponent
   ],
   imports: [
     BrowserModule,

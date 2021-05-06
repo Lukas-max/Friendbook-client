@@ -1,0 +1,42 @@
+<div class="head-box">
+    <div *ngIf="lowQualityUrl; else noPhoto">
+        <div class="photo-frame">
+            <img src="data:image/jpeg;base64,{{lowQualityUrl}}" alt="Zdjęcie profilowe">
+        </div>
+    </div>
+    <p class="username">{{ user.username }}</p>
+
+</div>
+
+<div *ngIf="isOwnerUser()">
+    <p>
+        <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#options"
+            aria-expanded="false" aria-controls="options">
+            Opcje
+        </button>
+    </p>
+
+    <div class="collapse" id="options">
+        <div class="card card-body">
+            <div>
+                <h5>Zmień zdjęcie</h5>
+                <label>
+                    <input type="file" (change)="selectFile($event)" />
+                </label>
+                <button class="btn btn-outline-success" [disabled]="!photo" (click)="changeProfilePhoto()">
+                    Zmień profilowe
+                </button>
+
+                <button *ngIf="lowQualityUrl" class="btn btn-outline-danger" (click)="deletePhoto()">
+                    Usuń profilowe
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #noPhoto>
+    <div class="profile-head">
+        <div class="letter-name">{{ firstLetterOfName }}</div>
+    </div>
+</ng-template>

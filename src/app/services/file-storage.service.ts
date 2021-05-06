@@ -20,6 +20,14 @@ export class FileStorageService {
             { params: { 'userUUID': uuid, 'directory': folder, 'limit': limit, 'offset': offset } });
     }
 
+    getProfilePhotoHighQuality(uuid: string): Observable<any> {
+        return this.http.get(`http://localhost:9010/api/storage/profile/high-quality/${uuid}`);
+    }
+
+    getProfilePhotoLowQuality(uuid: string): Observable<any> {
+        return this.http.get(`http://localhost:9010/api/storage/profile/low-quality/${uuid}`);
+    }
+
     uploadFile(form: FormData, folder: string): Observable<HttpEvent<any>> {
         const param = new HttpParams().append('directory', folder);
         const request = new HttpRequest('POST', `http://localhost:9010/api/storage`, form, {
@@ -42,6 +50,10 @@ export class FileStorageService {
         return this.http.request(request);
     }
 
+    uplodProfilePhoto(form: FormData): Observable<any> {
+        return this.http.post(`http://localhost:9010/api/storage/profile`, form);
+    }
+
     createFolder(directory: string): Observable<any> {
         return this.http.post<any>(`http://localhost:9010/api/storage/directory`, directory);
     }
@@ -52,5 +64,9 @@ export class FileStorageService {
 
     deleteFile(directory: string, fileName: string): Observable<any> {
         return this.http.delete(`http://localhost:9010/api/storage/${directory}/${fileName}`);
+    }
+
+    deleteProfilePhoto(): Observable<any> {
+        return this.http.delete(`http://localhost:9010/api/storage/profile`);
     }
 } 

@@ -1,0 +1,35 @@
+.head-box {
+    display: flex;
+    padding: 30px;
+
+    img {
+        width: 300px;
+        border-radius: 60px;
+    }
+    
+    .username {
+        margin: 0 40px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    
+    .card-body {
+        width: 400px;
+    }
+
+    .profile-head {
+        text-align: center;
+        line-height: 250px;
+        width: 250px;
+        height: 250px;
+        background-color: rgb(243, 241, 241);
+        border-radius: 60px;
+
+        .letter-name {
+            font-weight: bolder;
+            font-size: 90px;
+            text-transform: uppercase;
+            color: silver;
+        }
+    }
+}

@@ -39,7 +39,7 @@ export class FileUploadComponent implements OnInit, OnDestroy {
     Array.from(this.filesSelected).forEach(file => {
       const fileType = file.type.split('/')[0];
       if (fileType === 'image') {
-        this.compressService._compressImage(file, 250, 0.3);
+        this.compressService.compressImage(file, 250, 0.3);
         this.imageFiles.push(file);
       } else {
         this.otherFilesAndCompressedImages.push(file);
