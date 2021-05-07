@@ -1,11 +1,14 @@
-<div *ngIf="response">
-    <p>ta da</p>
+<div class="message">
+    <div *ngIf="response; else res">
+        <p>Utworzono konto użytkownika</p>
+    </div>
+
+    <div *ngIf="error">
+        <p>{{ message }}</p>
+    </div>
+
 </div>
 
-<div *ngIf="error">
-    <p>{{ message }}</p>
-</div>
-
-<ng-template *ngIf="!response">
+<ng-template #res>
     <p>Czekam na odpowiedź z serwera</p>
 </ng-template>

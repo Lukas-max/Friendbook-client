@@ -3,6 +3,7 @@ import { HttpClient, HttpRequest, HttpParams, HttpEvent } from '@angular/common/
 import { Observable } from 'rxjs';
 import { FileDataDto } from '../model/fileDataDto';
 import { Chunk } from '../model/chunk';
+import { BytePackage } from '../model/bytePackage';
 
 @Injectable({
     providedIn: 'root',
@@ -20,12 +21,12 @@ export class FileStorageService {
             { params: { 'userUUID': uuid, 'directory': folder, 'limit': limit, 'offset': offset } });
     }
 
-    getProfilePhotoHighQuality(uuid: string): Observable<any> {
-        return this.http.get(`http://localhost:9010/api/storage/profile/high-quality/${uuid}`);
+    getProfilePhotoHighQuality(uuid: string): Observable<BytePackage> {
+        return this.http.get<BytePackage>(`http://localhost:9010/api/storage/profile/high-quality/${uuid}`);
     }
 
-    getProfilePhotoLowQuality(uuid: string): Observable<any> {
-        return this.http.get(`http://localhost:9010/api/storage/profile/low-quality/${uuid}`);
+    getProfilePhotoLowQuality(uuid: string): Observable<BytePackage> {
+        return this.http.get<BytePackage>(`http://localhost:9010/api/storage/profile/low-quality/${uuid}`);
     }
 
     uploadFile(form: FormData, folder: string): Observable<HttpEvent<any>> {

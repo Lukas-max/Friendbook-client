@@ -3,5 +3,6 @@ export interface UserResponseDto {
     username: string;
     email: string;
     password: string;
+    storageSize: number;
     messagePending?: boolean;
 }

@@ -2,6 +2,7 @@
     <app-profile-head [user]="user"></app-profile-head>
 
     <div class="box">
+        <p *ngIf="_isLoggedUser()"><span>Zajęte miejsce:</span> {{ user.storageSize | number: '1.0-2'}} %</p>
 
         <div *ngIf="folders" class="folder-block">
             <div>FOLDERY:</div>

@@ -14,6 +14,7 @@ export class UserProfileComponent implements OnInit {
   userUUID: string;
   user: UserResponseDto;
   folders: string[] = [];
+  storage: number;
 
   constructor(
     private fileStorageService: FileStorageService,

@@ -12,6 +12,7 @@ import { SocketService } from 'src/app/services/socket.Service';
 })
 export class LoginComponent implements OnInit {
   @ViewChild("loginForm") form: NgForm;
+  error: boolean;
 
   constructor(private router: Router, private authenticationService: AuthenticationService, private socketService: SocketService) { }
 
@@ -29,6 +30,7 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['/user', 'starter', 'main-feed']);
     }, error => {
       console.log(error);
+      this.error = true;
     });
   }
 
