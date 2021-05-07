@@ -29,6 +29,7 @@ import { OnlineUsersComponent } from './components/users-main/online-users/onlin
 import { FeedComponent } from './components/users-main/main-feed/feed/feed.component';
 import { CommentsComponent } from './components/users-main/main-feed/feed/comments/comments.component';
 import { ProfileHeadComponent } from './components/users-main/user-profile/profile-head/profile-head.component';
+import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 
 
 const routes: Routes = [
@@ -45,6 +46,7 @@ const routes: Routes = [
   },
   { path: '', component: StarterPageComponent },
   { path: 'register-verify', component: ConfirmRegistrationComponent },
+  { path: 'reset', component: ResetPasswordComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
@@ -71,7 +73,8 @@ const routes: Routes = [
     FeedComponent,
     FileDisplayComponent,
     CommentsComponent,
-    ProfileHeadComponent
+    ProfileHeadComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,

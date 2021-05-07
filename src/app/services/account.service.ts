@@ -23,4 +23,12 @@ export class AccountService {
     sendVerificationToken(tokenUUID: string): Observable<any> {
         return this.http.post(`http://localhost:9010/api/account/confirm-account`, tokenUUID)
     }
+
+    sendPasswordResetRequest(email: string): Observable<any> {
+        return this.http.get(`http://localhost:9010/api/account/reset-request`, { params: { email: email } });
+    }
+
+    sendPasswordResetToken(token: string): Observable<any> {
+        return this.http.put(`http://localhost:9010/api/account/reset-password`, token);
+    }
 }

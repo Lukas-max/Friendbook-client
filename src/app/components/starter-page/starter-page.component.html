@@ -1,6 +1,7 @@
 <div class="starter-page-box">
     <app-login></app-login>
     <a href="#" (click)="register()">Zarejestruj się</a>
+    <a href="#" [routerLink]="['reset']">Zapomniełeś hasła?</a>
 </div>
 
 <app-register *ngIf="registerAttempt" (closeComponent)="closeRegisterWindow()"></app-register>
