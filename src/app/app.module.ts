@@ -42,6 +42,7 @@ const routes: Routes = [
       { path: 'folder/:uuid/:dir', component: FolderComponent },
       { path: 'dummy', component: DummyComponent },
       { path: 'chat', component: PublicChatComponent },
+      { path: 'login/:value', component: LoginComponent }
     ]
   },
   { path: '', component: StarterPageComponent },

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { NgForm } from '@angular/forms';
 import { LoginCredentials } from 'src/app/model/LoginCredentials';
@@ -14,15 +14,22 @@ export class LoginComponent implements OnInit {
   @ViewChild("loginForm") form: NgForm;
   error: boolean;
 
-  constructor(private router: Router, private authenticationService: AuthenticationService, private socketService: SocketService) { }
+  constructor(
+    private router: Router,
+
+    private authenticationService: AuthenticationService,
+    private socketService: SocketService,
+    private routes: ActivatedRoute) { }
 
   ngOnInit(): void {
+    const param = this.routes.snapshot.params['value'];
   }
 
   onSubmit() {
     const credentials = new LoginCredentials(
       this.form.value.email,
-      btoa(this.form.value.password));
+      btoa(this.form.value.password)
+    );
 
     this.authenticationService.login(credentials).subscribe((res) => {
       if (this.authenticationService.isLogged() && !this.socketService.isConnected())

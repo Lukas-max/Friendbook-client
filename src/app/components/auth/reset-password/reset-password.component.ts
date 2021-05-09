@@ -11,13 +11,19 @@ import { AccountService } from 'src/app/services/account.service';
 export class ResetPasswordComponent implements OnInit {
   @ViewChild('resetForm') form: NgForm;
   token: string;
+  isTokenSend: boolean;
 
-  constructor(private routes: ActivatedRoute, private router: Router, private accountService: AccountService) { }
+  constructor(
+    private routes: ActivatedRoute,
+    private router: Router,
+    private accountService: AccountService) { }
 
   ngOnInit(): void {
     this.token = this.routes.snapshot.queryParams['token'];
     if (this.token)
-      this.accountService.sendPasswordResetToken(this.token).subscribe(() => { });
+      this.accountService.sendPasswordResetToken(this.token).subscribe(() => {
+        this.isTokenSend = true;
+      });
   }
 
   submit(): void {
