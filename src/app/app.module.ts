@@ -30,6 +30,7 @@ import { FeedComponent } from './components/users-main/main-feed/feed/feed.compo
 import { CommentsComponent } from './components/users-main/main-feed/feed/comments/comments.component';
 import { ProfileHeadComponent } from './components/users-main/user-profile/profile-head/profile-head.component';
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
+import { ChangePasswordComponent } from './components/auth/change-password/change-password.component';
 
 
 const routes: Routes = [
@@ -42,7 +43,8 @@ const routes: Routes = [
       { path: 'folder/:uuid/:dir', component: FolderComponent },
       { path: 'dummy', component: DummyComponent },
       { path: 'chat', component: PublicChatComponent },
-      { path: 'login/:value', component: LoginComponent }
+      { path: 'login/:value', component: LoginComponent },
+      { path: 'change', component: ChangePasswordComponent }
     ]
   },
   { path: '', component: StarterPageComponent },
@@ -75,7 +77,8 @@ const routes: Routes = [
     FileDisplayComponent,
     CommentsComponent,
     ProfileHeadComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,

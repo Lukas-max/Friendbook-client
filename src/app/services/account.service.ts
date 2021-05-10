@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserDto } from '../model/userDto';
+import { Credentials } from '../model/credentials';
 
 
 @Injectable({
@@ -13,7 +14,8 @@ export class AccountService {
     }
 
     checkForEmail(typedEmail: string): Observable<boolean> {
-        return this.http.get<boolean>(`http://localhost:9010/api/account/email`, { params: new HttpParams().set('email', typedEmail) });
+        const paramObject = new HttpParams().set('email', typedEmail);
+        return this.http.get<boolean>(`http://localhost:9010/api/account/email`, { params: paramObject });
     }
 
     register(userDto: UserDto): Observable<UserDto> {
@@ -29,6 +31,10 @@ export class AccountService {
     }
 
     sendPasswordResetToken(token: string): Observable<any> {
-        return this.http.put(`http://localhost:9010/api/account/reset-password`, token);
+        return this.http.patch(`http://localhost:9010/api/account/reset-password`, token);
+    }
+
+    changePassword(credentials: Credentials): Observable<any> {
+        return this.http.patch(`http://localhost:9010/api/account/password`, credentials);
     }
 }
