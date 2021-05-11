@@ -37,4 +37,12 @@ export class AccountService {
     changePassword(credentials: Credentials): Observable<any> {
         return this.http.patch(`http://localhost:9010/api/account/password`, credentials);
     }
+
+    changeEmail(email: string): Observable<any> {
+        return this.http.patch(`http://localhost:9010/api/account/email`, email);
+    }
+
+    deleteAccount() {
+        return this.http.delete(`http://localhost:9010/api/account`);
+    }
 }

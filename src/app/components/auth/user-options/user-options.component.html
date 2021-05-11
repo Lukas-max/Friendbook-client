@@ -18,6 +18,19 @@
         </form>
     </div>
 
+    <div *ngIf="emailChangeOption && !message">
+        <h6>Podaj nowy email:</h6>
+
+        <form (ngSubmit)="submitEmailChange()" [formGroup]="emailForm">
+            <div class="form-group">
+                <input type="email" class="form-control" name="email" formControlName="email">
+                <p *ngIf="emailForm.get('email').hasError('mailExists')" class="error">Email już jest zajęty</p>
+            </div>
+
+            <button type="submit" class="btn btn-primary" [disabled]="emailForm.invalid">Zmień email</button>
+        </form>
+    </div>
+
     <div *ngIf="message">
         <p class="message">{{ message }}</p>
     </div>

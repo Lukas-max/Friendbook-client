@@ -44,21 +44,21 @@ export class LoginComponent implements OnInit {
   handelLoginExecution(): void {
     switch (this.pathVariable) {
       case 'change-password':
-        this.changePassword();
+        this.optionUserChange('change-password');
         break;
       case 'change-email':
-        console.log('change email');
+        this.optionUserChange('change-email');
         break;
       case 'delete-account':
-        console.log('delete account');
+        this.optionUserChange('delete-account');
         break;
       default:
         this.normalLogin();
     }
   }
 
-  changePassword(): void {
-    this.router.navigate(['/user/starter/change'], { state: { confirmed: 'change-password' } });
+  optionUserChange(option: string): void {
+    this.router.navigate(['/user/starter/change'], { state: { confirmed: option } });
   }
 
   normalLogin(): void {

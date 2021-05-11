@@ -5,6 +5,10 @@
 
     form {
         width: 300px;
+
+        .error {
+            color: crimson;
+        }
     }
 
     .message { 
