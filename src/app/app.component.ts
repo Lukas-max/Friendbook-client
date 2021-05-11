@@ -10,7 +10,9 @@ import { SocketService } from './services/socket.Service';
 export class AppComponent implements OnInit {
   title = 'FriendBook';
 
-  constructor(private authenticationService: AuthenticationService, private socketService: SocketService) {
+  constructor(
+    private authenticationService: AuthenticationService,
+    private socketService: SocketService) {
   }
 
   ngOnInit(): void {

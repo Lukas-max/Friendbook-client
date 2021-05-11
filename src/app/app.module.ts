@@ -31,6 +31,7 @@ import { CommentsComponent } from './components/users-main/main-feed/feed/commen
 import { ProfileHeadComponent } from './components/users-main/user-profile/profile-head/profile-head.component';
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 import { UserOptionsComponent } from './components/auth/user-options/user-options.component';
+import { LoggedUserGuard } from './guards/loggedUser.guard';
 
 
 const routes: Routes = [
@@ -47,9 +48,9 @@ const routes: Routes = [
       { path: 'change', component: UserOptionsComponent }
     ]
   },
-  { path: '', component: StarterPageComponent },
+  { path: '', component: StarterPageComponent, canActivate: [LoggedUserGuard] },
   { path: 'register-verify', component: ConfirmRegistrationComponent },
-  { path: 'reset', component: ResetPasswordComponent },
+  { path: 'reset', component: ResetPasswordComponent, canActivate: [LoggedUserGuard] },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
