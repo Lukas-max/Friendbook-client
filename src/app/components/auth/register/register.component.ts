@@ -1,9 +1,10 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { UserDto } from 'src/app/model/userDto';
 import { AccountService } from 'src/app/services/account.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { PasswordMatchValidator } from 'src/app/services/passwordMatch.service';
 
 @Component({
   selector: 'app-register',
@@ -14,40 +15,53 @@ export class RegisterComponent implements OnInit {
   @Output() closeComponent = new EventEmitter<void>();
   form: FormGroup;
   sendingMail: boolean = false;
+  mailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$';
 
-  constructor(private formBuilder: FormBuilder, private accountService: AccountService) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private accountService: AccountService,
+    private passwordMatchValidator: PasswordMatchValidator) { }
 
   ngOnInit(): void {
     this.initForm();
   }
 
-  initForm() {
+  initForm(): void {
     this.form = this.formBuilder.group({
-      username: new FormControl(''),
-      email: new FormControl('', { asyncValidators: [this.doesEmailExist.bind(this)], updateOn: 'blur' }),
-      password: new FormControl(''),
-      confirmPassword: new FormControl('')
-    });
+      username: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(60)]),
+      email: new FormControl('', {
+        validators: [Validators.required, Validators.pattern(this.mailPattern)],
+        asyncValidators: [this.doesEmailExist.bind(this)], updateOn: 'blur'
+      }),
+      password: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(60)]),
+      confirmPassword: new FormControl('', [Validators.required, Validators.minLength(5)])
+    }, { validator: this.passwordMatchValidator.matchPasswords('password', 'confirmPassword') });
   }
 
-  onSubmit() {
+  onSubmit(): void {
+    const userDto = this._createUserDto();
+    this._sendForm(userDto);
+  }
+
+  _createUserDto(): UserDto {
     this.sendingMail = true;
-    const userDto: UserDto = new UserDto(
+    return new UserDto(
       this.form.value.username,
       this.form.value.email,
       btoa(this.form.value.password)
     );
-    this.accountService.register(userDto).subscribe(data => {
-      this.sendingMail = true;
-      console.log(data);
+  }
+
+  _sendForm(userDto: UserDto): void {
+    this.accountService.register(userDto).subscribe(() => {
+      this.form.reset();
+      this.onClose();
     }, err => {
       console.log(err);
     });
-    this.form.reset();
-    this.onClose();
   }
 
-  onClose() {
+  onClose(): void {
     this.closeComponent.emit();
   }
 
@@ -56,5 +70,21 @@ export class RegisterComponent implements OnInit {
       .pipe(map(bool => {
         return bool ? { 'mailExists': bool } : null;
       }));
+  }
+
+  get username(): AbstractControl {
+    return this.form.get('username');
+  }
+
+  get email(): AbstractControl {
+    return this.form.get('email');
+  }
+
+  get password(): AbstractControl {
+    return this.form.get('password');
+  }
+
+  get confirm(): AbstractControl {
+    return this.form.get('confirmPassword')
   }
 }

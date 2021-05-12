@@ -113,7 +113,7 @@ export class CommentsComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   postComment(commentForm: NgForm): void {
     const comment = commentForm.value.comment;
-    if (comment.length === 0) return;
+    if (!comment || comment.length === 0) return;
 
     const feedComment: FeedComment = {
       feedId: this.feed.feedId,

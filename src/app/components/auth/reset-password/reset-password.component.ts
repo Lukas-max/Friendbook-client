@@ -12,6 +12,7 @@ export class ResetPasswordComponent implements OnInit {
   @ViewChild('resetForm') form: NgForm;
   token: string;
   isTokenSend: boolean;
+  sendingMail = false;
 
   constructor(
     private routes: ActivatedRoute,
@@ -27,7 +28,8 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   submit(): void {
-    const email = this.form.value.email;
+    this.sendingMail = true;
+    const email: string = this.form.value.email;
     this.accountService.sendPasswordResetRequest(email).subscribe(() => {
       this.router.navigate(['']);
     }, (err: any) => {
@@ -36,4 +38,7 @@ export class ResetPasswordComponent implements OnInit {
     });
   }
 
+  goBack(): void {
+    this.router.navigate(['/']);
+  }
 }

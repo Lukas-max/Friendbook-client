@@ -17,7 +17,7 @@
 <div class="comment-poster">
     <form autocomplete="off" class="form-inline" #commentForm="ngForm">
         <div class="form-group">
-            <input type="text" ngModel class="form-control" name="comment"> <br>
+            <input type="text" ngModel class="form-control" name="comment" required maxlength="255"> <br>
         </div>
         <button (click)="postComment(commentForm)" class="btn btn-primary" type="submit">Wyślij</button>
     </form>

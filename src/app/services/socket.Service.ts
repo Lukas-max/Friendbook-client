@@ -9,6 +9,7 @@ import { PrivateChatMessage } from '../model/privateChatMessage';
 import { FeedModelDto } from '../model/feedModelDto';
 import { FeedComment } from '../model/feedComment';
 import { UserData } from '../model/userData';
+import { UserResponseDto } from '../model/userResponseDto';
 
 @Injectable({
     providedIn: 'root'
@@ -28,6 +29,8 @@ export class SocketService implements OnDestroy {
     publicNotificationSubject: Subject<PublicChatMessage> = new Subject<PublicChatMessage>();
     privateSubscription: Subscription;
     privateNotificationSubject: Subject<PrivateChatMessage> = new Subject<PrivateChatMessage>();
+    deletedAccountSubscription: Subscription;
+    deletedAccountSubject: Subject<UserResponseDto> = new Subject<UserResponseDto>();
 
     constructor(private authenticationService: AuthenticationService) { }
 
@@ -81,6 +84,11 @@ export class SocketService implements OnDestroy {
             const body: PrivateChatMessage = JSON.parse(chat.body);
             this.privateNotificationSubject.next(body);
         });
+
+        this.deletedAccountSubscription = this.stomp.subscribe(`/topic/deleted-user`, (data) => {
+            const body: UserResponseDto = JSON.parse(data.body);
+            this.deletedAccountSubject.next(body);
+        })
 
         this._sendWhenConnected();
         window.onbeforeunload = window.onunload = () => this._disconnect();
@@ -144,6 +152,7 @@ export class SocketService implements OnDestroy {
         this.commentFeedSubscription.unsubscribe();
         this.publicSubscription.unsubscribe();
         this.privateSubscription.unsubscribe();
+        this.deletedAccountSubscription.unsubscribe();
     }
 
 }

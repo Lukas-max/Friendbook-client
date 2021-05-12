@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserDto } from '../model/userDto';
 import { Credentials } from '../model/credentials';
+import { MailData } from '../model/mailData';
 
 
 @Injectable({
@@ -38,7 +39,7 @@ export class AccountService {
         return this.http.patch(`http://localhost:9010/api/account/password`, credentials);
     }
 
-    changeEmail(email: string): Observable<any> {
+    changeEmail(email: MailData): Observable<any> {
         return this.http.patch(`http://localhost:9010/api/account/email`, email);
     }
 

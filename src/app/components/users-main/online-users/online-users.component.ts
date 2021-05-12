@@ -21,6 +21,7 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
   pending: UserData[];
   connectionSubscription: Subscription;
   privateSubscription: Subscription;
+  deletedAccountSubscription: Subscription;
   chosenUserUUID: string;
 
   constructor(
@@ -34,6 +35,7 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
     this.getUsers();
     this.getPending();
     this.getNotificationConnection();
+    this.getDeletedAccount();
   }
 
   /**
@@ -91,6 +93,21 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
     this.offlineUsers.splice(index, 1);
   }
 
+
+  /**
+   * Subscribes to websocket subject. Then when a user deletes his account we get by STOMP his data in a UserResponseDto. After that we delete this user from the
+   * users array, so the he wont repopulate the offlineUsers array. And we remove him from connectedUsers array so he will be erased from Online users view.
+   */
+  getDeletedAccount(): void {
+    this.deletedAccountSubscription = this.socketService.deletedAccountSubject.subscribe((userResponse: UserResponseDto) => {
+      let index = this.users.findIndex((user) => user.userUUID === userResponse.userUUID);
+      this.users.splice(index, 1);
+
+      index = this.connectedUsers.findIndex((user: ConnectedUser) => user.userUUID === userResponse.userUUID);
+      this.connectedUsers.splice(index, 1);
+    });
+  }
+
   /**
    * Will check if there are pending messages from other users.
    * It calls setPendingMessages(pendingMessageUser: UserData[]).
@@ -103,7 +120,7 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
 
   /**
    * 
-   * We use here this.pending: UserData[].  To get the array of user with pending messages.
+   * We use here - this.pending: UserData[].  To get the array of user with pending messages.
    * 
    * First this method checks if the connectedUsers and offlineUsers are ready, if not it waits. 
    * Then for each of the pending (user with message or messages not read) we iterate and check the connectedUsers array and if not found the offlineUsers array 
@@ -163,5 +180,6 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.connectionSubscription.unsubscribe();
     this.privateSubscription.unsubscribe();
+    this.deletedAccountSubscription.unsubscribe();
   }
 }

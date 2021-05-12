@@ -1,36 +1,78 @@
 <div class="overlay" (click)="onClose()"></div>
 <div class="register-modal">
 
-    <div class="form-box" *ngIf="!sendingMail">
+    <div class="form-box" *ngIf="!sendingMail; else sending">
         <form (ngSubmit)="onSubmit()" [formGroup]="form">
+
             <div class="form-group">
                 <label for="username">Nazwa użytkownika</label>
-                <input type="email" class="form-control" name="username" formControlName="username">
+                <input type="email" class="form-control" name="username" formControlName="username" required>
+
+                <div *ngIf="username.touched && username.invalid" class="alert alert-danger">
+                    <div *ngIf="username.hasError('required')">
+                        <span>Nazwa użytkownika jest wymagana</span>
+                    </div>
+                    <div *ngIf="username.hasError('minlength')">
+                        <span>Nazwa użytkownika musi mieć minimum 4 znaki</span>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" class="form-control" name="email" formControlName="email">
-                <span *ngIf="form.get('email').hasError('mailExists')">Ten email jest już zajęty</span>
+                <input type="email" class="form-control" name="email" formControlName="email" required>
+
+                <div *ngIf="email.touched && email.invalid" class="alert alert-danger">
+                    <div *ngIf="email.hasError('required')">
+                        <span>Email jest wymagany</span>
+                    </div>
+                    <div *ngIf="email.hasError('mailExists')">
+                        <span>Ten email jest już zajęty</span>
+                    </div>
+                    <div *ngIf="email.hasError('pattern')">
+                        <span>Niepoprawny email</span>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="password">Hasło</label>
-                <input type="password" class="form-control" name="password" formControlName="password">
+                <input type="password" class="form-control" name="password" formControlName="password" required>
+
+                <div *ngIf="password.touched && password.invalid" class="alert alert-danger">
+                    <div *ngIf="password.hasError('required')">
+                        <span>Hasło jest wymagane</span>
+                    </div>
+                    <div *ngIf="password.hasError('minlength')">
+                        <span>Hasło musi mieć minimum 5 znaków</span>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="confirm">Powtórz hasło</label>
-                <input type="password" class="form-control" name="confirm" formControlName="confirmPassword">
+                <input type="password" class="form-control" name="confirm" formControlName="confirmPassword" required>
+
+                <div *ngIf="confirm.touched && confirm.invalid" class="alert alert-danger">
+                    <div *ngIf="confirm.hasError('required')">
+                        <span>To pole jest wymagane</span>
+                    </div>
+                    <div *ngIf="confirm.hasError('minlength')">
+                        <span>Pole musi mieć minimum 5 znaków</span>
+                    </div>
+                    <div *ngIf="confirm.hasError('noMatch')">
+                        <span>Hasła muszą się zgadzać</span>
+                    </div>
+                </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">Zarejestruj mnie</button>
+            <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Zarejestruj mnie</button>
             <button type="button" class="btn btn-warning" (click)="onClose()">Anuluj</button>
         </form>
     </div>
 
 </div>
 
-<ng-template *ngIf="sendingMail">
+<ng-template #sending>
     <p>Wysyłam meila</p>
 </ng-template>

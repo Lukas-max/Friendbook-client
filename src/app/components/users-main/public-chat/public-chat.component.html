@@ -14,7 +14,7 @@
 
     <form autocomplete="off" class="form-inline chat-input">
         <div class="form-group">
-            <input type="text" [(ngModel)]="message" class="form-control" name="name"> <br>
+            <input type="text" [(ngModel)]="message" class="form-control" name="name" required maxlength="255"> <br>
         </div>
         <button (click)="sendMessage()" class="btn btn-primary" type="submit">Wyślij</button>
     </form>

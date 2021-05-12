@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { AccountService } from 'src/app/services/account.service';
@@ -7,6 +7,8 @@ import { Credentials } from 'src/app/model/credentials';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { SocketService } from 'src/app/services/socket.Service';
+import { MailData } from 'src/app/model/mailData';
+import { PasswordMatchValidator } from 'src/app/services/passwordMatch.service';
 
 @Component({
   selector: 'app-user-options',
@@ -20,13 +22,15 @@ export class UserOptionsComponent implements OnInit {
   emailForm: FormGroup;
   passwordChangeOption: boolean;
   emailChangeOption: boolean;
+  mailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$';
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private authenticationService: AuthenticationService,
     private socketService: SocketService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private passwordMatchValidator: PasswordMatchValidator
   ) { }
 
   ngOnInit(): void {
@@ -59,9 +63,9 @@ export class UserOptionsComponent implements OnInit {
   changePassword(): void {
     this.passwordChangeOption = true;
     this.passwordForm = new FormGroup({
-      password: new FormControl(''),
-      confirmPassword: new FormControl('')
-    });
+      password: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(60)]),
+      confirmPassword: new FormControl('', [Validators.required, Validators.minLength(5)])
+    }, { validators: [this.passwordMatchValidator.matchPasswords('password', 'confirmPassword')] });
   }
 
   submitPasswordChange(): void {
@@ -78,13 +82,17 @@ export class UserOptionsComponent implements OnInit {
   changeEmail(): void {
     this.emailChangeOption = true;
     this.emailForm = new FormGroup({
-      email: new FormControl('', { asyncValidators: [this.doesEmailExist.bind(this)], updateOn: 'blur' })
+      email: new FormControl('', {
+        validators: [Validators.required, Validators.pattern(this.mailPattern)],
+        asyncValidators: [this.doesEmailExist.bind(this)], updateOn: 'blur'
+      })
     });
   }
 
   submitEmailChange(): void {
     const newEmail = this.emailForm.value.email;
-    this.accountService.changeEmail(newEmail).subscribe(() => {
+    const mailData: MailData = { email: newEmail };
+    this.accountService.changeEmail(mailData).subscribe(() => {
       this.authenticationService.logout();
     });
   }
@@ -113,4 +121,15 @@ export class UserOptionsComponent implements OnInit {
       }));
   }
 
+  get password(): AbstractControl {
+    return this.passwordForm.get('password');
+  }
+
+  get confirm(): AbstractControl {
+    return this.passwordForm.get('confirmPassword');
+  }
+
+  get email(): AbstractControl {
+    return this.emailForm.get('email');
+  }
 }

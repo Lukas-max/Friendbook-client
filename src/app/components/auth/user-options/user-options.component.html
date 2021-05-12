@@ -6,12 +6,33 @@
         <form (ngSubmit)="submitPasswordChange()" [formGroup]="passwordForm">
 
             <div class="form-group">
-                <input type="password" class="form-control" name="password" formControlName="password">
+                <input type="password" class="form-control" name="password" formControlName="password" required>
+
+                <div *ngIf="password.touched && password.invalid" class="alert alert-danger">
+                    <div *ngIf="password.hasError('required')">
+                        <span>Hasło jest wymagane</span>
+                    </div>
+                    <div *ngIf="password.hasError('minlength')">
+                        <span>Hasło musi mieć minimum 5 znaków</span>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="confirm">Powtórz hasło</label>
-                <input type="password" class="form-control" name="confirm" formControlName="confirmPassword">
+                <input type="password" class="form-control" name="confirm" formControlName="confirmPassword" required>
+
+                <div *ngIf="confirm.touched && confirm.invalid" class="alert alert-danger">
+                    <div *ngIf="confirm.hasError('required')">
+                        <span>To pole jest wymagane</span>
+                    </div>
+                    <div *ngIf="confirm.hasError('minlength')">
+                        <span>Pole musi mieć minimum 5 znaków</span>
+                    </div>
+                    <div *ngIf="confirm.hasError('noMatch')">
+                        <span>Hasła muszą się zgadzać</span>
+                    </div>
+                </div>
             </div>
             <button type="submit" class="btn btn-primary" [disabled]="passwordForm.invalid">Zmień hasło</button>
 
@@ -23,8 +44,19 @@
 
         <form (ngSubmit)="submitEmailChange()" [formGroup]="emailForm">
             <div class="form-group">
-                <input type="email" class="form-control" name="email" formControlName="email">
-                <p *ngIf="emailForm.get('email').hasError('mailExists')" class="error">Email już jest zajęty</p>
+                <input type="email" class="form-control" name="email" formControlName="email" required>
+
+                <div *ngIf="email.touched && email.invalid" class="alert alert-danger">
+                    <div *ngIf="email.hasError('required')">
+                        <span>Email jest wymagany</span>
+                    </div>
+                    <div *ngIf="email.hasError('mailExists')">
+                        <span>Ten email jest już zajęty</span>
+                    </div>
+                    <div *ngIf="email.hasError('pattern')">
+                        <span>Niepoprawny email</span>
+                    </div>
+                </div>
             </div>
 
             <button type="submit" class="btn btn-primary" [disabled]="emailForm.invalid">Zmień email</button>
