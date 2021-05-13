@@ -32,11 +32,12 @@ import { ProfileHeadComponent } from './components/users-main/user-profile/profi
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 import { UserOptionsComponent } from './components/auth/user-options/user-options.component';
 import { LoggedUserGuard } from './guards/loggedUser.guard';
+import { ForeignUserGuard } from './guards/foreignUser.guard';
 
 
 const routes: Routes = [
   {
-    path: 'user/starter', component: UsersMainComponent, children: [
+    path: 'user/starter', component: UsersMainComponent, canActivate: [ForeignUserGuard], children: [
       { path: 'main-feed', component: MainFeedComponent },
       { path: 'user-profile/:uuid', component: UserProfileComponent },
       { path: 'options', component: OptionsComponent },

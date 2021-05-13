@@ -8,8 +8,24 @@
     }
 }
 
+// .comment {
+    
+// }
+
+.username { 
+    font-weight: bold;
+}
+
 .time {
     font-size: 11px;
+}
+
+.delete-button {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    height: 30px;
+    line-height: 15px;
 }
 
 .comment-poster {

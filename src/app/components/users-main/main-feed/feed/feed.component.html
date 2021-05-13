@@ -1,28 +1,29 @@
-<div class="tab-one">
-    <span class="user-tab">
-        <span class="user-span" [routerLink]="['/user', 'starter', 'user-profile', feed.userUUID]">
-            {{ feed.username }}
+<div class="feed-box">
+    <div class="tab-one">
+        <span class="user-tab">
+            <span class="user-span" [routerLink]="['/user', 'starter', 'user-profile', feed.userUUID]">
+                {{ feed.username }}
+            </span>
+            <span class="timestamp-span">
+                ({{ feed.feedTimestamp | date: 'dd/MM/yyyy, hh:mm' }})
+            </span>
         </span>
-        <span class="timestamp-span">
-            ({{ feed.feedTimestamp | date: 'dd/MM/yyyy, hh:mm' }})
-        </span>
-    </span>
-    <button *ngIf="isTheSameUser()" class="btn btn-outline-danger delete-button" (click)=deleteFeed()>Usuń</button>
-</div>
-
-<div class="alert alert-dark">
-    <p>{{ feed.text }}</p>
-</div>
-
-<div *ngIf="feed.fileData">
-    <app-file-display [fileData]="feed.fileData" [userUUIDEncoded]="userUUIDEncoded" [showDeleteButton]="false"
-        [length]="4">
-    </app-file-display>
-
-    <div *ngIf="feed.fileData.length > 4" class="more-files">
-        <i class="fas fa-binoculars"></i>
+        <button *ngIf="isTheSameUser()" class="btn btn-outline-danger delete-button" (click)=deleteFeed()>Usuń</button>
     </div>
-</div>
 
-<app-comments [feed]="feed"></app-comments>
-<hr>
+    <div class="alert alert-dark">
+        <p>{{ feed.text }}</p>
+    </div>
+
+    <div *ngIf="feed.fileData">
+        <app-file-display [fileData]="feed.fileData" [userUUIDEncoded]="userUUIDEncoded" [showDeleteButton]="false"
+            [length]="4">
+        </app-file-display>
+
+        <div *ngIf="feed.fileData.length > 4" class="more-files">
+            <i class="fas fa-binoculars"></i>
+        </div>
+    </div>
+
+    <app-comments [feed]="feed"></app-comments>
+</div>

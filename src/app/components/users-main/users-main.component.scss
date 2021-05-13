@@ -1,15 +1,35 @@
+@mixin bars {
+    // margin: 1px;
+    // border-radius: 10px;
+    border: 1px solid rgb(236, 228, 228);
+    box-shadow: 1px 1px 5px rgb(236, 228, 228);
+    min-height: 100vh;
+  }
+
 .user-main-window { 
 
     .inner-window {
         display: grid;
-        grid-template-columns: 1fr 0fr 10fr 1fr;
+        grid-template-columns: 1fr 0fr 5fr 1fr;
     }
 
     .list-left {
-        margin: 20px;
+        @include bars;
 
         div {
-            margin: 10px 0;
+            padding: 10px 0;
+            font-weight: bold;
+            color: rgb(51, 49, 49);
+
+            span {
+                margin: 20px;
+            }
+        }
+
+        div:hover {
+            // color: white;
+            background-color: rgba(224, 223, 235, 0.5);
+            border-radius: 5px;
         }
 
         .list-link {
@@ -18,6 +38,18 @@
     }
 
     .main-router { 
-        top: 50px;
+        // background-color: wheat;
+    }
+
+    .list-right {
+        @include bars;
+    }
+
+    .line {
+        margin-left: 5px;
+        display: inline-block;
+        height: 1px;
+        width: 80%;
+        background-color: blue;
     }
 }

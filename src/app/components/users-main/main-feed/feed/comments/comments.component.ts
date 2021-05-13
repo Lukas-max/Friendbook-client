@@ -98,7 +98,7 @@ export class CommentsComponent implements OnInit, AfterViewInit, OnDestroy {
   loadComments(): void {
     this.commentService.getFeedComments(this.feed.feedId.toString(), this.limit.toString(), this.offset.toString())
       .subscribe((comments: Chunk<FeedComment>) => {
-        if (comments.content.length === 0 || comments.content.length < 10) {
+        if (comments.content.length === 0 || comments.content.length < this.limit) {
           this.allCommentsLoaded = true;
         }
 

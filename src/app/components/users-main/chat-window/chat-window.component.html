@@ -9,7 +9,7 @@
         <div *ngIf="chatMessages">
 
             <div class="load-messages">
-                <button *ngIf="offset > 9" class="btn btn-primary" (click)="loadMessages(false)">
+                <button *ngIf="!loadedAllMessages" class="btn btn-primary" (click)="loadMessages(false)">
                     <i class="fas fa-arrow-alt-circle-up"></i>
                 </button>
             </div>

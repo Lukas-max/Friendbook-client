@@ -5,10 +5,11 @@
     </button>
 </div>
 
-<div *ngFor="let comment of commentsArray; let i = index">
-    <span>{{ comment.username }} </span>
+<div *ngFor="let comment of commentsArray; let i = index" class="alert alert-secondary">
+    <span class="username">{{ comment.username }} </span>
     <span class="time"> ({{ comment.timestamp | date: 'dd/MM/yyyy, hh:mm' }}) </span>
-    <button *ngIf="userUUID === comment.userUUID" (click)="deleteComment(i)">Usuń</button>
+    <button *ngIf="userUUID === comment.userUUID" (click)="deleteComment(i)"
+        class="delete-button btn btn-outline-dark">Usuń</button>
     <br>
     <span> {{ comment.content }} </span>
 </div>

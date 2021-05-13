@@ -2,15 +2,17 @@
 <div class="user-main-window">
     <div class="inner-window">
         <div class="list-left">
-            <div [routerLink]="['/user', 'starter', 'main-feed']" class="list-link">Start</div>
-            <div [routerLink]="['/user', 'starter', 'user-profile', '']" class="list-link">Profil</div>
-            <div [routerLink]="['/user', 'starter', 'user-search']" class="list-link">Członkowie</div>
-            <div [routerLink]="['/user', 'starter', 'chat']" class="list-link">Chat</div>
-            <div [routerLink]="['/user', 'starter', 'options']" class="list-link">Opcje</div>
-            <div (click)="logout()" class="list-link">Wyloguj się</div>
+            <div [routerLink]="['/user', 'starter', 'main-feed']" class="list-link"><span>Start</span></div>
+            <div [routerLink]="['/user', 'starter', 'user-profile', '']" class="list-link"><span>Profil</span></div>
+            <div [routerLink]="['/user', 'starter', 'user-search']" class="list-link"><span>Członkowie</span></div>
+            <div [routerLink]="['/user', 'starter', 'chat']" class="list-link"><span>Chat</span></div>
+            <div [routerLink]="['/user', 'starter', 'options']" class="list-link"><span>Opcje</span></div>
+            <br>
+            <div (click)="logout()" class="list-link"><span>Wyloguj się</span></div>
+            <span class="line"></span>
         </div>
         <router-outlet class="main-router"></router-outlet>
-        <app-online-users></app-online-users>
+        <app-online-users class="list-right"></app-online-users>
     </div>
 
     <app-chat-window></app-chat-window>
