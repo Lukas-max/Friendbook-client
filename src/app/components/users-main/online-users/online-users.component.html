@@ -1,18 +1,26 @@
 <div *ngIf="connectedUsers">
 
     <div class="user-tab">
-        <div>ONLINE:</div>
+        <div class="status">ONLINE:</div>
+        <div class="underline"></div>
         <div *ngFor="let user of connectedUsers; let i = index">
-            <span class="online" (click)="openChat(user)">{{ user.username }}</span>
-            <span *ngIf="user.messagePending"><i class="far fa-envelope"></i></span>
+            <div class="online-user" (click)="openChat(user)">
+                <!-- <span class="user-status-online"><i class="fas fa-circle"></i></span> -->
+                <span>{{ user.username }}</span>
+                <span *ngIf="user.messagePending"><i class="far fa-envelope"></i></span>
+            </div>
         </div>
-    </div>
 
-    <div class="user-tab offline">
-        <div>OFFLINE:</div>
-        <div *ngFor="let user of offlineUsers">
-            <span class="offline" (click)="openChat(user)">{{ user.username }}</span>
-            <span *ngIf="user.messagePending"><i class="far fa-envelope"></i></span>
+        <div class="user-tab offline">
+            <div class="status">OFFLINE:</div>
+            <div class="underline"></div>
+            <div *ngFor="let user of offlineUsers">
+                <div class="offline-user" (click)="openChat(user)">
+                    <!-- <span class="user-status-offline"></span> -->
+                    <span>{{ user.username }}</span>
+                    <span *ngIf="user.messagePending"><i class="far fa-envelope"></i></span>
+                </div>
+            </div>
         </div>
     </div>
 

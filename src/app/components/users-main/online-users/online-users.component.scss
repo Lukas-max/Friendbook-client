@@ -1,13 +1,54 @@
+@mixin user-names {
+    padding: 10px 0;
+    text-align: center;
+    // margin-left: 30px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+@mixin user-hover {
+    background-color: rgba(224, 223, 235, 0.5);
+    border-radius: 5px;
+}
+
 .user-tab {
     margin-top: 10px;
 
-    .online {
-        color: green;
-        cursor: pointer;
+    .status {
+        text-align: center;
     }
 
-    .offline {
-        cursor: pointer;
+    .online-user {
+        @include user-names();
+        color: green;
+
+        .user-status-online {
+            margin-right: 10px;
+
+            .fa-circle {
+                color: darkgreen;
+            }
+        }
+    }
+
+    .online-user:hover {
+        background-color: rgba(224, 223, 235, 0.5);
+        border-radius: 5px;
+    }
+
+    .offline-user {
+        @include user-names();
+    }
+
+    .offline-user:hover {
+        @include user-hover();
+    }
+
+    .underline {
+        margin: 10px auto 0;
+        width: 100px;
+        height: 1px;
+        background-color: blue;
     }
 }
 

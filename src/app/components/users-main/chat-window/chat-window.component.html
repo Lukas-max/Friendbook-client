@@ -34,6 +34,7 @@
 
 <div class="closed-bar" [class.open]="isOpen" *ngIf="receiverUUID" (click)="openClose()">
     <span *ngIf="notificationAwaiting"><i class="far fa-envelope"></i></span>
+    <span class="closed-bar-username">{{ receiverName }}</span>
     <div>
         <button class="open-close">__</button>
     </div>

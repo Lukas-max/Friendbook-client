@@ -1,9 +1,8 @@
 @mixin bars {
-    // margin: 1px;
-    // border-radius: 10px;
-    border: 1px solid rgb(236, 228, 228);
+    border-radius: 5px;
+    background-color: rgb(255, 255, 255);
     box-shadow: 1px 1px 5px rgb(236, 228, 228);
-    min-height: 100vh;
+    // box-shadow: 1px 1px 5px rgba(75, 77, 192, 0.7);
   }
 
 .user-main-window { 
@@ -11,18 +10,28 @@
     .inner-window {
         display: grid;
         grid-template-columns: 1fr 0fr 5fr 1fr;
+        background-color: rgb(245, 245, 245);
     }
 
     .list-left {
+        position: sticky;
+        top: 5px;
+        width: 13vw;
+        margin-top: 10px;
+        margin-left: 10px;
+        min-height: 350px;
+        max-height: 35vh;
         @include bars;
 
+
         div {
+            margin-top: 5px;
             padding: 10px 0;
             font-weight: bold;
             color: rgb(51, 49, 49);
 
             span {
-                margin: 20px;
+                margin: 40px;
             }
         }
 
@@ -37,12 +46,10 @@
         }
     }
 
-    .main-router { 
-        // background-color: wheat;
-    }
 
     .list-right {
         @include bars;
+        min-height: 100vh;
     }
 
     .line {

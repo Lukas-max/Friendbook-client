@@ -4,7 +4,7 @@
     border: 1px solid rgb(236, 228, 228);
     border-radius: 10px;
     box-shadow: 1px 1px 5px rgb(236, 228, 228);
-    // background-color: rgb(252, 252, 252);
+    background-color: rgb(255, 255, 255);
 }
 
 .tab-one {
@@ -32,32 +32,11 @@
     
 }
 
-.file-view {
-    display: inline-block;
-    margin: 5px;
+.feed-text {
+    padding: 10px;
 }
 
 .more-files {
-    width: 200px;
-    height: 150px;
-    background: gray;
-    text-align: center;
-    line-height: 150px;
-
-    .fa-binoculars {
-        font-size: 70px;
-    }
-}
-
-img {
-    width: 250px;
-    transition: transform 0.4s;
-}
-
-img:hover {
-    transform: scale(1.1);
-}
-
-video {
-    height: 300px;
+    margin-top: 20px;
+    font-weight: bold;
 }

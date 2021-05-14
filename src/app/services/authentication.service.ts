@@ -22,6 +22,7 @@ export class AuthenticationService {
 
         return this.http.post(`http://localhost:9010/app/user/login`, JSON.stringify(credentials), options)
             .pipe(tap(res => {
+                console.log(res);
                 this.storeResponseHeaderData(res);
             }));
     }

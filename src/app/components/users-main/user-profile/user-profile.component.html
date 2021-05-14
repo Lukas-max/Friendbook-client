@@ -1,20 +1,23 @@
-<div *ngIf="userUUID && user; else empty">
+<div *ngIf="userUUID && user; else empty" class="profile-box">
     <app-profile-head [user]="user"></app-profile-head>
 
-    <div class="box">
-        <p *ngIf="_isLoggedUser()"><span>Zajęte miejsce:</span> {{ user.storageSize | number: '1.0-2'}} %</p>
+    <div>
+        <p *ngIf="_isLoggedUser()">
+            <span>Zajęte miejsce:</span>
+            <span class="storage-space">{{ user.storageSize | number: '1.0-2'}} %</span>
+        </p>
 
-        <div *ngIf="folders" class="folder-block">
-            <div>FOLDERY:</div>
+        <div>FOLDERY:</div>
+        <div *ngIf="folders" class="row">
 
-            <span *ngFor="let folder of folders">
+            <div *ngFor="let folder of folders" class="col">
                 <div class="folder" (click)="onFolderClick(folder)">
                     <i class="fas fa-folder-open folder-icon"></i>
-                    <span>{{ folder }}</span>
+                    <div>{{ folder }}</div>
                 </div>
-                <button *ngIf="_isLoggedUser()" class="btn btn-outline-warning"
+                <button *ngIf="_isLoggedUser()" class="btn btn-outline-secondary"
                     (click)="deleteFolder(folder)">Usuń</button>
-            </span>
+            </div>
 
         </div>
 

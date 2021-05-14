@@ -7,11 +7,11 @@
             <div [routerLink]="['/user', 'starter', 'user-search']" class="list-link"><span>Członkowie</span></div>
             <div [routerLink]="['/user', 'starter', 'chat']" class="list-link"><span>Chat</span></div>
             <div [routerLink]="['/user', 'starter', 'options']" class="list-link"><span>Opcje</span></div>
+            <span class="line"></span>
             <br>
             <div (click)="logout()" class="list-link"><span>Wyloguj się</span></div>
-            <span class="line"></span>
         </div>
-        <router-outlet class="main-router"></router-outlet>
+        <router-outlet></router-outlet>
         <app-online-users class="list-right"></app-online-users>
     </div>
 

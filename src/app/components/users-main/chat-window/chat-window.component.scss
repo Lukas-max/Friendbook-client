@@ -74,6 +74,11 @@
     background-color: rgb(245, 245, 245);
     border: 1px solid rgba(0, 0, 0, 0.445);
     cursor: pointer;
+
+    .closed-bar-username {
+        margin-left: 20px;
+        font-weight: bold;
+    }
 }
 
 .open-close {

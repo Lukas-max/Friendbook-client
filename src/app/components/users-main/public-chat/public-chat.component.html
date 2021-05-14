@@ -3,7 +3,7 @@
     <div class="chat-window" #overflow>
         <div *ngIf="chatMessages" class="messages">
             <span #observed></span>
-            <div *ngFor="let chat of chatMessages">
+            <div *ngFor="let chat of chatMessages" class="message">
                 <span class="username">{{ chat.username }} </span>
                 <span class="time">({{ chat.timestamp | date: 'dd/MM/yyyy, hh:mm' }})</span><br>
                 <span>{{ chat.content }}</span>

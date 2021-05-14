@@ -16,6 +16,14 @@
         border: 1px solid rgb(170, 162, 162);
         border-radius: 4px;
         overflow: auto;
+        background-color: white;
+
+        .message { 
+            margin: 4px;
+            padding: 10px;
+            background-color: rgb(227, 234, 255);
+            border-radius: 10px;
+        }
 
         .messages {
 

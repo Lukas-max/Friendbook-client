@@ -1,6 +1,8 @@
-<div *ngIf="users">
-    <div *ngFor="let user of users, let i = index">
-        <div [routerLink]="['/user', 'starter', 'user-profile', user.userUUID]" class="link-user">
-            {{ user.username }}</div>
+<div class="user-box">
+    <div *ngIf="users" class="row">
+        <div *ngFor="let user of users, let i = index" class="col-6">
+            <div [routerLink]="['/user', 'starter', 'user-profile', user.userUUID]" class="link-user">
+                {{ user.username }}</div>
+        </div>
     </div>
 </div>

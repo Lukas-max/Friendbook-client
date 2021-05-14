@@ -18,7 +18,8 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
   connectedUsers: UserData[];
   users: UserResponseDto[];
   offlineUsers: UserResponseDto[];
-  pending: UserData[];
+  pendingMessages: UserData[];
+  pendingMessegesFromLogoutUsers = new Set();
   connectionSubscription: Subscription;
   privateSubscription: Subscription;
   deletedAccountSubscription: Subscription;
@@ -39,6 +40,7 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * This method is called each time a user logs in or logs out!
    * Here we get UserData of connected by stomp and online users from BehaviourSubject in SocketService. We delete the offlineUsers array to repopulate them in a minute.
    * When we got that we evoke populateOfflineUsers();
    */
@@ -114,7 +116,7 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
    */
   getPending(): void {
     this.chatService.getUserData().subscribe((data: UserData[]) => {
-      this.pending = data;
+      this.pendingMessages = data;
     });
   }
 
@@ -127,10 +129,10 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
    * to find the searched user. Then when found we stamp him by setting messagePending field to true. So the view will change accordingly.
    */
   setPendingMessages(): void {
-    if (!this.pending || !this.offlineUsers || !this.connectedUsers) {
+    if (!this.pendingMessages || !this.offlineUsers || !this.connectedUsers) {
       setTimeout(() => this.setPendingMessages(), 150);
     } else {
-      this.pending.forEach((user: UserData) => {
+      this.pendingMessages.forEach((user: UserData) => {
         let userWithMessagePending: any = this.connectedUsers.find((connectedUser: UserData) => connectedUser.userUUID === user.userUUID);
 
         if (userWithMessagePending)
@@ -170,8 +172,8 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
    */
   resetPending(connectedUser: UserData): void {
     connectedUser.messagePending = false;
-    const index = this.pending.findIndex((user: UserData) => user.userUUID === connectedUser.userUUID);
-    this.pending.splice(index, 1);
+    const index = this.pendingMessages.findIndex((user: UserData) => user.userUUID === connectedUser.userUUID);
+    this.pendingMessages.splice(index, 1);
   }
 
   /**

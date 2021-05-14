@@ -59,7 +59,8 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
    * (This method gets called every time we click a different user to chat)
    * 
    * This subscribes at startup to chosenUser Subject. So this method will get invoked each time we clicked a user on OnlineUserComponent. 
-   * On user click we pick this user data. If the picked user userUUID is the same as receiverUUID we return the method, cause we clicked the same user.
+   * On user click we pick this user data. If the picked user userUUID is the same as receiverUUID we - open the chat window and return the method,
+   *  cause we clicked the same user.
    * But if the userUUID is an other user we:
    * 1) set receiverName and UUID to have that user data stored in a variable
    * 2) we restart the chat window variables (this happens each time we pick a user to chat)
@@ -69,7 +70,10 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
    */
   fetchMessagesAtStart(): void {
     this.userSelectSubscription = this.userService.chosenUser.subscribe((user: UserData) => {
-      if (this.receiverUUID === user.userUUID) return;
+      if (this.receiverUUID === user.userUUID) {
+        this.isOpen = !this.isOpen;
+        return;
+      }
 
       this.receiverName = user.username;
       this.receiverUUID = user.userUUID;

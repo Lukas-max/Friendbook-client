@@ -1,22 +1,29 @@
-.box {
-    margin: 50px 100px;
-}
+.profile-box {
+    margin: 50px 30px;
+    padding: 30px;
+    border-radius: 5px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 1px 1px 5px rgb(236, 228, 228);
 
-.folder-block {
-    display: inline-block;
-}
-
-.folder-icon {
-    font-size: 100px;
-    color: rgb(11, 36, 165);
-}
-
-.folder {
-    display:  inline-block;
-    margin: 20px 20px;
-    cursor: pointer;
-
-    span {
-        font-weight: bolder;
+    .storage-space {
+        margin-left: 5px;
+        font-weight: bold;
+    }
+    
+    .folder-icon {
+        font-size: 100px;
+        // color: rgb(11, 36, 165);
+        color: rgb(46, 75, 219);
+    }
+    
+    .folder {
+        display:  inline-block;
+        margin: 20px 20px;
+        cursor: pointer;
+    
+        div {
+            font-weight: bolder;
+        }
     }
 }
+

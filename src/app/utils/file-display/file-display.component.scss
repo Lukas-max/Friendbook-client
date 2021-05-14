@@ -1,17 +1,44 @@
-.file-view {
-    display: inline-block;
-    margin: 5px;
-}
+.files {
+    margin-top: 30px;
 
-img {
-    width: 300px;
-    transition: transform 0.4s;
-}
+    .file-view {
+        margin-top: 40px;
 
-img:hover {
-    transform: scale(1.1);
-}
+        .file {
+            cursor: pointer;
+        }
 
-video {
-    height: 300px;
+        img {
+            max-width: 200px;
+            max-height: 230px;
+            transition: transform 0.4s;
+            border-radius: 10px;
+        }
+        
+        img:hover {
+            transform: scale(1.1);
+        }
+
+        audio {
+            max-width: 250px;
+        }
+        
+        video {
+            max-height: 230px;
+            max-width: 230px;
+        }
+
+        @media (min-width: 1470px) {
+            audio {
+                max-width: none;
+            }
+        }
+
+    }
+    
+    .btn-outline-secondary {
+        margin-top: 2px;
+        height: 30px;
+        line-height: 15px;
+    }
 }

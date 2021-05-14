@@ -17,7 +17,7 @@ export class FolderComponent implements OnInit, AfterViewInit {
   userUUID: string;
   folder: string;
   fileData: FileDataDto[] = [];
-  limit = 10;
+  limit = 15;
   offset = 0;
 
   constructor(

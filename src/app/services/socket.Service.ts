@@ -56,7 +56,7 @@ export class SocketService implements OnDestroy {
         }
 
         this.connectionSubscription = this.stomp.subscribe(`/topic/connection`, (data) => {
-            const body: UserData[] = JSON.parse(data.body);;
+            const body: UserData[] = JSON.parse(data.body);
             this.connectionSubject.next(body);
         });
 
@@ -97,6 +97,7 @@ export class SocketService implements OnDestroy {
     _sendWhenConnected() {
         const username = this.authenticationService.getUsername();
         const uuid = this.authenticationService.getLoggedUserId();
+        console.log(username);
 
         if (!username || !uuid) {
             this.authenticationService.logout();

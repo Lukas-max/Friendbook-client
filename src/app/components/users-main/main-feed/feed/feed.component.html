@@ -10,8 +10,9 @@
         </span>
         <button *ngIf="isTheSameUser()" class="btn btn-outline-danger delete-button" (click)=deleteFeed()>Usuń</button>
     </div>
+    <hr>
 
-    <div class="alert alert-dark">
+    <div class="feed-text">
         <p>{{ feed.text }}</p>
     </div>
 
@@ -19,10 +20,7 @@
         <app-file-display [fileData]="feed.fileData" [userUUIDEncoded]="userUUIDEncoded" [showDeleteButton]="false"
             [length]="4">
         </app-file-display>
-
-        <div *ngIf="feed.fileData.length > 4" class="more-files">
-            <i class="fas fa-binoculars"></i>
-        </div>
+        <div *ngIf="feed.fileData.length > 4" class="more-files">...plus inne dostępne w podglądzie</div>
     </div>
 
     <app-comments [feed]="feed"></app-comments>
