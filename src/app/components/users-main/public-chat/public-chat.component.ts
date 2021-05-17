@@ -8,6 +8,7 @@ import { IntersectionObserverService } from 'src/app/services/intersectionObserv
 import { filter, switchMap } from 'rxjs/operators';
 import { Chunk } from 'src/app/model/chunk';
 import { Utils } from 'src/app/utils/utils';
+import { ToastService } from 'src/app/utils/toast.service';
 
 @Component({
   selector: 'app-public-chat',
@@ -23,12 +24,14 @@ export class PublicChatComponent implements OnInit, AfterViewInit, AfterViewChec
   componentStart: boolean;
   limit = 10;
   offset = 0;
+  isLoading = true;
 
   constructor(
     private socketService: SocketService,
     private authenticationService: AuthenticationService,
     private chatService: ChatService,
-    private intersector: IntersectionObserverService) { }
+    private intersector: IntersectionObserverService,
+    private toast: ToastService) { }
 
   ngOnInit(): void {
     this.componentStart = true;
@@ -37,7 +40,7 @@ export class PublicChatComponent implements OnInit, AfterViewInit, AfterViewChec
       this.chatMessages.push(chat);
       this.offset = this.chatMessages.length;
       Utils.scroll(this.scrollElement.nativeElement, 0);
-    });
+    }, (error: any) => this.toast.onError(error.error.message));
   }
 
   ngAfterViewInit(): void {
@@ -47,7 +50,8 @@ export class PublicChatComponent implements OnInit, AfterViewInit, AfterViewChec
     ).subscribe((chunk: Chunk<PublicChatMessage>) => {
       chunk.content.forEach((chat: PublicChatMessage) => this.chatMessages.unshift(chat));
       this.offset = this.chatMessages.length;
-    }, (err: any) => console.error(err));
+      this.isLoading = false;
+    }, (error: any) => this.toast.onError(error.error.message));
   }
 
   ngAfterViewChecked(): void {

@@ -10,6 +10,10 @@
             </div>
             <span #scroll></span>
         </div>
+
+        <div *ngIf="isLoading" class="spinner">
+            <app-spinner></app-spinner>
+        </div>
     </div>
 
     <form autocomplete="off" class="form-inline chat-input">

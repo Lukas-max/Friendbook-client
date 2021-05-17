@@ -6,6 +6,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { CompressService } from 'src/app/services/compress.Service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { ToastService } from 'src/app/utils/toast.service';
 
 @Component({
   selector: 'app-profile-head',
@@ -24,11 +25,14 @@ export class ProfileHeadComponent implements OnInit, OnDestroy {
     private authenticationService: AuthenticationService,
     private compressService: CompressService,
     private router: Router,
-    private zone: NgZone) { }
+    private zone: NgZone,
+    private toast: ToastService) { }
 
   ngOnInit(): void {
-    this.fileStorage.getProfilePhotoLowQuality(this.user.userUUID).subscribe((data: BytePackage) => this.lowQualityUrl = data.bytes);
-    this.compressedSubscription = this.compressService.compressedImageSubject.subscribe((file: File) => this.sendPhoto(file));
+    this.fileStorage.getProfilePhotoLowQuality(this.user.userUUID).subscribe((data: BytePackage) => this.lowQualityUrl = data.bytes,
+      (error: any) => this.toast.onError(error.error.message));
+    this.compressedSubscription = this.compressService.compressedImageSubject.subscribe((file: File) => this.sendPhoto(file),
+      (error: any) => this.toast.onError(error.error.message));
     this.firstLetterOfName = this._getFirstLetter();
   }
 
@@ -48,7 +52,7 @@ export class ProfileHeadComponent implements OnInit, OnDestroy {
     this.zone.run(() => {
       this.fileStorage.uplodProfilePhoto(form).subscribe(() => {
         this._reloadFolder();
-      }, (err: any) => console.error(err));
+      }, (error: any) => this.toast.onError(error.error.message));
     })
   }
 
@@ -56,7 +60,7 @@ export class ProfileHeadComponent implements OnInit, OnDestroy {
     if (confirm('Chcesz usunąć zdjęcie profilowe?'))
       return this.fileStorage.deleteProfilePhoto().subscribe(() => {
         this._reloadFolder();
-      }, (err: any) => console.error(err));
+      }, (error: any) => this.toast.onError(error.error.message));
   }
 
   _getFirstLetter(): string {

@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FileDataDto } from 'src/app/model/fileDataDto';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { FileStorageService } from 'src/app/services/file-storage.service';
+import { ToastService } from '../toast.service';
 
 @Component({
   selector: 'app-file-display',
@@ -18,7 +19,10 @@ export class FileDisplayComponent implements OnInit {
   selectedFile: FileDataDto;
   index: number = 0;
 
-  constructor(private authenticationService: AuthenticationService, private fileStorageService: FileStorageService) { }
+  constructor(
+    private authenticationService: AuthenticationService,
+    private fileStorageService: FileStorageService,
+    private toast: ToastService) { }
 
   ngOnInit(): void {
   }
@@ -31,9 +35,7 @@ export class FileDisplayComponent implements OnInit {
 
     this.fileStorageService.deleteFile(this.folder, fileName).subscribe(() => {
       this.reload.emit();
-    }, (error: any) => {
-      console.error(error);
-    });
+    }, (error: any) => this.toast.onError(error.error.message));
   }
 
   clickFile(idx: number): void {

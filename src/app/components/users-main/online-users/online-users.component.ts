@@ -8,6 +8,7 @@ import { PrivateChatMessage } from 'src/app/model/privateChatMessage';
 import { UserResponseDto } from 'src/app/model/userResponseDto';
 import { ChatService } from 'src/app/services/chat.service';
 import { UserData } from 'src/app/model/userData';
+import { ToastService } from 'src/app/utils/toast.service';
 
 @Component({
   selector: 'app-online-users',
@@ -29,7 +30,8 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
     private socketService: SocketService,
     private userService: UserService,
     private authenticationService: AuthenticationService,
-    private chatService: ChatService) { }
+    private chatService: ChatService,
+    private toast: ToastService) { }
 
   ngOnInit(): void {
     this.getConnectedUsers();
@@ -63,7 +65,7 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
 
       const user = this.connectedUsers.find(connectedUser => connectedUser.userUUID === notification.senderUUID);
       user.messagePending = true;
-    });
+    }, (error: any) => this.toast.onError(error.error.message));
   }
 
   /**
@@ -72,7 +74,7 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
   getUsers(): void {
     this.userService.getAllUsers().subscribe((users: UserResponseDto[]) => {
       this.users = users;
-    });
+    }, (error: any) => this.toast.onError(error.error.message));
   }
 
   /**
@@ -107,7 +109,7 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
 
       index = this.connectedUsers.findIndex((user: ConnectedUser) => user.userUUID === userResponse.userUUID);
       this.connectedUsers.splice(index, 1);
-    });
+    }, (error: any) => this.toast.onError(error.error.message));
   }
 
   /**
@@ -117,7 +119,7 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
   getPending(): void {
     this.chatService.getUserData().subscribe((data: UserData[]) => {
       this.pendingMessages = data;
-    });
+    }, (error: any) => this.toast.onError(error.error.message));
   }
 
   /**

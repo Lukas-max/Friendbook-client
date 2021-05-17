@@ -4,6 +4,7 @@ import { HttpEventType } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CompressService } from 'src/app/services/compress.Service';
 import { Subscription } from 'rxjs';
+import { ToastService } from '../toast.service';
 
 @Component({
   selector: 'app-file-upload',
@@ -24,11 +25,18 @@ export class FileUploadComponent implements OnInit, OnDestroy {
   constructor(
     private fileStorageService: FileStorageService,
     private router: Router,
-    private compressService: CompressService) { }
+    private compressService: CompressService,
+    private toast: ToastService) { }
 
+  /**
+   * - CompressingFileSubject sends a true flag if the service is compressing an image file.
+   * - CompressedImageSubject sends the image when compressed.
+   */
   ngOnInit(): void {
-    this.compressingFileSubscription = this.compressService.compressingFileSubject.subscribe((flag: boolean) => this.compressingFiles = flag);
-    this.compressedImageSubscription = this.compressService.compressedImageSubject.subscribe((file: File) => this.otherFilesAndCompressedImages.push(file))
+    this.compressingFileSubscription = this.compressService.compressingFileSubject.subscribe((flag: boolean) => this.compressingFiles = flag,
+      (error: any) => this.toast.onError(error.error.message));
+    this.compressedImageSubscription = this.compressService.compressedImageSubject.subscribe((file: File) => this.otherFilesAndCompressedImages.push(file),
+      (error: any) => this.toast.onError(error.error.message))
   }
 
   selectFiles(event: any): void {
@@ -65,7 +73,7 @@ export class FileUploadComponent implements OnInit, OnDestroy {
         this._reloadFolder();
       }
     }, (error: any) => {
-      console.error(error);
+      this.toast.onError(error.error.message)
       this._reloadFolder();
     });
   }
@@ -78,7 +86,7 @@ export class FileUploadComponent implements OnInit, OnDestroy {
         this._reloadFolder();
       };
     }, (error: any) => {
-      console.error(error);
+      this.toast.onError(error.error.message)
       this._reloadFolder();
     });
   }

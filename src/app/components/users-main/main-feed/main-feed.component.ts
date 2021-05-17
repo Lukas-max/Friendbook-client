@@ -8,6 +8,7 @@ import { SocketService } from 'src/app/services/socket.Service';
 import { IntersectionObserverService } from 'src/app/services/intersectionObserver.service';
 import { filter, switchMap } from 'rxjs/operators';
 import { Chunk } from 'src/app/model/chunk';
+import { ToastService } from 'src/app/utils/toast.service';
 
 @Component({
   selector: 'app-main-feed',
@@ -30,12 +31,14 @@ export class MainFeedComponent implements AfterViewInit, OnDestroy {
   intersectorSubscription: Subscription;
   limit = 5;
   offset = 0;
+  isLoading = true;
 
   constructor(
     private mainFeedService: MainFeedService,
     private compressService: CompressService,
     private socketService: SocketService,
-    private intersector: IntersectionObserverService) { }
+    private intersector: IntersectionObserverService,
+    private toast: ToastService) { }
 
 
   ngAfterViewInit(): void {
@@ -57,14 +60,15 @@ export class MainFeedComponent implements AfterViewInit, OnDestroy {
       .subscribe((chunk: Chunk<FeedModelDto>) => {
         chunk.content.forEach(feed => this.feedData.push(feed));
         this.offset = this.feedData.length;
-      });
+        this.isLoading = false;
+      }, (error: any) => this.toast.onError(error.error.message));
   }
 
   subscribeFeedSubject() {
     this.feedSocketSubscription = this.socketService.feedSubject.subscribe((feed: FeedModelDto) => {
       this.feedData.unshift(feed);
       this.offset = this.feedData.length;
-    }, (err: any) => console.error(err));
+    }, (error: any) => this.toast.onError(error.error.message));
   }
 
   subscribeDeleteFeedSubject() {
@@ -72,7 +76,7 @@ export class MainFeedComponent implements AfterViewInit, OnDestroy {
       const index = this.feedData.findIndex(feed => feed.feedId === id);
       this.feedData.splice(index, 1);
       this.offset = this.feedData.length;
-    }, (err: any) => console.error(err));
+    }, (error: any) => this.toast.onError(error.error.message));
   }
 
   selectFiles(event: any): void {
@@ -116,7 +120,7 @@ export class MainFeedComponent implements AfterViewInit, OnDestroy {
     this.mainFeedService.postFeedWithFiles(form, text).subscribe(data => {
       this.form.reset();
       // this.filesInput.nativeElement.value = '';
-    }, (err: any) => console.error(err));
+    }, (error: any) => this.toast.onError(error.error.message));
   }
 
   _uploadFilesWithCompressedImgs(text: string): void {
@@ -127,7 +131,7 @@ export class MainFeedComponent implements AfterViewInit, OnDestroy {
     this.mainFeedService.postWithFilesPlusCompressed(form, text).subscribe(() => {
       this.form.reset();
       // this.filesInput.nativeElement.value = '';
-    }, (err: any) => console.error(err));
+    }, (error: any) => this.toast.onError(error.error.message));
   }
 
   ngOnDestroy(): void {

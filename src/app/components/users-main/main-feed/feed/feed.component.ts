@@ -3,6 +3,7 @@ import { FeedModelDto } from 'src/app/model/feedModelDto';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { MainFeedService } from 'src/app/services/mainFeed.service';
 import { Router } from '@angular/router';
+import { ToastService } from 'src/app/utils/toast.service';
 
 @Component({
   selector: 'app-feed',
@@ -18,7 +19,8 @@ export class FeedComponent implements OnInit {
   constructor(
     private authenticationService: AuthenticationService,
     private mainFeedService: MainFeedService,
-    private router: Router) { }
+    private router: Router,
+    private toast: ToastService) { }
 
   ngOnInit(): void {
     this.userUUIDEncoded = btoa(this.feed.userUUID);
@@ -29,7 +31,7 @@ export class FeedComponent implements OnInit {
       this.mainFeedService.deleteFeed(this.feed.feedId).subscribe(() => {
         this.router.navigate(['/user', 'starter', 'dummy'], { skipLocationChange: true })
           .then(() => this.router.navigate(['/user', 'starter', 'main-feed']));
-      });
+      }, (error) => this.toast.onError(error.error.message));
   }
 
   isTheSameUser(): boolean {

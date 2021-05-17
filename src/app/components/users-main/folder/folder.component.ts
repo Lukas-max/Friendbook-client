@@ -6,6 +6,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Chunk } from 'src/app/model/chunk';
 import { IntersectionObserverService } from 'src/app/services/intersectionObserver.service';
 import { filter, switchMap } from 'rxjs/operators';
+import { ToastService } from 'src/app/utils/toast.service';
 
 @Component({
   selector: 'app-folder',
@@ -19,13 +20,15 @@ export class FolderComponent implements OnInit, AfterViewInit {
   fileData: FileDataDto[] = [];
   limit = 15;
   offset = 0;
+  isLoading = true;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private fileStorageService: FileStorageService,
     private router: Router,
     private authenticationService: AuthenticationService,
-    private intersector: IntersectionObserverService) { }
+    private intersector: IntersectionObserverService,
+    private toast: ToastService) { }
 
   ngOnInit(): void {
     this.getUserParams();
@@ -49,7 +52,8 @@ export class FolderComponent implements OnInit, AfterViewInit {
     ).subscribe((chunk: Chunk<FileDataDto>) => {
       chunk.content.forEach((file: FileDataDto) => this.fileData.push(file));
       this.offset = this.fileData.length;
-    });
+      this.isLoading = false;
+    }, (error: any) => this.toast.onError(error.error.message));
   }
 
   return(): void {

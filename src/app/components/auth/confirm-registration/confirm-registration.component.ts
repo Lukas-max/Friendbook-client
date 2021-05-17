@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AccountService } from 'src/app/services/account.service';
+import { ToastService } from 'src/app/utils/toast.service';
 
 @Component({
   selector: 'app-confirm-registration',
@@ -12,7 +13,10 @@ export class ConfirmRegistrationComponent implements OnInit {
   error: boolean = false;
   message: string;
 
-  constructor(private route: ActivatedRoute, private accountService: AccountService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private accountService: AccountService,
+    private toast: ToastService) { }
 
   ngOnInit(): void {
     this.sendToken();
@@ -23,7 +27,7 @@ export class ConfirmRegistrationComponent implements OnInit {
     this.accountService.sendVerificationToken(token).subscribe(() => {
       this.response = true;
     }, err => {
-      this.error = true;
+      this.toast.onError(err.error.message)
       this.message = err.error.message;
     })
   }

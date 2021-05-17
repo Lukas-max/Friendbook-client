@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from 'src/app/services/account.service';
+import { ToastService } from 'src/app/utils/toast.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -17,14 +18,15 @@ export class ResetPasswordComponent implements OnInit {
   constructor(
     private routes: ActivatedRoute,
     private router: Router,
-    private accountService: AccountService) { }
+    private accountService: AccountService,
+    private toast: ToastService) { }
 
   ngOnInit(): void {
     this.token = this.routes.snapshot.queryParams['token'];
     if (this.token)
       this.accountService.sendPasswordResetToken(this.token).subscribe(() => {
         this.isTokenSend = true;
-      });
+      }, (error: any) => this.toast.onError(error.error.message));
   }
 
   submit(): void {
@@ -33,7 +35,7 @@ export class ResetPasswordComponent implements OnInit {
     this.accountService.sendPasswordResetRequest(email).subscribe(() => {
       this.router.navigate(['']);
     }, (err: any) => {
-      console.error(err);
+      this.toast.onError(err.error.message)
       this.router.navigate(['']);
     });
   }

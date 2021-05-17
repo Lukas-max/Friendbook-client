@@ -1,4 +1,4 @@
-<div *ngIf="userUUID && user; else empty" class="profile-box">
+<div *ngIf="!isLoading" class="profile-box">
     <app-profile-head [user]="user"></app-profile-head>
 
     <div>
@@ -32,6 +32,6 @@
 
 </div>
 
-<ng-template #empty>
-    <p>Brak użytkownika</p>
-</ng-template>
+<div *ngIf="isLoading" class="profile-box spinner">
+    <app-spinner></app-spinner>
+</div>

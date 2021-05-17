@@ -10,6 +10,7 @@ import { FeedModelDto } from '../model/feedModelDto';
 import { FeedComment } from '../model/feedComment';
 import { UserData } from '../model/userData';
 import { UserResponseDto } from '../model/userResponseDto';
+import { ToastService } from '../utils/toast.service';
 
 @Injectable({
     providedIn: 'root'
@@ -32,7 +33,7 @@ export class SocketService implements OnDestroy {
     deletedAccountSubscription: Subscription;
     deletedAccountSubject: Subject<UserResponseDto> = new Subject<UserResponseDto>();
 
-    constructor(private authenticationService: AuthenticationService) { }
+    constructor(private authenticationService: AuthenticationService, private toast: ToastService) { }
 
     connect(): void {
         this.socketJs = new SockJS('http://localhost:9010/socket/connect');
@@ -43,6 +44,7 @@ export class SocketService implements OnDestroy {
             this._onConnect();
 
         }, err => {
+            this.toast.onError(err.error.message);
             console.error(err);
             setTimeout(() => this.connect(), 3000);
         });
@@ -52,7 +54,7 @@ export class SocketService implements OnDestroy {
         const uuid = this.authenticationService.getLoggedUserId();
         if (!uuid) {
             this.authenticationService.logout();
-            throw new Error('Brak poprawnego uwierzytelnienia. Wylogowano.');
+            this.toast.onError('Brak poprawnego uwierzytelnienia. Wylogowano.');
         }
 
         this.connectionSubscription = this.stomp.subscribe(`/topic/connection`, (data) => {
@@ -97,11 +99,10 @@ export class SocketService implements OnDestroy {
     _sendWhenConnected() {
         const username = this.authenticationService.getUsername();
         const uuid = this.authenticationService.getLoggedUserId();
-        console.log(username);
 
         if (!username || !uuid) {
             this.authenticationService.logout();
-            throw new Error('Brak poprawnego uwierzytelnienia. Wylogowano.');
+            this.toast.onError('Brak poprawnego uwierzytelnienia. Wylogowano.');
         }
 
         const userConnected: ConnectedUser = {

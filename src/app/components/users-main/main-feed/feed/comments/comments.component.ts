@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { SocketService } from 'src/app/services/socket.Service';
+import { ToastService } from 'src/app/utils/toast.service';
 
 @Component({
   selector: 'app-comments',
@@ -25,15 +26,16 @@ export class CommentsComponent implements OnInit, AfterViewInit, OnDestroy {
   commentsArray: FeedComment[] = [];
   commentsLoaded = false;
   allCommentsLoaded = false;
-  commentsAtStartup = '5';
-  limit = 10;
+  commentsAtStartup = '3';
+  limit = 3;
   offset = 0;
 
   constructor(
     private commentService: MainFeedCommentService,
     private intersector: IntersectionObserverService,
     private authenticationService: AuthenticationService,
-    private socketService: SocketService) { }
+    private socketService: SocketService,
+    private toast: ToastService) { }
 
   ngOnInit(): void {
     this.initializeUser();
@@ -87,7 +89,7 @@ export class CommentsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.offset = this.commentsArray.length;
       this.commentsLoaded = true;
       this.subscriber.unsubscribe();
-    });
+    }, (error: any) => this.toast.onError(error.error.message));
   }
 
   /**
@@ -104,7 +106,7 @@ export class CommentsComponent implements OnInit, AfterViewInit, OnDestroy {
 
         comments.content.forEach((comment: FeedComment) => this.commentsArray.unshift(comment));
         this.offset = this.commentsArray.length;
-      })
+      }, (error: any) => this.toast.onError(error.error.message))
   }
 
   /**
@@ -126,7 +128,7 @@ export class CommentsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.commentService.postFeedComment(feedComment).subscribe(() => {
       //
-    }, (err: any) => console.error(err));
+    }, (error: any) => this.toast.onError(error.error.message));
   }
 
   /**
@@ -141,7 +143,7 @@ export class CommentsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.commentService.deleteFeedComments(comment.id).subscribe(() => {
         const idx = this.commentsArray.findIndex((cmnt: FeedComment) => cmnt.id === comment.id);
         this.commentsArray.splice(idx, 1);
-      }, (err: any) => console.error(err));
+      }, (error: any) => this.toast.onError(error.error.message));
     }
   }
 

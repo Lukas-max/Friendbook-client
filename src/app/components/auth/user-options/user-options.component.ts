@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { SocketService } from 'src/app/services/socket.Service';
 import { MailData } from 'src/app/model/mailData';
 import { PasswordMatchValidator } from 'src/app/services/passwordMatch.service';
+import { ToastService } from 'src/app/utils/toast.service';
 
 @Component({
   selector: 'app-user-options',
@@ -30,7 +31,8 @@ export class UserOptionsComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private socketService: SocketService,
     private accountService: AccountService,
-    private passwordMatchValidator: PasswordMatchValidator
+    private passwordMatchValidator: PasswordMatchValidator,
+    private toast: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -39,9 +41,7 @@ export class UserOptionsComponent implements OnInit {
       .subscribe((isConfirmed: string) => {
         this.isConfirmed = isConfirmed;
         this.handleComponentExecution();
-      }, (err) => {
-        this.notAuthenticated();
-      });
+      }, (error: any) => this.toast.onError(error.error.message));
   }
 
   handleComponentExecution(): void {
@@ -94,7 +94,7 @@ export class UserOptionsComponent implements OnInit {
     const mailData: MailData = { email: newEmail };
     this.accountService.changeEmail(mailData).subscribe(() => {
       this.authenticationService.logout();
-    });
+    }, (error: any) => this.toast.onError(error.error.message));
   }
 
   deleteAccount(): void {
@@ -111,7 +111,7 @@ export class UserOptionsComponent implements OnInit {
 
   notAuthenticated(): void {
     this.authenticationService.logout();
-    throw new Error('Odmowa dostępu.');
+    this.toast.onError('Odmowa dostępu')
   }
 
   private doesEmailExist(control: FormControl): Observable<any> {

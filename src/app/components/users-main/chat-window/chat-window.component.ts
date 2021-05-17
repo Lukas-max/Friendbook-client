@@ -8,6 +8,7 @@ import { ChatService } from 'src/app/services/chat.service';
 import { Utils } from 'src/app/utils/utils';
 import { Chunk } from 'src/app/model/chunk';
 import { UserData } from 'src/app/model/userData';
+import { ToastService } from 'src/app/utils/toast.service';
 
 @Component({
   selector: 'app-chat-window',
@@ -34,7 +35,8 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private socketService: SocketService,
     private authenticationService: AuthenticationService,
-    private chatService: ChatService) { }
+    private chatService: ChatService,
+    private toast: ToastService) { }
 
   ngOnInit(): void {
     this.initializeSender();
@@ -109,7 +111,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
           this.loadedAllMessages = true;
         if (scrollDown)
           Utils.scroll(this.scrollElement.nativeElement, 0);
-      }, (err: any) => console.error(err));
+      }, (error: any) => this.toast.onError(error.error.message));
   }
 
   /**
@@ -133,7 +135,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
       if (!this.isOpen && chat.senderUUID === this.receiverUUID) {
         this.notificationAwaiting = true;
       }
-    });
+    }, (error: any) => this.toast.onError(error.error.message));
   }
 
   /**

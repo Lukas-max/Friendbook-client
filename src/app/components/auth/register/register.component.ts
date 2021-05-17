@@ -5,6 +5,7 @@ import { AccountService } from 'src/app/services/account.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PasswordMatchValidator } from 'src/app/services/passwordMatch.service';
+import { ToastService } from 'src/app/utils/toast.service';
 
 @Component({
   selector: 'app-register',
@@ -20,7 +21,8 @@ export class RegisterComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private accountService: AccountService,
-    private passwordMatchValidator: PasswordMatchValidator) { }
+    private passwordMatchValidator: PasswordMatchValidator,
+    private toast: ToastService) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -56,8 +58,9 @@ export class RegisterComponent implements OnInit {
     this.accountService.register(userDto).subscribe(() => {
       this.form.reset();
       this.onClose();
-    }, err => {
-      console.log(err);
+    }, (error: any) => {
+      this.toast.onError(error.error.message);
+      console.log(error);
     });
   }
 

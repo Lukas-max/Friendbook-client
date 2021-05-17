@@ -33,6 +33,9 @@ import { ResetPasswordComponent } from './components/auth/reset-password/reset-p
 import { UserOptionsComponent } from './components/auth/user-options/user-options.component';
 import { LoggedUserGuard } from './guards/loggedUser.guard';
 import { ForeignUserGuard } from './guards/foreignUser.guard';
+import { SpinnerComponent } from './utils/spinner/spinner.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 
 const routes: Routes = [
@@ -80,7 +83,8 @@ const routes: Routes = [
     CommentsComponent,
     ProfileHeadComponent,
     ResetPasswordComponent,
-    UserOptionsComponent
+    UserOptionsComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,
@@ -89,7 +93,12 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     FormsModule,
     ReactiveFormsModule,
-    NgbPaginationModule
+    NgbPaginationModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    }),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizationInterceptor, multi: true }

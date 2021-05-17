@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { UserResponseDto } from 'src/app/model/userResponseDto';
+import { ToastService } from 'src/app/utils/toast.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -15,13 +16,15 @@ export class UserProfileComponent implements OnInit {
   user: UserResponseDto;
   folders: string[] = [];
   storage: number;
+  isLoading = true;
 
   constructor(
     private fileStorageService: FileStorageService,
     private route: ActivatedRoute,
     private userService: UserService,
     private authenticationService: AuthenticationService,
-    private router: Router) { }
+    private router: Router,
+    private toast: ToastService) { }
 
   ngOnInit(): void {
     this.init();
@@ -36,13 +39,19 @@ export class UserProfileComponent implements OnInit {
   }
 
   loadForeignUser() {
-    this.userService.getUserByUUID(this.userUUID).subscribe(data => this.user = data);
+    this.userService.getUserByUUID(this.userUUID).subscribe(data => {
+      this.user = data;
+      this.isLoading = false;
+    });
   }
 
   loadLoggedUser() {
     const uuid = this.authenticationService.getLoggedUserId();
     this.userUUID = uuid;
-    this.userService.getUserByUUID(uuid).subscribe(data => this.user = data);
+    this.userService.getUserByUUID(uuid).subscribe(data => {
+      this.user = data;
+      this.isLoading = false;
+    }, (error: any) => this.toast.onError(error.error.message));
   }
 
   getFolders() {
@@ -50,7 +59,7 @@ export class UserProfileComponent implements OnInit {
       this.folders = data.map(path => {
         return path.split('\\').reverse()[0];
       });
-    });
+    }, (error: any) => this.toast.onError(error.error.message));
   }
 
   onFolderClick(folder: string) {
@@ -64,22 +73,14 @@ export class UserProfileComponent implements OnInit {
     this._investigateFolderName(folderName);
     this.fileStorageService.createFolder(folderName).subscribe(() => {
       this._reloadComponent();
-    }, (err: any) => {
-      console.error(err);
-    });
+    }, (error: any) => this.toast.onError(error.error.message));
   }
 
   deleteFolder(name: string) {
     if (confirm('Chcesz usunąć folder ' + name + ' wraz z całą jego zawartością?'))
       this.fileStorageService.deleteFolder(name).subscribe((data: boolean) => {
-        if (data) {
-          this._reloadComponent();
-        }
-        else
-          console.log("Nie usuneło.")
-      }, (error: any) => {
-        console.error(error);
-      });
+        this._reloadComponent();
+      }, (error: any) => this.toast.onError(error.error.message));
   }
 
   _investigateFolderName(folderName: string) {

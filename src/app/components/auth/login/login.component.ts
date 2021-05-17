@@ -35,8 +35,7 @@ export class LoginComponent implements OnInit {
 
     this.authenticationService.login(credentials).subscribe(() => {
       this.handelLoginExecution();
-    }, error => {
-      console.log(error);
+    }, () => {
       this.error = true;
     });
   }

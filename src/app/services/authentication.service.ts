@@ -22,7 +22,6 @@ export class AuthenticationService {
 
         return this.http.post(`http://localhost:9010/app/user/login`, JSON.stringify(credentials), options)
             .pipe(tap(res => {
-                console.log(res);
                 this.storeResponseHeaderData(res);
             }));
     }
@@ -31,8 +30,8 @@ export class AuthenticationService {
         localStorage.setItem(this.JWT_TOKEN, res.headers.get('jwt-token'));
         localStorage.setItem(this.USER_ROLES, res.headers.get('roles'));
         localStorage.setItem(this.TOKEN_EXPIRATION, res.headers.get('jwt-expiration'));
-        localStorage.setItem(this.USER_DATA, res.headers.get('user'));
-        localStorage.setItem(this.USERNAME, res.headers.get('username'));
+        localStorage.setItem(this.USER_DATA, res.body.userUUID);
+        localStorage.setItem(this.USERNAME, res.body.username);
     }
 
     logout(): void {
