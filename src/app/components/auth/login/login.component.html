@@ -1,4 +1,4 @@
-<div class="login-box">
+<div *ngIf="!isLoading" class="login-box">
     <h5 *ngIf="!starterLoginPage">Zaloguj się aby wprowadzić zmiany</h5>
 
     <div class="form-login">
@@ -21,6 +21,6 @@
     </div>
 </div>
 
-<div *ngIf="isLogged() && starterLoginPage">
-    <button class="btn btn-warning" (click)="logout()">Wyloguj się</button>
+<div *ngIf="isLoading" class="login-box spinner">
+    <app-spinner></app-spinner>
 </div>

@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
   starterLoginPage: boolean;
   error: boolean;
   pathVariable: string;
+  isLoading = false;
 
   constructor(
     private router: Router,
@@ -28,6 +29,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.isLoading = true;
     const credentials = new LoginCredentials(
       this.form.value.email,
       btoa(this.form.value.password)
@@ -36,6 +38,7 @@ export class LoginComponent implements OnInit {
     this.authenticationService.login(credentials).subscribe(() => {
       this.handelLoginExecution();
     }, () => {
+      this.isLoading = false;
       this.error = true;
     });
   }

@@ -2,11 +2,13 @@
 <div class="register-modal">
 
     <div class="form-box" *ngIf="!sendingMail; else sending">
+        <div class="text-center mb-4 font-weight-bold" style="font-size: 22px;">REJESTRACJA</div>
         <form (ngSubmit)="onSubmit()" [formGroup]="form">
 
             <div class="form-group">
-                <label for="username">Nazwa użytkownika</label>
-                <input type="email" class="form-control" name="username" formControlName="username" required>
+                <label for="username" class="font-weight-bold">Nazwa użytkownika:</label>
+                <input type="email" class="form-control" name="username" formControlName="username" placeholder="..."
+                    required>
 
                 <div *ngIf="username.touched && username.invalid" class="alert alert-danger">
                     <div *ngIf="username.hasError('required')">
@@ -19,8 +21,9 @@
             </div>
 
             <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" name="email" formControlName="email" required>
+                <label for="email" class="font-weight-bold">Email:</label>
+                <input type="email" class="form-control" name="email" formControlName="email" placeholder="..."
+                    required>
 
                 <div *ngIf="email.touched && email.invalid" class="alert alert-danger">
                     <div *ngIf="email.hasError('required')">
@@ -36,8 +39,9 @@
             </div>
 
             <div class="form-group">
-                <label for="password">Hasło</label>
-                <input type="password" class="form-control" name="password" formControlName="password" required>
+                <label for="password" class="font-weight-bold">Hasło:</label>
+                <input type="password" class="form-control" name="password" formControlName="password" placeholder="..."
+                    required>
 
                 <div *ngIf="password.touched && password.invalid" class="alert alert-danger">
                     <div *ngIf="password.hasError('required')">
@@ -50,8 +54,9 @@
             </div>
 
             <div class="form-group">
-                <label for="confirm">Powtórz hasło</label>
-                <input type="password" class="form-control" name="confirm" formControlName="confirmPassword" required>
+                <label for="confirm" class="font-weight-bold">Powtórz hasło:</label>
+                <input type="password" class="form-control" name="confirm" formControlName="confirmPassword"
+                    placeholder="..." required>
 
                 <div *ngIf="confirm.touched && confirm.invalid" class="alert alert-danger">
                     <div *ngIf="confirm.hasError('required')">
@@ -67,7 +72,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Zarejestruj mnie</button>
-            <button type="button" class="btn btn-warning" (click)="onClose()">Anuluj</button>
+            <button type="button" class="btn btn-outline-danger" (click)="onClose()">Anuluj</button>
         </form>
     </div>
 

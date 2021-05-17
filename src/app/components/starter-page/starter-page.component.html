@@ -1,7 +1,37 @@
-<div class="starter-page-box">
-    <app-login></app-login>
-    <a href="#" (click)="register()">Zarejestruj się</a>
-    <a href="#" [routerLink]="['reset']">Zapomniełeś hasła?</a>
+<div class="starter-img">
+    <div class="starter-bg">
+        <div class="starter-page-box">
+            <app-login></app-login>
+            <a href="#" (click)="register()" class="font-weight-bold mb-2">Zarejestruj się</a>
+            <a href="#" [routerLink]="['reset']" class="font-weight-bold">Zapomniełeś hasła?</a>
+        </div>
+    </div>
+
+    <div class="starter-text">
+        <span>Friend</span>
+        <span class="book">Book</span>
+    </div>
+
+    <div class="photo-author">
+        <div>Art by: Mateusz Dach</div>
+        <div>https://www.pexels.com/pl-pl/@mateusz-dach-99805</div>
+    </div>
 </div>
+
+<div class="author">
+    <p>Stworzone przez:</p>
+    <p class="font-weight-bold">Łukasz Jankowski</p>
+    <div>
+        <a href="https://www.linkedin.com/in/%C5%82ukasz-jankowski-4579791b5/" target="_blank">
+            <i class="fab fa-linkedin"></i>Linkedin</a>
+        <a href="https://github.com/Lukas-max/Friendbook-client" target="_blank">
+            <i class="fab fa-github"></i>GitHub - Frontend</a>
+        <a href="https://github.com/Lukas-max/Friendbook-backend" target="_blank">
+            <i class="fab fa-github"></i>GitHub - Backend</a>
+        <a href="https://www.youtube.com/channel/UC-htJ3PkR6xi1ff1E7Ns3Hw/videos?view_as=subscriber" target="_blank">
+            <i class="fab fa-youtube"></i>YouTube</a>
+    </div>
+</div>
+
 
 <app-register *ngIf="registerAttempt" (closeComponent)="closeRegisterWindow()"></app-register>

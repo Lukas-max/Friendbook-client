@@ -60,7 +60,6 @@ export class RegisterComponent implements OnInit {
       this.onClose();
     }, (error: any) => {
       this.toast.onError(error.error.message);
-      console.log(error);
     });
   }
 
