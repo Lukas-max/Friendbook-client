@@ -36,6 +36,8 @@ import { ForeignUserGuard } from './guards/foreignUser.guard';
 import { SpinnerComponent } from './utils/spinner/spinner.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { FooterComponent } from './footer/footer.component';
+import { MatProgressBarModule, MatProgressBar } from '@angular/material/progress-bar'
 
 
 const routes: Routes = [
@@ -84,7 +86,8 @@ const routes: Routes = [
     ProfileHeadComponent,
     ResetPasswordComponent,
     UserOptionsComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
@@ -95,6 +98,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     NgbPaginationModule,
     BrowserAnimationsModule,
+    MatProgressBarModule,
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,

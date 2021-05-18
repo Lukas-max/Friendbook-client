@@ -22,14 +22,14 @@
 
 .arrow-left { 
     position: fixed;
-    left: 10%;
+    left: 5%;
     top: 50%;
     transform: translate(0, -50%);
 }
 
 .arrow-right {
     position: fixed;
-    right: 10%;
+    right: 5%;
     top: 50%;
     transform: translate(0, -50%);
 }
@@ -65,5 +65,22 @@
     video {
         max-height: 90vh;
     }
+    
+    // @media (max-width: 1600px) {
+    //     img {
+    //         max-width: 90vh;
+    //     }
+    // }
+    
+    // @media (max-width: 1240px) {
+    //     img {
+    //         max-width: 70vh;
+    //     }
+    // }
 
+    // @media (max-width: 1000px) {
+    //     img {
+    //         max-width: 40vh;
+    //     }
+    // }
 }

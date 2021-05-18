@@ -11,11 +11,24 @@
                 <label>
                     <input type="file" multiple (change)="selectFiles($event)" #filesInput />
                 </label>
-                <p *ngIf="compressingFiles">KOMPRESUJE!</p>
             </div>
 
-            <button class="btn btn-primary" [disabled]="!feed.valid || compressingFiles">Wyślij</button>
+            <button class="btn btn-primary" [disabled]="!feed.valid || compressingFiles || uploadingFiles">
+                Wyślij
+            </button>
         </form>
+
+        <div>
+            <p *ngIf="compressingFiles">KOMPRESUJE OBRAZY</p>
+            <div class="spinner">
+                <app-spinner *ngIf="compressingFiles"></app-spinner>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="uploadingFiles" class="progress-bar">
+        <p>Wysyłam pliki..</p>
+        <mat-progress-bar mode="determinate" [value]="fileProgress"></mat-progress-bar>
     </div>
 
     <div *ngIf="isLoading" class="spinner">

@@ -9,6 +9,7 @@ import { IntersectionObserverService } from 'src/app/services/intersectionObserv
 import { filter, switchMap } from 'rxjs/operators';
 import { Chunk } from 'src/app/model/chunk';
 import { ToastService } from 'src/app/utils/toast.service';
+import { HttpEventType } from '@angular/common/http';
 
 @Component({
   selector: 'app-main-feed',
@@ -23,15 +24,19 @@ export class MainFeedComponent implements AfterViewInit, OnDestroy {
   filesSelected: FileList;
   imageFiles: File[] = [];
   otherFilesAndCompressedImages: File[] = [];
+  feedData: FeedModelDto[] = [];
+  // subscriptions to Subject's and IntersectorObserver:
   compressingFileSubscription: Subscription;
   compressedImageSubscription: Subscription;
-  feedData: FeedModelDto[] = [];
   feedSocketSubscription: Subscription;
   deleteFeedSocketSubscription: Subscription;
   intersectorSubscription: Subscription;
   limit = 5;
   offset = 0;
   isLoading = true;
+  // file upload flags and progress tracking:
+  uploadingFiles = false;
+  fileProgress = 0;
 
   constructor(
     private mainFeedService: MainFeedService,
@@ -114,24 +119,34 @@ export class MainFeedComponent implements AfterViewInit, OnDestroy {
   }
 
   _uploadFiles(text: string): void {
+    this.uploadingFiles = true;
     const form = new FormData();
     this.otherFilesAndCompressedImages.forEach(file => form.append('files', file));
-
-    this.mainFeedService.postFeedWithFiles(form, text).subscribe(data => {
-      this.form.reset();
-      // this.filesInput.nativeElement.value = '';
+    this.mainFeedService.postFeedWithFiles(form, text).subscribe((event: any) => {
+      this.uploading(event);
     }, (error: any) => this.toast.onError(error.error.message));
   }
 
   _uploadFilesWithCompressedImgs(text: string): void {
+    this.uploadingFiles = true;
     const form = new FormData();
     this.otherFilesAndCompressedImages.forEach(file => form.append('files', file));
     this.imageFiles.forEach(file => form.append('images', file));
-
-    this.mainFeedService.postWithFilesPlusCompressed(form, text).subscribe(() => {
-      this.form.reset();
-      // this.filesInput.nativeElement.value = '';
+    this.mainFeedService.postWithFilesPlusCompressed(form, text).subscribe((event: any) => {
+      this.uploading(event);
     }, (error: any) => this.toast.onError(error.error.message));
+  }
+
+  private uploading(event: any): void {
+    if (event.type === HttpEventType.UploadProgress) {
+      this.fileProgress = Math.round(100 * (event.loaded / event.total));
+    }
+
+    if (event.type === HttpEventType.Response) {
+      this.form.reset();
+      this.uploadingFiles = false;
+      this.fileProgress = 0;
+    };
   }
 
   ngOnDestroy(): void {

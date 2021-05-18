@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, NgZone } from '@angular/core';
 import { FileStorageService } from 'src/app/services/file-storage.service';
 import { HttpEventType } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -21,6 +21,9 @@ export class FileUploadComponent implements OnInit, OnDestroy {
   // here are the types of file to send:
   imageFiles: File[] = [];
   otherFilesAndCompressedImages: File[] = [];
+  // file upload flags and progress tracking:
+  uploadingFiles = false;
+  fileProgress = 0;
 
   constructor(
     private fileStorageService: FileStorageService,
@@ -56,39 +59,46 @@ export class FileUploadComponent implements OnInit, OnDestroy {
   }
 
   onUpload() {
-    if (!this.filesSelected) return;
-    if (this.otherFilesAndCompressedImages.length > 0)
+    if (!this.filesSelected && this.otherFilesAndCompressedImages.length === 0) return;
+    this.uploadingFiles = true;
+    if (this.imageFiles.length === 0)
       this._uploadFiles();
     if (this.imageFiles.length > 0)
-      this._uploadImages();
+      this._uploadFilesAndImages();
 
   }
 
-  _uploadFiles() {
+  _uploadFiles(): void {
     const form = new FormData();
     this.otherFilesAndCompressedImages.forEach(file => form.append('files', file));
-
-    this.fileStorageService.uploadFile(form, this.folder).subscribe((event: any) => {
-      if (event.type === HttpEventType.Response) {
-        this._reloadFolder();
-      }
+    this.fileStorageService.uploadFile(form, this.folder, false).subscribe((event: any) => {
+      this.onUploadFiles(event);
     }, (error: any) => {
       this.toast.onError(error.error.message)
       this._reloadFolder();
     });
   }
 
-  _uploadImages() {
+  _uploadFilesAndImages(): void {
     const form = new FormData();
-    this.imageFiles.forEach(file => form.append('files', file));
-    this.fileStorageService.uploadImage(form, this.folder).subscribe((event: any) => {
-      if (event.type === HttpEventType.Response) {
-        this._reloadFolder();
-      };
+    this.otherFilesAndCompressedImages.forEach(file => form.append('files', file));
+    this.imageFiles.forEach(file => form.append('images', file));
+    this.fileStorageService.uploadFile(form, this.folder, true).subscribe((event: any) => {
+      this.onUploadFiles(event);
     }, (error: any) => {
       this.toast.onError(error.error.message)
       this._reloadFolder();
     });
+  }
+
+  private onUploadFiles(event: any): void {
+    if (event.type === HttpEventType.UploadProgress) {
+      this.fileProgress = Math.round(100 * (event.loaded / event.total));
+    }
+
+    if (event.type === HttpEventType.Response) {
+      this._reloadFolder();
+    }
   }
 
   _reloadFolder(): void {
@@ -96,7 +106,7 @@ export class FileUploadComponent implements OnInit, OnDestroy {
       .then(() => this.router.navigate(['/user', 'starter', 'folder', this.userUUID, this.folder]));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.compressedImageSubscription.unsubscribe();
     this.compressingFileSubscription.unsubscribe();
   }

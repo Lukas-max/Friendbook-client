@@ -2,7 +2,6 @@
     margin-top: 30px;
     display: flex;
     flex-direction: column;
-    // justify-content: center;
     align-items: center;
 
     .user-input {
@@ -12,6 +11,17 @@
         // border-radius: 10px;
         // background-color: rgb(255, 255, 255);
         // box-shadow: 1px 1px 5px rgb(236, 228, 228);
+    }
+
+    .progress-bar {
+        padding: 40px;
+        width: 50vw;
+        align-items: flex-start;
+        color: black;
+
+        border: 1px solid rgb(236, 228, 228);
+        border-radius: 10px;
+        background-color: rgb(255, 255, 255);
     }
 
     .feed-border {

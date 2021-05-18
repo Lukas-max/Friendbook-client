@@ -1,0 +1,43 @@
+.footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 90px;
+    background-color: rgb(255, 255, 255);
+    border-top: 1px solid rgba(100, 100, 100, 0.2);
+
+    .footer-name {
+        margin-right: 20px;
+        font-size: 20px;
+        font-weight: bold;
+        color: rgba(0, 0, 0, 0.6);
+      }
+
+      a {
+        margin: 0 30px;
+        font-size: 28px;
+      }
+  }
+  
+  @media (min-width: 576px) {
+    .footer {
+      flex-direction: row;
+      height: 55px;
+
+      a {
+        margin: 0 30px;
+        font-size: 18px;
+      }
+    }
+  
+    .footer-name {
+      margin-right: 20px;
+      font-size: 18px;
+    }
+
+  }
+
+  i {
+      margin: 5px;
+  }

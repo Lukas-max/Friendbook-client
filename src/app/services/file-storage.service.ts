@@ -29,21 +29,11 @@ export class FileStorageService {
         return this.http.get<BytePackage>(`http://localhost:9010/api/storage/profile/low-quality/${uuid}`);
     }
 
-    uploadFile(form: FormData, folder: string): Observable<HttpEvent<any>> {
+    uploadFile(form: FormData, folder: string, images: boolean): Observable<HttpEvent<any>> {
         const param = new HttpParams().append('directory', folder);
-        const request = new HttpRequest('POST', `http://localhost:9010/api/storage`, form, {
-            // reportProgress: true,
-            responseType: 'json',
-            params: param
-        });
-
-        return this.http.request(request);
-    }
-
-    uploadImage(form: FormData, folder: string): Observable<HttpEvent<any>> {
-        const param = new HttpParams().append('directory', folder);
-        const request = new HttpRequest('POST', `http://localhost:9010/api/storage/images`, form, {
-            // reportProgress: true,
+        const url = images ? `http://localhost:9010/api/storage/images` : `http://localhost:9010/api/storage`;
+        const request = new HttpRequest('POST', url, form, {
+            reportProgress: true,
             responseType: 'json',
             params: param
         });

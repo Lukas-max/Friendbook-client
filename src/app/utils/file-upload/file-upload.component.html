@@ -2,8 +2,22 @@
     <label>
         <input type="file" multiple (change)="selectFiles($event)" />
     </label>
-    <p *ngIf="compressingFiles">KOMPRESUJE!</p>
-    <button class="btn btn-outline-success" (click)="onUpload()" [disabled]="!filesSelected || compressingFiles">
+
+    <button class="btn btn-outline-success" (click)="onUpload()"
+        [disabled]="!filesSelected || compressingFiles || uploadingFiles">
         Załaduj pliki
     </button>
+
+    <div>
+        <p *ngIf="compressingFiles">KOMPRESUJE OBRAZY</p>
+        <div class="spinner">
+            <app-spinner *ngIf="compressingFiles"></app-spinner>
+        </div>
+    </div>
+
+    <div *ngIf="uploadingFiles">
+        <p>Wysyłam pliki..</p>
+        <mat-progress-bar mode="determinate" [value]="fileProgress"></mat-progress-bar>
+        <br>
+    </div>
 </div>
