@@ -1,27 +1,91 @@
-# FriendplaceFrontend
+# FriendPlace
+## Frontend part
+Project made by Łukasz Jankowski.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.4.
+## Prerequisites
+- Nodejs
+- TypeScript: 4.1.5
+- AuctioShop backend part. [link](https://github.com/Lukas-max/Friendbook-backend)
 
-## Development server
+## Build with:
+- Angular: 11.2.4
+- Angular-CLI: 11.2.4
+- Bootstrap: 4.6.0
+- Ngx-toastr: 13.2.1
+- StompJS: 2.3.3
+- Net: 1.0.2
+- Angular Matarial progress bar 
+- HTML, SCSS
+- Font Awesome
+- Visual Studio Code
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+The backend part of the application is right [here](https://github.com/Lukas-max/Friendbook-backend). 
 
-## Code scaffolding
+## RUN 
+Step 1: Install backend part.  
+Step 2: Copy/clone this repo and open in your compiler.   
+Step 3: Go to app/environments folder to environment.ts and change backendUrl to your backend url. Like:  `http://localhost:8080'`
+Step 4: Run `npm install` and its ready to go.  
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Project purpose and goal
+The aim was to develop a functional application, from end to end, that people can use on the internet. First of all the target was to learn storing data, files in folders, developing chat between users, learning websockets, server sent events and user notification about changes in the app, building own lightbox and viewing different kinds of files. The second thing was to use this information and build the web app to better memorize and understand new functions. And least, to style it so it will be comfortable in use and not bad to look.
 
-## Build
+## App main functions (Fullstack review)
+Account:
+- User authorization and authentication (with JSON Web Token)
+- Register user with email verification
+- Reseting password with email verification
+- Email and password change by logged users
+- Deleting account
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+File storage:
+- Storing files in user file storage
+- Deleting files
+- Creating folders, deleting folders
+- Adding profile photo, deleting the photo
+- Each user has a limited storage space
+- Informing user on used storage space 
 
-## Running unit tests
+Database:
+- storing user data, main feed data, comments, global chat and private chat notifications etc..
+- Table generation by sql syntax in schema.sql
+- Connection with database using EntityManager and Spring JPA. No Spring Data for this project.
+- Database and file storage code connection
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Viewing files:
+- Viewing added files on the page and/or by using lightbox on file click for a broader view
+- Custom made lightbox for viewing all type of files. Images, videos etc..
+- Image compression for better performance. The images on the page are viewed in compressed format. Where the images in the lightbox are downloaded in full quality
+- Image compression of the profile photo
 
-## Running end-to-end tests
+Main feed (user posts)
+- Adding posts by users with text and/or files
+- Deleting posts created by users
+- General file view and lightbox file view
+- Writing comments under each post
+- Deleting user comments
+- Feed files are stored to global feed directory
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+WebSocket/Stomp
+- Using STOMP for client-server communication
+- User login/logout (viewing logged and offline users)
+- Global chat beetwen users
+- Private p2p chat between users
+- Using STOMP to upload information only to logged clients:  
+  1) Uploading added posts in the main feed  
+  2) Uploading new comments
+  3) Upload messages to global chat
+  4) Upload messages to private chate between users  
+  5) Viewing which user is online
 
-## Further help
+Online/Offline window
+- Viewing which users are online when connecting to stomp or offline on disconnect.
+- Opening p2p chat window when user is clicked
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Chat
+- global chat with all users
+- Chat window component for user-to-user private chat (private messages are stored encoded in the database)
+- Notification if a message is received by other user
+
+## Endopoints and Angular
+FriendBook uses endpoints that are documented in the backend part of the app. For more info go [there](https://github.com/Lukas-max/Friendbook-backend).
