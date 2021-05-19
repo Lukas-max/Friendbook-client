@@ -2,15 +2,16 @@ import { Injectable, OnDestroy } from '@angular/core';
 import * as SockJS from 'sockjs-client';
 import * as Stomp from 'stompjs';
 import { Subscription, Subject, BehaviorSubject } from 'rxjs';
-import { PublicChatMessage } from '../model/publicChatMessage';
-import { ConnectedUser } from '../model/connectedUser';
+import { PublicChatMessage } from '../model/chat/publicChatMessage';
+import { ConnectedUser } from '../model/chat/connectedUser';
 import { AuthenticationService } from './authentication.service';
-import { PrivateChatMessage } from '../model/privateChatMessage';
-import { FeedModelDto } from '../model/feedModelDto';
-import { FeedComment } from '../model/feedComment';
-import { UserData } from '../model/userData';
-import { UserResponseDto } from '../model/userResponseDto';
-import { ToastService } from '../utils/toast.service';
+import { PrivateChatMessage } from '../model/chat/privateChatMessage';
+import { FeedModelDto } from '../model/feed/feedModelDto';
+import { FeedComment } from '../model/feed/feedComment';
+import { UserData } from '../model/account/userData';
+import { UserResponseDto } from '../model/account/userResponseDto';
+import { ToastService } from './toast.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -36,7 +37,7 @@ export class SocketService implements OnDestroy {
     constructor(private authenticationService: AuthenticationService, private toast: ToastService) { }
 
     connect(): void {
-        this.socketJs = new SockJS('http://localhost:9010/socket/connect');
+        this.socketJs = new SockJS(`${environment.backendUrl}/socket/connect`);
         this.stomp = Stomp.over(this.socketJs);
         this.stomp.debug = null;
 

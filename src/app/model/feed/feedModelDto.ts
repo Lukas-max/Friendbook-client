@@ -1,4 +1,4 @@
-import { FileDataDto } from './fileDataDto';
+import { FileDataDto } from '../files/fileDataDto';
 
 export class FeedModelDto {
     feedId: number;

@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, OnDestroy, NgZone } from '@angular/core';
 import { FileStorageService } from 'src/app/services/file-storage.service';
-import { UserResponseDto } from 'src/app/model/userResponseDto';
-import { BytePackage } from 'src/app/model/bytePackage';
+import { UserResponseDto } from 'src/app/model/account/userResponseDto';
+import { BytePackage } from 'src/app/model/data/bytePackage';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { CompressService } from 'src/app/services/compress.Service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
-import { ToastService } from 'src/app/utils/toast.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-profile-head',

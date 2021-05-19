@@ -5,7 +5,7 @@
                 {{ feed.username }}
             </span>
             <span class="timestamp-span">
-                ({{ feed.feedTimestamp | date: 'dd/MM/yyyy, hh:mm' }})
+                ({{ feed.feedTimestamp | time }})
             </span>
         </span>
         <button *ngIf="isTheSameUser()" class="btn btn-outline-danger delete-button" (click)=deleteFeed()>Usuń</button>

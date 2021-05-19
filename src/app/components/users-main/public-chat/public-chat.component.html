@@ -5,7 +5,7 @@
             <span #observed></span>
             <div *ngFor="let chat of chatMessages" class="message">
                 <span class="username">{{ chat.username }} </span>
-                <span class="time">({{ chat.timestamp | date: 'dd/MM/yyyy, hh:mm' }})</span><br>
+                <span class="time">({{ chat.timestamp | time }})</span><br>
                 <span>{{ chat.content }}</span>
             </div>
             <span #scroll></span>

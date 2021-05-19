@@ -9,11 +9,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { ConfirmRegistrationComponent } from './components/auth/confirm-registration/confirm-registration.component';
 import { LoginComponent } from './components/auth/login/login.component';
-import { AuthorizationInterceptor } from './interceptors/authorization.interceptor';
-import { FileUploadComponent } from './utils/file-upload/file-upload.component';
-import { LightboxViewerComponent } from './utils/lightbox-viewer/lightbox-viewer.component';
-import { DummyComponent } from './utils/dummy/dummy.component';
-import { FileDisplayComponent } from './utils/file-display/file-display.component';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { UsersMainComponent } from './components/users-main/users-main.component';
 import { MainFeedComponent } from './components/users-main/main-feed/main-feed.component';
@@ -31,13 +26,19 @@ import { CommentsComponent } from './components/users-main/main-feed/feed/commen
 import { ProfileHeadComponent } from './components/users-main/user-profile/profile-head/profile-head.component';
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 import { UserOptionsComponent } from './components/auth/user-options/user-options.component';
-import { LoggedUserGuard } from './guards/loggedUser.guard';
-import { ForeignUserGuard } from './guards/foreignUser.guard';
-import { SpinnerComponent } from './utils/spinner/spinner.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { FooterComponent } from './footer/footer.component';
-import { MatProgressBarModule, MatProgressBar } from '@angular/material/progress-bar'
+import { MatProgressBarModule } from '@angular/material/progress-bar'
+import { TimePipe } from './utils/time.pipe';
+import { ForeignUserGuard } from './utils/guards/foreignUser.guard';
+import { DummyComponent } from './utils/components/dummy/dummy.component';
+import { LoggedUserGuard } from './utils/guards/loggedUser.guard';
+import { FileUploadComponent } from './utils/components/file-upload/file-upload.component';
+import { LightboxViewerComponent } from './utils/components/lightbox-viewer/lightbox-viewer.component';
+import { FileDisplayComponent } from './utils/components/file-display/file-display.component';
+import { SpinnerComponent } from './utils/components/spinner/spinner.component';
+import { AuthorizationInterceptor } from './utils/interceptors/authorization.interceptor';
 
 
 const routes: Routes = [
@@ -87,7 +88,8 @@ const routes: Routes = [
     ResetPasswordComponent,
     UserOptionsComponent,
     SpinnerComponent,
-    FooterComponent
+    FooterComponent,
+    TimePipe
   ],
   imports: [
     BrowserModule,

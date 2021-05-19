@@ -1,12 +1,12 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FileStorageService } from 'src/app/services/file-storage.service';
-import { FileDataDto } from 'src/app/model/fileDataDto';
+import { FileDataDto } from 'src/app/model/files/fileDataDto';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { Chunk } from 'src/app/model/chunk';
+import { Chunk } from 'src/app/model/data/chunk';
 import { IntersectionObserverService } from 'src/app/services/intersectionObserver.service';
 import { filter, switchMap } from 'rxjs/operators';
-import { ToastService } from 'src/app/utils/toast.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-folder',

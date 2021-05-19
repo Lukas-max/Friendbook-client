@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FeedModelDto } from 'src/app/model/feedModelDto';
+import { FeedModelDto } from 'src/app/model/feed/feedModelDto';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { MainFeedService } from 'src/app/services/mainFeed.service';
 import { Router } from '@angular/router';
-import { ToastService } from 'src/app/utils/toast.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-feed',

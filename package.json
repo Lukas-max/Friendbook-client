@@ -24,7 +24,6 @@
     "@angular/router": "~11.2.5",
     "@ng-bootstrap/ng-bootstrap": "^9.1.0",
     "bootstrap": "^4.6.0",
-    "crypto-js": "^4.0.0",
     "jquerry": "0.0.1-security",
     "jquery": "^3.6.0",
     "net": "^1.0.2",

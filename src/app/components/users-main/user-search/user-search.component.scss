@@ -1,19 +1,24 @@
 .user-box {
     margin: 40px 20px;
+    overflow: auto;
 
-    .link-user {
-        margin: 20px;
-        padding: 20px 0;
-        display: flex;
-        justify-content: center;
-        border-radius: 5px;
-        background-color: rgb(255, 255, 255);
-        box-shadow: 1px 1px 5px rgb(236, 228, 228);
-        font-weight: bold;
-        cursor: pointer;
-    }
+    .row {
+        width: 65vw;
 
-    .link-user:hover {
-        background-color: rgb(228, 228, 228);
+        .link-user {
+            margin: 20px;
+            padding: 20px 0;
+            display: flex;
+            justify-content: center;
+            border-radius: 5px;
+            background-color: rgb(255, 255, 255);
+            box-shadow: 1px 1px 5px rgb(236, 228, 228);
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .link-user:hover {
+            background-color: rgb(228, 228, 228);
+        }
     }
 }

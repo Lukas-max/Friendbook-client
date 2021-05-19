@@ -3,12 +3,12 @@ import { NgForm } from '@angular/forms';
 import { MainFeedService } from 'src/app/services/mainFeed.service';
 import { CompressService } from 'src/app/services/compress.Service';
 import { Subscription } from 'rxjs';
-import { FeedModelDto } from 'src/app/model/feedModelDto';
+import { FeedModelDto } from 'src/app/model/feed/feedModelDto';
 import { SocketService } from 'src/app/services/socket.Service';
 import { IntersectionObserverService } from 'src/app/services/intersectionObserver.service';
 import { filter, switchMap } from 'rxjs/operators';
-import { Chunk } from 'src/app/model/chunk';
-import { ToastService } from 'src/app/utils/toast.service';
+import { Chunk } from 'src/app/model/data/chunk';
+import { ToastService } from 'src/app/services/toast.service';
 import { HttpEventType } from '@angular/common/http';
 
 @Component({

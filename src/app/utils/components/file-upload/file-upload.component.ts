@@ -4,7 +4,7 @@ import { HttpEventType } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CompressService } from 'src/app/services/compress.Service';
 import { Subscription } from 'rxjs';
-import { ToastService } from '../toast.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-file-upload',

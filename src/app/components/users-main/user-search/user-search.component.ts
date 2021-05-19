@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { UserResponseDto } from 'src/app/model/userResponseDto';
-import { ToastService } from 'src/app/utils/toast.service';
+import { UserResponseDto } from 'src/app/model/account/userResponseDto';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-user-search',

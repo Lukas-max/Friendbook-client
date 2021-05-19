@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { SocketService } from 'src/app/services/socket.Service';
-import { PublicChatMessage } from 'src/app/model/publicChatMessage';
+import { PublicChatMessage } from 'src/app/model/chat/publicChatMessage';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ChatService } from 'src/app/services/chat.service';
 import { IntersectionObserverService } from 'src/app/services/intersectionObserver.service';
 import { filter, switchMap } from 'rxjs/operators';
-import { Chunk } from 'src/app/model/chunk';
+import { Chunk } from 'src/app/model/data/chunk';
 import { Utils } from 'src/app/utils/utils';
-import { ToastService } from 'src/app/utils/toast.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-public-chat',

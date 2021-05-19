@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FileDataDto } from 'src/app/model/fileDataDto';
+import { FileDataDto } from 'src/app/model/files/fileDataDto';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { FileStorageService } from 'src/app/services/file-storage.service';
-import { ToastService } from '../toast.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-file-display',

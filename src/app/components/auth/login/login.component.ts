@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { NgForm } from '@angular/forms';
-import { LoginCredentials } from 'src/app/model/LoginCredentials';
+import { LoginCredentials } from 'src/app/model/account/LoginCredentials';
 import { SocketService } from 'src/app/services/socket.Service';
 
 @Component({

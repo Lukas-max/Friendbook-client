@@ -1,11 +1,11 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
-import { UserDto } from 'src/app/model/userDto';
+import { UserDto } from 'src/app/model/account/userDto';
 import { AccountService } from 'src/app/services/account.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PasswordMatchValidator } from 'src/app/services/passwordMatch.service';
-import { ToastService } from 'src/app/utils/toast.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-register',

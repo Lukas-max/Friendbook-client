@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SocketService } from 'src/app/services/socket.Service';
 import { UserService } from 'src/app/services/user.service';
-import { ConnectedUser } from 'src/app/model/connectedUser';
+import { ConnectedUser } from 'src/app/model/chat/connectedUser';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { PrivateChatMessage } from 'src/app/model/privateChatMessage';
-import { UserResponseDto } from 'src/app/model/userResponseDto';
+import { PrivateChatMessage } from 'src/app/model/chat/privateChatMessage';
+import { UserResponseDto } from 'src/app/model/account/userResponseDto';
 import { ChatService } from 'src/app/services/chat.service';
-import { UserData } from 'src/app/model/userData';
-import { ToastService } from 'src/app/utils/toast.service';
+import { UserData } from 'src/app/model/account/userData';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-online-users',

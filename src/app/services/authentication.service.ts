@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { LoginCredentials } from '../model/LoginCredentials';
+import { LoginCredentials } from '../model/account/LoginCredentials';
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -20,7 +21,7 @@ export class AuthenticationService {
     login(credentials: LoginCredentials): Observable<any> {
         const options = { observe: 'response' as const };
 
-        return this.http.post(`http://localhost:9010/app/user/login`, JSON.stringify(credentials), options)
+        return this.http.post(`${environment.backendUrl}/app/user/login`, JSON.stringify(credentials), options)
             .pipe(tap(res => {
                 this.storeResponseHeaderData(res);
             }));

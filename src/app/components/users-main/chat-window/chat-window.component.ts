@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
-import { PrivateChatMessage } from 'src/app/model/privateChatMessage';
+import { PrivateChatMessage } from 'src/app/model/chat/privateChatMessage';
 import { UserService } from 'src/app/services/user.service';
 import { SocketService } from 'src/app/services/socket.Service';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ChatService } from 'src/app/services/chat.service';
 import { Utils } from 'src/app/utils/utils';
-import { Chunk } from 'src/app/model/chunk';
-import { UserData } from 'src/app/model/userData';
-import { ToastService } from 'src/app/utils/toast.service';
+import { Chunk } from 'src/app/model/data/chunk';
+import { UserData } from 'src/app/model/account/userData';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-chat-window',

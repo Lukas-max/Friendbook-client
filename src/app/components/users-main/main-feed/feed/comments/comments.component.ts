@@ -1,15 +1,15 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
-import { FeedModelDto } from 'src/app/model/feedModelDto';
-import { FeedComment } from 'src/app/model/feedComment';
+import { FeedModelDto } from 'src/app/model/feed/feedModelDto';
+import { FeedComment } from 'src/app/model/feed/feedComment';
 import { MainFeedCommentService } from 'src/app/services/mainFeedComment.service';
-import { Chunk } from 'src/app/model/chunk';
+import { Chunk } from 'src/app/model/data/chunk';
 import { IntersectionObserverService } from 'src/app/services/intersectionObserver.service';
 import { filter, switchMap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { SocketService } from 'src/app/services/socket.Service';
-import { ToastService } from 'src/app/utils/toast.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-comments',

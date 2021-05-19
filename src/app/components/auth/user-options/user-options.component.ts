@@ -3,13 +3,13 @@ import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/fo
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { AccountService } from 'src/app/services/account.service';
-import { Credentials } from 'src/app/model/credentials';
+import { Credentials } from 'src/app/model/account/credentials';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { SocketService } from 'src/app/services/socket.Service';
 import { MailData } from 'src/app/model/mailData';
 import { PasswordMatchValidator } from 'src/app/services/passwordMatch.service';
-import { ToastService } from 'src/app/utils/toast.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-user-options',
