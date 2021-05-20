@@ -1,7 +1,7 @@
 <div class="overlay" (click)="onClose()"></div>
 <div class="register-modal">
 
-    <div class="form-box" *ngIf="!sendingMail; else sending">
+    <div class="form-box" *ngIf="!sendingMail && content">
         <div class="text-center mb-4 font-weight-bold" style="font-size: 22px;">REJESTRACJA</div>
         <form (ngSubmit)="onSubmit()" [formGroup]="form">
 
@@ -76,8 +76,28 @@
         </form>
     </div>
 
-</div>
+    <div *ngIf="!content && !sendingMail" class="content-text">
+        <div>
+            FriendBook jest projektem nie komercyjnym, należącym do jego twórcy.
+            Jest też projektem w tej chwili testowym i dostępnym dla wszystkich.
+            Konto jest darmowe a serwer miesięcznie opłacany przez właściciela.
+            Dlatego rejestrując się, zgadzasz się na to że twoje konto może zostać usunięte przez właściciela, a serwer
+            zniknąć z internetu.
+            Projekt istnieje na sieci w celu możliwości zapoznania sięz nim i zabawy.
+            Nie wrzucaj obelżywych treści i szanuj innych użytkowników.
+        </div>
+        <div class="buttons">
+            <div>
+                <input [(ngModel)]="checkboxFlag" type="checkbox"><span class="check">Zgoda</span>
+            </div>
+            <div>
+                <button [disabled]="!checkboxFlag" class="btn btn-primary" (click)="confirmContent()">OK</button>
+            </div>
+        </div>
+    </div>
 
-<ng-template #sending>
-    <p>Wysyłam meila</p>
-</ng-template>
+    <div *ngIf="sendingMail">
+        <p>Wysyłam meila</p>
+    </div>
+
+</div>

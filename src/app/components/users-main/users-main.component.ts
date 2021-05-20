@@ -14,10 +14,10 @@ export class UsersMainComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  logout() {
-    // if (!confirm('Chcesz się wylogować?')) return;
-
-    this.socketService._disconnect();
-    this.authenticationService.logout();
+  logout(): void {
+    if (confirm('Chcesz się wylogować?')) {
+      this.socketService._disconnect();
+      this.authenticationService.logout();
+    }
   }
 }

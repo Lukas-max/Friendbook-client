@@ -5,6 +5,7 @@ import { UserService } from 'src/app/services/user.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { UserResponseDto } from 'src/app/model/account/userResponseDto';
 import { ToastService } from 'src/app/services/toast.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-user-profile',
@@ -30,7 +31,7 @@ export class UserProfileComponent implements OnInit {
     this.init();
   }
 
-  init() {
+  init(): void {
     this.route.params.subscribe((param: Params) => {
       this.userUUID = param['uuid'];
       this.userUUID ? this.loadForeignUser() : this.loadLoggedUser();
@@ -38,14 +39,14 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  loadForeignUser() {
+  loadForeignUser(): void {
     this.userService.getUserByUUID(this.userUUID).subscribe(data => {
       this.user = data;
       this.isLoading = false;
     });
   }
 
-  loadLoggedUser() {
+  loadLoggedUser(): void {
     const uuid = this.authenticationService.getLoggedUserId();
     this.userUUID = uuid;
     this.userService.getUserByUUID(uuid).subscribe(data => {
@@ -54,19 +55,19 @@ export class UserProfileComponent implements OnInit {
     }, (error: any) => this.toast.onError(error.error.message));
   }
 
-  getFolders() {
+  getFolders(): void {
     this.fileStorageService.getFolders(this.userUUID).subscribe(data => {
       this.folders = data.map(path => {
-        return path.split('\\').reverse()[0];
+        return path.split(environment.folderNameSplitter).reverse()[0];
       });
     }, (error: any) => this.toast.onError(error.error.message));
   }
 
-  onFolderClick(folder: string) {
+  onFolderClick(folder: string): void {
     this.router.navigate(['/user', 'starter', 'folder', this.userUUID, folder]);
   }
 
-  createFolder() {
+  createFolder(): void {
     const folderName = window.prompt('Nazwa folderu: ');
     if (!folderName) return;
 
@@ -76,25 +77,25 @@ export class UserProfileComponent implements OnInit {
     }, (error: any) => this.toast.onError(error.error.message));
   }
 
-  deleteFolder(name: string) {
+  deleteFolder(name: string): void {
     if (confirm('Chcesz usunąć folder ' + name + ' wraz z całą jego zawartością?'))
       this.fileStorageService.deleteFolder(name).subscribe((data: boolean) => {
         this._reloadComponent();
       }, (error: any) => this.toast.onError(error.error.message));
   }
 
-  _investigateFolderName(folderName: string) {
+  _investigateFolderName(folderName: string): void {
     if (folderName.includes('/') || folderName.includes('\\')) {
       throw new Error('Nazwa katologu nie może zawierać znaku / ani znaku \\');
     }
   }
 
-  _reloadComponent() {
+  _reloadComponent(): void {
     this.router.navigate(['/user', 'starter', 'dummy'], { skipLocationChange: true }).then(() =>
       this.router.navigate(['/user', 'starter', 'user-profile', '']));
   }
 
-  _isLoggedUser() {
+  _isLoggedUser(): boolean {
     return this.authenticationService.isTheSameId(this.userUUID);
   }
 }

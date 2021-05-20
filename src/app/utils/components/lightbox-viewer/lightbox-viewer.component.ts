@@ -30,15 +30,15 @@ export class LightboxViewerComponent implements OnInit {
     });
   }
 
-  onClose() {
+  onClose(): void {
     this.closeLightbox.emit();
   }
 
-  onArrowLeft() {
+  onArrowLeft(): void {
     this.previousFile.emit();
   }
 
-  onArrowRight() {
+  onArrowRight(): void {
     this.nextFile.emit();
   }
 

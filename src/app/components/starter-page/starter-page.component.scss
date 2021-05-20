@@ -5,6 +5,7 @@
     background-image: url('../../../assets/images/starter-mateusz-dach-45.jpg');
     background-size: cover;
     background-position: 20% 40%;
+    box-shadow: 10px 10px 30px rgb(0, 0, 0);
 
     .starter-bg {
         position: absolute;
@@ -51,12 +52,99 @@
     }
 }
 
+
+.app-info {
+    padding: 20px 40px;
+    text-align: center;
+
+    .head-title {
+        margin: 20px 0 10px;
+        font-weight: bold;
+        font-size: 24px;
+    }
+
+    .info {
+        margin: 80px 40px;
+        text-align: justify;
+
+        .head-title {
+            .main-functions {
+                margin-left: 20px;
+            }
+        }
+
+        .info-group {
+            margin-bottom: 20px;
+            padding: 20px;
+            font-size: 19px;
+
+            border-radius: 5px;
+            background-color: rgb(255, 255, 255);
+            box-shadow: 1px 1px 5px rgb(207, 201, 201);
+
+            .adds {
+                margin-top: 5px;
+                margin-left: 60px;
+            }
+        }
+    }
+    
+    .icons {
+
+        i {
+            margin: 0 10px;
+        }
+
+        .devicon-java-plain-wordmark {
+            font-size: 120px;
+        }
+
+        .devicon-spring-plain-wordmark {
+            font-size: 110px;
+        }
+    
+        .devicon-typescript-plain {
+            font-size: 80px;
+        }
+
+        .devicon-angularjs-plain {
+            font-size: 95px;
+        }
+
+        .devicon-html5-plain-wordmark {
+            font-size: 100px;
+        }
+
+        .devicon-css3-plain-wordmark {
+            font-size: 100px;
+        }
+
+        .devicon-bootstrap-plain-wordmark {
+            font-size: 90px;
+        }
+
+        .devicon-postgresql-plain-wordmark {
+            font-size: 100px;
+        }
+
+        .devicon-npm-original-wordmark {
+            font-size: 100px;
+        }
+
+        .devicon-github-original-wordmark {
+            font-size: 95px;
+        }
+    }
+}
+
+
 .author {
-    margin: 30px 0;
+    padding: 50px 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     font-size: 20px;
+    box-shadow: 1px 1px 5px rgb(221, 210, 210);
 
     a {
         margin: 0 10px;
@@ -66,4 +154,3 @@
         margin: 0 3px;
     }
 }
-

@@ -58,7 +58,7 @@ export class FileUploadComponent implements OnInit, OnDestroy {
     });
   }
 
-  onUpload() {
+  onUpload(): void {
     if (!this.filesSelected && this.otherFilesAndCompressedImages.length === 0) return;
     this.uploadingFiles = true;
     if (this.imageFiles.length === 0)

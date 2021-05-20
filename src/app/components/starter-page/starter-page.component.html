@@ -1,3 +1,9 @@
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.11.0/devicon.min.css">
+</head>
+
+<app-register *ngIf="registerAttempt" (closeComponent)="closeRegisterWindow()"></app-register>
+
 <div class="starter-img">
     <div class="starter-bg">
         <div class="starter-page-box">
@@ -18,21 +24,131 @@
     </div>
 </div>
 
+<div class="app-info">
+    <div class="head-title">Projekt</div>
+    <div class="icons">
+        <i class="devicon-java-plain-wordmark"></i>
+        <i class="devicon-spring-plain-wordmark colored"></i>
+        <i class="devicon-typescript-plain colored"></i>
+        <i class="devicon-angularjs-plain colored"></i>
+        <i class="devicon-html5-plain-wordmark colored"></i>
+        <i class="devicon-css3-plain-wordmark colored"></i>
+        <i class="devicon-bootstrap-plain-wordmark colored"></i>
+        <i class="devicon-postgresql-plain-wordmark colored"></i>
+        <i class="devicon-npm-original-wordmark colored"></i>
+        <i class="devicon-github-original-wordmark colored"></i>
+    </div>
+
+    <div class="info">
+        <div class="head-title main-functions">Główne funkcje:</div>
+
+        <div class="info-group">
+            <div>Konto:</div>
+            <span>
+                - Autoryzacja i autentykacja użytkowników. (JSON Web Token) <br>
+                - Rejestracja użytkowników z weryfikacją przez konto Email. <br>
+                - Reset hasła z weryfikacją użytkownika przez konto Email. <br>
+                - Opcja zmiany hasła i konta email przez zalogowanych użytkowników. <br>
+                - Usuwanie konta. <br>
+            </span>
+        </div>
+
+        <div class="info-group">
+            <div>Magazyn plików i katalogów:</div>
+            <span>
+                - Magazynowanie plików w systemie katologów na serwerze. <br>
+                - Usuwanie plików. <br>
+                - Tworzenie i usuwanie folderów. <br>
+                - Dodawanie lub usuwanie zdjęcia profilowego. <br>
+                - Ograniczona ilość miejsca dla użytkowników na dysku. <br>
+                - Informowanie użytkowników o ilości dostępnego miejsca. <br>
+            </span>
+        </div>
+
+        <div class="info-group">
+            <div>Baza danych:</div>
+            <span>
+                - Magazynowanie informacji o użytkowniku, głównych postach, komentarzach, wiadomościach czatu
+                prywatnego, globalnego itp.. <br>
+                - Generowanie tablic przez sql w schema.sql <br>
+                - Połączenie z bazą danych przez EntityManager w Spring JPA. <br>
+                - Współpraca magazynu plików z bazą danych. <br>
+            </span>
+        </div>
+
+        <div class="info-group">
+            <div>Podgląd plików:</div>
+            <span>
+                - Wyświetlane plików w katalogach i głównych postach lub ich przeglądanie w lightboxie. <br>
+                - Własnoręcznie zaprojektowany lighbox do wyświetlania obrazów, filmów i innych plików. <br>
+                - Kompresja załadowywanych obrazów do łatwiejszego ich odtwarzania na stronie. <br>
+                - Wyświetlanie obrazów w pełnej jakości w lightboxie. <br>
+                - Kompresja zdjęcia profilowego. <br>
+            </span>
+        </div>
+
+        <div class="info-group">
+            <div>Główne okno postów:</div>
+            <span>
+                - Dodawanie postów przez zalogowanych użytkowników z tekstem i/lub plikami. <br>
+                - Usuwanie postów przez ich właścicieli. <br>
+                - Podgląd plików w postach na stronie głównej jak i w lighboxie. <br>
+                - Dodawanie komentarzy do postów. <br>
+                - Usuwanie komentarzy pod postami przez ich właścicieli. <br>
+                - Pliki dołączane do postów są załadowywane do oddzielnego katologu postów i nie wlicza się ich do
+                dostępnego miejsca dla użytkownika. <br>
+            </span>
+        </div>
+
+        <div class="info-group">
+            <div>Websocket/Stomp:</div>
+            <span>
+                - Używanie Stomp do komunikacji klient-serwer. <br>
+                - Podgląd zalogowanych i nie zalogowanych użytkowników. <br>
+                - Czat globalny między wszystkimi użytkownikami. <br>
+                - Czat prywatny między dwoma użytkownikami. (Wiadomości zakodowane dostępne tylko dla użytkowników)
+                <br>
+                - Wysyłanie informacji tylko do zalogowanych użytkowników o zmianach na stronie: <br>
+                <div class="adds">
+                    * aktualizacja dodanych postów przez innych użytkowników <br>
+                    * aktualizacja dodanych komentarzy <br>
+                    * aktualizacja wiadomości dodanych na czacie globalnym i prywatnym <br>
+                    * aktualizacja logujących się użytkowników na stronę do grupy użytkowników online <br>
+                </div>
+            </span>
+        </div>
+
+        <div class="info-group">
+            <div>Okno Online/Offline:</div>
+            <span>
+                - Podgląd zalogowanych użytkowników i użytkowników niedostępnych. <br>
+                - Otwarcie okna czatu prywatnego po kliknięciu użytkownika. <br>
+            </span>
+        </div>
+
+        <div class="info-group">
+            <div>Czat:</div>
+            <span>
+                - Czat globalny dla wszystkich użytkowników. <br>
+                - Okienko czatu dla rozmów prywatnych. (Wiadomości zakodowane dostępne tylko dla użytkowników) <br>
+                - Powiadomienie jeśli otrzymało się wiadomość od aktywnego użytkownika. <br>
+                - Powiadomienie jeśli otrzymało się wiadomość od użytkowników będąc nie zalogowanym. <br>
+            </span>
+        </div>
+    </div>
+</div>
+
 <div class="author">
     <p>Stworzone przez:</p>
     <p class="font-weight-bold">Łukasz Jankowski</p>
     <div>
         <a href="https://www.linkedin.com/in/%C5%82ukasz-jankowski-4579791b5/" target="_blank">
             <i class="fab fa-linkedin"></i>Linkedin</a>
-        <a href="https://github.com/Lukas-max/Friendbook-client" target="_blank">
-            <i class="fab fa-github"></i>GitHub - Frontend</a>
         <a href="https://github.com/Lukas-max/Friendbook-backend" target="_blank">
             <i class="fab fa-github"></i>GitHub - Backend</a>
+        <a href="https://github.com/Lukas-max/Friendbook-client" target="_blank">
+            <i class="fab fa-github"></i>GitHub - Frontend</a>
         <a href="https://www.youtube.com/channel/UC-htJ3PkR6xi1ff1E7Ns3Hw/videos?view_as=subscriber" target="_blank">
             <i class="fab fa-youtube"></i>YouTube</a>
     </div>
 </div>
-
-
-
-<app-register *ngIf="registerAttempt" (closeComponent)="closeRegisterWindow()"></app-register>

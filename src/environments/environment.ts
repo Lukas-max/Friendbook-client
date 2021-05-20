@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  backendUrl: `http://localhost:9010`
+  backendUrl: ``,
+  folderNameSplitter: '\\'
 };
 
 /*

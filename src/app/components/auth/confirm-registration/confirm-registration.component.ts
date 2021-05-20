@@ -22,7 +22,7 @@ export class ConfirmRegistrationComponent implements OnInit {
     this.sendToken();
   }
 
-  sendToken() {
+  sendToken(): void {
     const token = this.route.snapshot.queryParams['token'];
     this.accountService.sendVerificationToken(token).subscribe(() => {
       this.response = true;

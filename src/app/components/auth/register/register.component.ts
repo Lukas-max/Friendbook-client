@@ -17,6 +17,8 @@ export class RegisterComponent implements OnInit {
   form: FormGroup;
   sendingMail: boolean = false;
   mailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$';
+  checkboxFlag: boolean;
+  content: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -25,7 +27,16 @@ export class RegisterComponent implements OnInit {
     private toast: ToastService) { }
 
   ngOnInit(): void {
+    this.createListener();
     this.initForm();
+  }
+
+  createListener(): void {
+    window.addEventListener('keydown', (event: any) => {
+      if (event.code === 'Escape') {
+        this.closeComponent.emit();
+      }
+    });
   }
 
   initForm(): void {
@@ -38,6 +49,12 @@ export class RegisterComponent implements OnInit {
       password: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(60)]),
       confirmPassword: new FormControl('', [Validators.required, Validators.minLength(5)])
     }, { validator: this.passwordMatchValidator.matchPasswords('password', 'confirmPassword') });
+  }
+
+  confirmContent(): void {
+    if (this.checkboxFlag) {
+      this.content = true;
+    }
   }
 
   onSubmit(): void {

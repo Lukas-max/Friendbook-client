@@ -56,9 +56,9 @@ export class ProfileHeadComponent implements OnInit, OnDestroy {
     })
   }
 
-  deletePhoto() {
+  deletePhoto(): void {
     if (confirm('Chcesz usunąć zdjęcie profilowe?'))
-      return this.fileStorage.deleteProfilePhoto().subscribe(() => {
+      this.fileStorage.deleteProfilePhoto().subscribe(() => {
         this._reloadFolder();
       }, (error: any) => this.toast.onError(error.error.message));
   }

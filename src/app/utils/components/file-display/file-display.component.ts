@@ -43,25 +43,25 @@ export class FileDisplayComponent implements OnInit {
     this.selectedFile = this.fileData[this.index];
   }
 
-  closeLightbox() {
+  closeLightbox(): void {
     this.selectedFile = undefined;
   }
 
-  previous() {
+  previous(): void {
     if (this.index === 0) return;
 
     this.index--;
     this.selectedFile = this.fileData[this.index];
   }
 
-  next() {
+  next(): void {
     if (this.index === this.fileData.length - 1) return;
 
     this.index++;
     this.selectedFile = this.fileData[this.index];
   }
 
-  _isLoggedUser() {
+  _isLoggedUser(): boolean {
     return this.authenticationService.isTheSameId(this.userUUID);
   }
 }
