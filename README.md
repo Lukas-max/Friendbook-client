@@ -114,7 +114,7 @@ compressImage(file: File, width: number, quality: number, type: CompressType): v
         };
     }
 ```  
-We se here that the blob file and thus the sent file will vary if the image will be an IMAGE_ICON, or IMAGE for the lightbox.  
+We see here that the blob file and thus the sent file will vary if the image will be an IMAGE_ICON, or IMAGE for the lightbox.  
 After the compression we create a file from the blob and send it asynchronously using a Subject.  
 ```typescript
 _createBlob(canvas: HTMLCanvasElement, event: any, file: File, quality: number, type: CompressType): void {
