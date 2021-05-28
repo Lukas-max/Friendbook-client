@@ -88,4 +88,67 @@ Chat
 - Notification if a message is received by other user
 
 ## Endopoints and Angular
-FriendBook uses endpoints that are documented in the backend part of the app. For more info go [there](https://github.com/Lukas-max/Friendbook-backend).
+FriendBook uses endpoints that are documented in the backend part of the app. For more info go [there](https://github.com/Lukas-max/Friendbook-backend).  
+
+## Image compression
+The images a user uploads are compressed to lower quality. Ther are two kinds of compression. Compression for image icons on the page is always active and will compress the images to very low quality. For the images that are viewed full size in the lightbox the size of the compression varies. Images that are less than 350KB are not compressed anyhow.  
+As for the compression itself its client side in the browser, to unload the server, and it's done through the Canvas object.
+
+```typescript
+compressImage(file: File, width: number, quality: number, type: CompressType): void {
+        this.compressingFileSubject.next(true);
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event: any) => {
+            const img = new Image();
+            img.src = event.target.result;
+
+            img.onload = (event: any) => {
+                if (type === CompressType.IMAGE_ICON) {
+                    const canvas = this._defineCanvas(event, width);
+                    this._createBlob(canvas, event, file, quality, CompressType.IMAGE_ICON);
+                }
+
+                // etc..
+            };
+        };
+    }
+```  
+We see here that the blob file and thus the sent file will vary if the image will be an IMAGE_ICON, or IMAGE for the lightbox.  
+After the compression we create a file from the blob and send it asynchronously using a Subject.  
+```typescript
+_createBlob(canvas: HTMLCanvasElement, event: any, file: File, quality: number, type: CompressType): void {
+        const ctx = <CanvasRenderingContext2D>canvas.getContext('2d');
+        ctx.drawImage(event.target, 0, 0, canvas.width, canvas.height);
+        ctx.canvas.toBlob((blob: Blob) => {
+            const newFile: File = new File([blob], file.name, { lastModified: new Date().getTime(), type: blob.type });
+            type === CompressType.IMAGE_ICON ? this.compressedImageIconSubject.next(newFile) : this.compressedImageSubject.next(newFile);
+        }, 'image/jpeg', quality);
+    }
+```  
+
+## WebSocket
+For websocket connection we use stompjs and socketjs.
+```typescript
+connect(): void {
+        this.socketJs = new SockJS(...);
+        this.stomp = Stomp.over(this.socketJs);
+        this.stomp.debug = null;
+
+        this.stomp.connect({}, (frame) => {
+            this._onConnect();
+
+        }, err => {
+            this.toast.onError(err.error.message);
+            console.error(err);
+            setTimeout(() => this.connect(), 3000);
+        });
+    }
+ ```  
+ And _onConnect() we subscribe to different topics, like here: 
+ ```typescript
+ this.feedSubscription = this.stomp.subscribe(`/topic/feed`, (feed) => {
+            const body: FeedModelDto = JSON.parse(feed.body);
+            this.feedSubject.next(body);
+        });
+ ```
