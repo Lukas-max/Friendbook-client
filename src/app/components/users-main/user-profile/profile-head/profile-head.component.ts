@@ -7,6 +7,7 @@ import { CompressService } from 'src/app/services/compress.Service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/services/toast.service';
+import { CompressType } from 'src/app/model/files/compressType';
 
 @Component({
   selector: 'app-profile-head',
@@ -17,7 +18,7 @@ export class ProfileHeadComponent implements OnInit, OnDestroy {
   @Input() user: UserResponseDto;
   lowQualityUrl: string;
   firstLetterOfName: string;
-  compressedSubscription: Subscription;
+  compressedImageIconSubscription: Subscription;
   photo: File;
 
   constructor(
@@ -31,7 +32,7 @@ export class ProfileHeadComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.fileStorage.getProfilePhotoLowQuality(this.user.userUUID).subscribe((data: BytePackage) => this.lowQualityUrl = data.bytes,
       (error: any) => this.toast.onError(error.error.message));
-    this.compressedSubscription = this.compressService.compressedImageSubject.subscribe((file: File) => this.sendPhoto(file),
+    this.compressedImageIconSubscription = this.compressService.compressedImageIconSubject.subscribe((file: File) => this.sendPhoto(file),
       (error: any) => this.toast.onError(error.error.message));
     this.firstLetterOfName = this._getFirstLetter();
   }
@@ -43,7 +44,7 @@ export class ProfileHeadComponent implements OnInit, OnDestroy {
   changeProfilePhoto(): void {
     if (!this.photo)
       return;
-    this.compressService.compressImage(this.photo, 300, 0.5);
+    this.compressService.compressImage(this.photo, 300, 0.5, CompressType.IMAGE_ICON);
   }
 
   sendPhoto(file: File): void {
@@ -77,6 +78,6 @@ export class ProfileHeadComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.compressedSubscription.unsubscribe();
+    this.compressedImageIconSubscription.unsubscribe();
   }
 }

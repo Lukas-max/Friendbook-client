@@ -4,7 +4,7 @@
     </label>
 
     <button class="btn btn-outline-success" (click)="onUpload()"
-        [disabled]="!filesSelected || compressingFiles || uploadingFiles">
+        [disabled]="!filesSelected || compressingFiles || uploadingFiles || uploadBlock">
         Załaduj pliki
     </button>
 

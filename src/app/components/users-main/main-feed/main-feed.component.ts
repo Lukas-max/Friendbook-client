@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy, ElementRef, AfterViewInit, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ElementRef, AfterViewInit, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MainFeedService } from 'src/app/services/mainFeed.service';
 import { CompressService } from 'src/app/services/compress.Service';
@@ -10,6 +10,7 @@ import { filter, switchMap } from 'rxjs/operators';
 import { Chunk } from 'src/app/model/data/chunk';
 import { ToastService } from 'src/app/services/toast.service';
 import { HttpEventType } from '@angular/common/http';
+import { CompressType } from 'src/app/model/files/compressType';
 
 @Component({
   selector: 'app-main-feed',
@@ -20,13 +21,13 @@ export class MainFeedComponent implements AfterViewInit, OnDestroy {
   @ViewChild('feed') form: NgForm;
   @ViewChild('filesInput') filesInput: ElementRef;
   @ViewChild('ob', { read: ElementRef }) ob: ElementRef;
-  compressingFiles: boolean = false;
   filesSelected: FileList;
   imageFiles: File[] = [];
-  otherFilesAndCompressedImages: File[] = [];
+  otherFilesPlusCompressedImageIcons: File[] = [];
   feedData: FeedModelDto[] = [];
   // subscriptions to Subject's and IntersectorObserver:
   compressingFileSubscription: Subscription;
+  compressedImageIconSubscription: Subscription;
   compressedImageSubscription: Subscription;
   feedSocketSubscription: Subscription;
   deleteFeedSocketSubscription: Subscription;
@@ -35,6 +36,10 @@ export class MainFeedComponent implements AfterViewInit, OnDestroy {
   offset = 0;
   isLoading = true;
   // file upload flags and progress tracking:
+  compressingFiles: boolean = false;
+  uploadBlock = true;
+  imagesToCompress = 0;
+  imagesCompressed = 0;
   uploadingFiles = false;
   fileProgress = 0;
 
@@ -43,7 +48,8 @@ export class MainFeedComponent implements AfterViewInit, OnDestroy {
     private compressService: CompressService,
     private socketService: SocketService,
     private intersector: IntersectionObserverService,
-    private toast: ToastService) { }
+    private toast: ToastService,
+    private viewRef: ChangeDetectorRef) { }
 
 
   ngAfterViewInit(): void {
@@ -51,11 +57,29 @@ export class MainFeedComponent implements AfterViewInit, OnDestroy {
   }
 
   initializeMainFeed() {
-    this.compressingFileSubscription = this.compressService.compressingFileSubject.subscribe((flag: boolean) => this.compressingFiles = flag);
-    this.compressedImageSubscription = this.compressService.compressedImageSubject.subscribe((file: File) => this.otherFilesAndCompressedImages.push(file));
+    this.subscribeToImageIconCompressor();
+    this.subscribeToImageCompressor();
     this.subscribeIntersectorLoader();
     this.subscribeFeedSubject();
     this.subscribeDeleteFeedSubject();
+  }
+
+  subscribeToImageIconCompressor(): void {
+    this.compressedImageIconSubscription = this.compressService.compressedImageIconSubject.subscribe((file: File) => {
+      this.otherFilesPlusCompressedImageIcons.push(file);
+      this.imagesCompressed++;
+      this.isCompressing();
+    },
+      (error: any) => this.toast.onError(error.error.message));
+  }
+
+  subscribeToImageCompressor(): void {
+    this.compressedImageSubscription = this.compressService.compressedImageSubject.subscribe((file: File) => {
+      this.imageFiles.push(file);
+      this.imagesCompressed++;
+      this.isCompressing();
+    },
+      (error: any) => this.toast.onError(error.error.message))
   }
 
   subscribeIntersectorLoader() {
@@ -85,30 +109,72 @@ export class MainFeedComponent implements AfterViewInit, OnDestroy {
   }
 
   selectFiles(event: any): void {
-    this.otherFilesAndCompressedImages = [];
+    this.otherFilesPlusCompressedImageIcons = [];
     this.imageFiles = [];
     this.filesSelected = event.target.files;
 
+    this.checkFileVolume();
     Array.from(this.filesSelected).forEach(file => {
       const fileType = file.type.split('/')[0];
       if (fileType === 'image') {
-        this.compressService.compressImage(file, 250, 0.5);
-        this.imageFiles.push(file);
+        this.compressingFiles = true;
+        this.compressService.compressImage(file, 250, 0.5, CompressType.IMAGE_ICON);
+        this._directTheImageCompression(file);
       } else {
-        this.otherFilesAndCompressedImages.push(file);
+        this.otherFilesPlusCompressedImageIcons.push(file);
       }
     });
+  }
+
+  /**
+   * If the file volume is to big inform the user and stop compression and upload.
+   */
+  checkFileVolume(): void {
+    let vol = 0;
+    Array.from(this.filesSelected).forEach((file: File) => {
+      vol = vol + file.size;
+    });
+
+    if (vol > 64_000_000) {
+      this.toast.onError('Nie możesz wysłać tyle MB na raz.')
+      throw new Error("Nie możesz wysłać tyle MB na raz.");
+    }
+
+    this.uploadBlock = false;
+  }
+
+  /**
+   * 
+   * If the volume is less than 350KB, dont compress. Send only one file to the server. If the volume is larger
+   */
+  _directTheImageCompression(file: File): void {
+    if (file.size < 350_000) {
+      this.imageFiles.push(file);
+      this.imagesToCompress++;
+    }
+    else if (file.size < 800_000) {
+      this.compressService.compressImage(file, 0, 0.7, CompressType.IMAGE);
+      this.imagesToCompress = this.imagesToCompress + 2;
+    }
+    else if (file.size < 1_800_000) {
+      this.compressService.compressImage(file, 0, 0.5, CompressType.IMAGE);
+      this.imagesToCompress = this.imagesToCompress + 2;
+    }
+    else {
+      this.compressService.compressImage(file, 0, 0.3, CompressType.IMAGE);
+      this.imagesToCompress = this.imagesToCompress + 2;
+    }
   }
 
   submit(): void {
     const text = this.form.value['nowy-wpis'];
     if (!text) return;
 
-    if (this.otherFilesAndCompressedImages.length === 0 && this.imageFiles.length === 0)
+    if (this.otherFilesPlusCompressedImageIcons.length === 0 && this.imageFiles.length === 0)
       this._uploadEmptyText(text);
-    else if (this.otherFilesAndCompressedImages.length > 0 && this.imageFiles.length === 0)
+    else if (this.otherFilesPlusCompressedImageIcons.length > 0 && this.imageFiles.length === 0)
       this._uploadFiles(text);
-    else if (this.otherFilesAndCompressedImages.length > 0 && this.imageFiles.length > 0)
+    else if (this.otherFilesPlusCompressedImageIcons.length > 0 && this.imageFiles.length > 0)
       this._uploadFilesWithCompressedImgs(text);
   }
 
@@ -121,7 +187,7 @@ export class MainFeedComponent implements AfterViewInit, OnDestroy {
   _uploadFiles(text: string): void {
     this.uploadingFiles = true;
     const form = new FormData();
-    this.otherFilesAndCompressedImages.forEach(file => form.append('files', file));
+    this.otherFilesPlusCompressedImageIcons.forEach(file => form.append('files', file));
     this.mainFeedService.postFeedWithFiles(form, text).subscribe((event: any) => {
       this.uploading(event);
     }, (error: any) => this.toast.onError(error.error.message));
@@ -130,7 +196,7 @@ export class MainFeedComponent implements AfterViewInit, OnDestroy {
   _uploadFilesWithCompressedImgs(text: string): void {
     this.uploadingFiles = true;
     const form = new FormData();
-    this.otherFilesAndCompressedImages.forEach(file => form.append('files', file));
+    this.otherFilesPlusCompressedImageIcons.forEach(file => form.append('files', file));
     this.imageFiles.forEach(file => form.append('images', file));
     this.mainFeedService.postWithFilesPlusCompressed(form, text).subscribe((event: any) => {
       this.uploading(event);
@@ -149,10 +215,19 @@ export class MainFeedComponent implements AfterViewInit, OnDestroy {
     };
   }
 
+  isCompressing(): void {
+    this.compressingFiles = this.imagesToCompress !== this.imagesCompressed;
+
+    if (this.compressService) {
+      this.viewRef.detectChanges();
+    }
+  }
+
   ngOnDestroy(): void {
+    this.compressedImageIconSubscription.unsubscribe();
     this.compressedImageSubscription.unsubscribe();
-    this.compressingFileSubscription.unsubscribe();
     this.feedSocketSubscription.unsubscribe();
     this.intersectorSubscription.unsubscribe();
+    this.deleteFeedSocketSubscription.unsubscribe();
   }
 }

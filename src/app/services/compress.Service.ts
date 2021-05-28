@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { CompressType } from '../model/files/compressType';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CompressService {
     compressingFileSubject: Subject<boolean> = new Subject<boolean>();
+    compressedImageIconSubject: Subject<File> = new Subject<File>();
     compressedImageSubject: Subject<File> = new Subject<File>();
 
-
-    compressImage(file: File, width: number, quality: number): void {
+    compressImage(file: File, width: number, quality: number, type: CompressType): void {
         this.compressingFileSubject.next(true);
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -18,9 +19,15 @@ export class CompressService {
             img.src = event.target.result;
 
             img.onload = (event: any) => {
-                const canvas = this._defineCanvas(event, width);
-                this._createBlob(canvas, event, file, quality);
-                this.compressingFileSubject.next(false);
+                if (type === CompressType.IMAGE_ICON) {
+                    const canvas = this._defineCanvas(event, width);
+                    this._createBlob(canvas, event, file, quality, CompressType.IMAGE_ICON);
+                }
+
+                if (type === CompressType.IMAGE) {
+                    const canvas = this._defineCanvasNoSizeRefactor(event);
+                    this._createBlob(canvas, event, file, quality, CompressType.IMAGE);
+                }
             };
         };
     }
@@ -34,12 +41,19 @@ export class CompressService {
         return canvas;
     }
 
-    _createBlob(canvas: HTMLCanvasElement, event: any, file: File, quality: number): void {
+    _defineCanvasNoSizeRefactor(event: any): HTMLCanvasElement {
+        const canvas = document.createElement('canvas');
+        canvas.width = event.target.width;
+        canvas.height = event.target.height;
+        return canvas;
+    }
+
+    _createBlob(canvas: HTMLCanvasElement, event: any, file: File, quality: number, type: CompressType): void {
         const ctx = <CanvasRenderingContext2D>canvas.getContext('2d');
         ctx.drawImage(event.target, 0, 0, canvas.width, canvas.height);
         ctx.canvas.toBlob((blob: Blob) => {
             const newFile: File = new File([blob], file.name, { lastModified: new Date().getTime(), type: blob.type });
-            this.compressedImageSubject.next(newFile);
+            type === CompressType.IMAGE_ICON ? this.compressedImageIconSubject.next(newFile) : this.compressedImageSubject.next(newFile);
         }, 'image/jpeg', quality);
     }
 
