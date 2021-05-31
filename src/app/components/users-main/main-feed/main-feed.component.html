@@ -13,8 +13,7 @@
                 </label>
             </div>
 
-            <button class="btn btn-primary"
-                [disabled]="!feed.valid || compressingFiles || uploadingFiles || uploadBlock">
+            <button class="btn btn-primary" [disabled]="!feed.valid || compressingFiles || uploadingFiles">
                 Wyślij
             </button>
         </form>

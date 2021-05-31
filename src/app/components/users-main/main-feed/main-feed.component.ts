@@ -37,7 +37,6 @@ export class MainFeedComponent implements AfterViewInit, OnDestroy {
   isLoading = true;
   // file upload flags and progress tracking:
   compressingFiles: boolean = false;
-  uploadBlock = true;
   imagesToCompress = 0;
   imagesCompressed = 0;
   uploadingFiles = false;
@@ -139,8 +138,6 @@ export class MainFeedComponent implements AfterViewInit, OnDestroy {
       this.toast.onError('Nie możesz wysłać tyle MB na raz.')
       throw new Error("Nie możesz wysłać tyle MB na raz.");
     }
-
-    this.uploadBlock = false;
   }
 
   /**

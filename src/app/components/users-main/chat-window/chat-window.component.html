@@ -17,7 +17,7 @@
             <div *ngFor="let chat of chatMessages">
                 <span class="username">{{ chat.senderName }} </span>
                 <span class="time"> ({{ chat.timestamp | time}})</span> <br>
-                <span> {{ chat.content }}</span>
+                <span [innerHtml]="chat.content | linkify"></span>
             </div>
             <span #scrollSpan></span>
         </div>

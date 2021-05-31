@@ -11,7 +11,7 @@
     <button *ngIf="userUUID === comment.userUUID" (click)="deleteComment(i)"
         class="delete-button btn btn-outline-dark">Usuń</button>
     <br>
-    <span> {{ comment.content }} </span>
+    <span [innerHtml]="comment.content | linkify"></span>
 </div>
 <div *ngIf="commentsArray.length === 0">Brak komentarzy</div>
 
