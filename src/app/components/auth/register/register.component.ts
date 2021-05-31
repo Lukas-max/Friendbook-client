@@ -75,6 +75,7 @@ export class RegisterComponent implements OnInit {
     this.accountService.register(userDto).subscribe(() => {
       this.form.reset();
       this.onClose();
+      this.toast.inform('Wysłano link aktywacyjny na twój email');
     }, (error: any) => {
       this.toast.onError(error.error.message);
     });

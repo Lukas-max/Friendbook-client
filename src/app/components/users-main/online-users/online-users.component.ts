@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { SocketService } from 'src/app/services/socket.Service';
 import { UserService } from 'src/app/services/user.service';
 import { ConnectedUser } from 'src/app/model/chat/connectedUser';
@@ -23,6 +23,7 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
   pendingMessegesFromLogoutUsers = new Set();
   connectionSubscription: Subscription;
   privateSubscription: Subscription;
+  createdAccountSubscription: Subscription;
   deletedAccountSubscription: Subscription;
   chosenUserUUID: string;
 
@@ -31,14 +32,16 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private authenticationService: AuthenticationService,
     private chatService: ChatService,
-    private toast: ToastService) { }
+    private toast: ToastService,
+    private viewChange: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.getConnectedUsers();
     this.getUsers();
     this.getPending();
     this.getNotificationConnection();
-    this.getDeletedAccount();
+    this.subscribeToDeletedUserTopic();
+    this.subscribeToCreatedUserTopic();
   }
 
   /**
@@ -56,6 +59,25 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * We get the UserData of all users registered on the server.
+   */
+  getUsers(): void {
+    this.userService.getActiveUsers().subscribe((users: UserResponseDto[]) => {
+      this.users = users;
+    }, (error: any) => this.toast.onError(error.error.message));
+  }
+
+  /**
+   * Will check if there are pending messages from other users.
+   * It calls setPendingMessages(pendingMessageUser: UserData[]).
+   */
+  getPending(): void {
+    this.chatService.getUserData().subscribe((data: UserData[]) => {
+      this.pendingMessages = data;
+    }, (error: any) => this.toast.onError(error.error.message));
+  }
+
+  /**
    * Here we fetch every message send by an other user on the private user stomp channel subscription. But only for that to set the messagePending field of that user to true.
    * That will change the view. If we chat with the an other user and a message comes from him we return; the method.
    */
@@ -69,15 +91,6 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * We get the UserData of all users registered on the server.
-   */
-  getUsers(): void {
-    this.userService.getAllUsers().subscribe((users: UserResponseDto[]) => {
-      this.users = users;
-    }, (error: any) => this.toast.onError(error.error.message));
-  }
-
-  /**
    * We set the offlineUsers array with all the registered users then we remove from that array all the connectedUsers.
    */
   populateOfflineUsers(): void {
@@ -86,40 +99,15 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
     } else {
       this.offlineUsers = this.users.slice();
       this.connectedUsers.forEach((user: ConnectedUser) => {
-        this.removeOnlineUser(user);
+        this.removeOnlineUserFromOfflineArray(user);
       });
     }
   }
 
-  removeOnlineUser(connectedUser: ConnectedUser): void {
+  removeOnlineUserFromOfflineArray(connectedUser: ConnectedUser): void {
     const index = this.offlineUsers.findIndex((usr) => usr.userUUID === connectedUser.userUUID);
 
     this.offlineUsers.splice(index, 1);
-  }
-
-
-  /**
-   * Subscribes to websocket subject. Then when a user deletes his account we get by STOMP his data in a UserResponseDto. After that we delete this user from the
-   * users array, so the he wont repopulate the offlineUsers array. And we remove him from connectedUsers array so he will be erased from Online users view.
-   */
-  getDeletedAccount(): void {
-    this.deletedAccountSubscription = this.socketService.deletedAccountSubject.subscribe((userResponse: UserResponseDto) => {
-      let index = this.users.findIndex((user) => user.userUUID === userResponse.userUUID);
-      this.users.splice(index, 1);
-
-      index = this.connectedUsers.findIndex((user: ConnectedUser) => user.userUUID === userResponse.userUUID);
-      this.connectedUsers.splice(index, 1);
-    }, (error: any) => this.toast.onError(error.error.message));
-  }
-
-  /**
-   * Will check if there are pending messages from other users.
-   * It calls setPendingMessages(pendingMessageUser: UserData[]).
-   */
-  getPending(): void {
-    this.chatService.getUserData().subscribe((data: UserData[]) => {
-      this.pendingMessages = data;
-    }, (error: any) => this.toast.onError(error.error.message));
   }
 
   /**
@@ -147,6 +135,29 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Subscribes to websocket subject. Then when a user deletes his account we get by STOMP his data in a UserResponseDto. After that we delete this user from the
+   * users array, so the he wont repopulate the offlineUsers array. And we remove him from connectedUsers array so he will be erased from Online users view.
+   */
+  subscribeToDeletedUserTopic(): void {
+    this.deletedAccountSubscription = this.socketService.deletedAccountSubject.subscribe((userResponse: UserResponseDto) => {
+      let index = this.users.findIndex((user) => user.userUUID === userResponse.userUUID);
+      this.users.splice(index, 1);
+
+      index = this.connectedUsers.findIndex((user: ConnectedUser) => user.userUUID === userResponse.userUUID);
+      this.connectedUsers.splice(index, 1);
+    }, (error: any) => this.toast.onError(error.error.message));
+  }
+
+  /**
+   * Each time a new user registers it will 
+   * - download new user data
+   */
+  subscribeToCreatedUserTopic(): void {
+    this.createdAccountSubscription = this.socketService.createdAccountSubject.subscribe(() => {
+      this.getUsers();
+    });
+  };
 
   /**
    * 
@@ -184,6 +195,7 @@ export class OnlineUsersComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.connectionSubscription.unsubscribe();
     this.privateSubscription.unsubscribe();
+    this.createdAccountSubscription.unsubscribe();
     this.deletedAccountSubscription.unsubscribe();
   }
 }

@@ -31,6 +31,8 @@ export class SocketService implements OnDestroy {
     publicNotificationSubject: Subject<PublicChatMessage> = new Subject<PublicChatMessage>();
     privateSubscription: Subscription;
     privateNotificationSubject: Subject<PrivateChatMessage> = new Subject<PrivateChatMessage>();
+    createdAccountSubscription: Subscription;
+    createdAccountSubject: Subject<void> = new Subject<void>();
     deletedAccountSubscription: Subscription;
     deletedAccountSubject: Subject<UserResponseDto> = new Subject<UserResponseDto>();
 
@@ -86,6 +88,10 @@ export class SocketService implements OnDestroy {
         this.privateSubscription = this.stomp.subscribe(`/topic/private.` + uuid, (chat) => {
             const body: PrivateChatMessage = JSON.parse(chat.body);
             this.privateNotificationSubject.next(body);
+        });
+
+        this.createdAccountSubscription = this.stomp.subscribe(`/topic/created-user`, () => {
+            this.createdAccountSubject.next();
         });
 
         this.deletedAccountSubscription = this.stomp.subscribe(`/topic/deleted-user`, (data) => {
@@ -155,6 +161,7 @@ export class SocketService implements OnDestroy {
         this.commentFeedSubscription.unsubscribe();
         this.publicSubscription.unsubscribe();
         this.privateSubscription.unsubscribe();
+        this.createdAccountSubscription.unsubscribe();
         this.deletedAccountSubscription.unsubscribe();
     }
 

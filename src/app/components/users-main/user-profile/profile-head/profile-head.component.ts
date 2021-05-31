@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, NgZone } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, NgZone, AfterViewInit, OnChanges } from '@angular/core';
 import { FileStorageService } from 'src/app/services/file-storage.service';
 import { UserResponseDto } from 'src/app/model/account/userResponseDto';
 import { BytePackage } from 'src/app/model/data/bytePackage';
@@ -14,7 +14,7 @@ import { CompressType } from 'src/app/model/files/compressType';
   templateUrl: './profile-head.component.html',
   styleUrls: ['./profile-head.component.scss']
 })
-export class ProfileHeadComponent implements OnInit, OnDestroy {
+export class ProfileHeadComponent implements OnInit, OnChanges, OnDestroy {
   @Input() user: UserResponseDto;
   lowQualityUrl: string;
   firstLetterOfName: string;
@@ -30,11 +30,22 @@ export class ProfileHeadComponent implements OnInit, OnDestroy {
     private toast: ToastService) { }
 
   ngOnInit(): void {
+    this.subscribeToImageIconCompressor();
+    this.firstLetterOfName = this._getFirstLetter();
+  }
+
+  ngOnChanges(): void {
+    this.loadProfilePhoto();
+  }
+
+  loadProfilePhoto(): void {
     this.fileStorage.getProfilePhotoLowQuality(this.user.userUUID).subscribe((data: BytePackage) => this.lowQualityUrl = data.bytes,
       (error: any) => this.toast.onError(error.error.message));
+  }
+
+  subscribeToImageIconCompressor(): void {
     this.compressedImageIconSubscription = this.compressService.compressedImageIconSubject.subscribe((file: File) => this.sendPhoto(file),
       (error: any) => this.toast.onError(error.error.message));
-    this.firstLetterOfName = this._getFirstLetter();
   }
 
   selectFile(event: any): void {

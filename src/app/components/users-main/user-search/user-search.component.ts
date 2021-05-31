@@ -20,7 +20,7 @@ export class UserSearchComponent implements OnInit {
 
   ngOnInit(): void {
     const uuid = this.authenticationService.getLoggedUserId();
-    this.userService.getAllUsers().subscribe(res => {
+    this.userService.getActiveUsers().subscribe(res => {
       this.users = res.filter((user: UserResponseDto) => user.userUUID !== uuid);
       this.isLoading = false;
     }, (error: any) => this.toast.onError(error.error.message));
