@@ -12,9 +12,10 @@ Project made by Łukasz Jankowski.
 - Angular-CLI: 11.2.4
 - Bootstrap: 4.6.0
 - Ngx-toastr: 13.2.1
+- Ngx-linkifyjs 1.3.0
 - StompJS: 2.3.3
 - Net: 1.0.2
-- Angular Matarial progress bar 
+- Angular Matarial progress bar
 - HTML, SCSS
 - Font Awesome
 - Visual Studio Code
