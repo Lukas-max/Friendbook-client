@@ -39,6 +39,8 @@ import { LightboxViewerComponent } from './utils/components/lightbox-viewer/ligh
 import { FileDisplayComponent } from './utils/components/file-display/file-display.component';
 import { SpinnerComponent } from './utils/components/spinner/spinner.component';
 import { AuthorizationInterceptor } from './utils/interceptors/authorization.interceptor';
+import { MatLinkPreviewModule } from '@angular-material-extensions/link-preview';
+import { NgxLinkifyjsModule } from 'ngx-linkifyjs';
 
 
 const routes: Routes = [
@@ -100,6 +102,8 @@ const routes: Routes = [
     NgbPaginationModule,
     BrowserAnimationsModule,
     MatProgressBarModule,
+    NgxLinkifyjsModule.forRoot(),
+    MatLinkPreviewModule.forRoot(),
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,
