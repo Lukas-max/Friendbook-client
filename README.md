@@ -16,6 +16,7 @@ Project made by Łukasz Jankowski.
 - StompJS: 2.3.3
 - Net: 1.0.2
 - Angular Matarial progress bar
+- YouTube Player
 - HTML, SCSS
 - Font Awesome
 - Visual Studio Code
