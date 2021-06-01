@@ -41,7 +41,7 @@ import { SpinnerComponent } from './utils/components/spinner/spinner.component';
 import { AuthorizationInterceptor } from './utils/interceptors/authorization.interceptor';
 import { MatLinkPreviewModule } from '@angular-material-extensions/link-preview';
 import { NgxLinkifyjsModule } from 'ngx-linkifyjs';
-
+import { YouTubePlayerModule } from "@angular/youtube-player";
 
 const routes: Routes = [
   {
@@ -102,6 +102,7 @@ const routes: Routes = [
     NgbPaginationModule,
     BrowserAnimationsModule,
     MatProgressBarModule,
+    YouTubePlayerModule,
     NgxLinkifyjsModule.forRoot(),
     MatLinkPreviewModule.forRoot(),
     ToastrModule.forRoot({
