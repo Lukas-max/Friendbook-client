@@ -1,0 +1,5 @@
+<span [innerHtml]="content | linkify"></span>
+<div>
+    <youtube-player *ngFor="let link of ytLinks" [videoId]="link" [height]="250" [width]="250">
+    </youtube-player>
+</div>

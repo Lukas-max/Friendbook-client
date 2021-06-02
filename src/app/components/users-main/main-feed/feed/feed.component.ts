@@ -4,6 +4,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { MainFeedService } from 'src/app/services/mainFeed.service';
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/services/toast.service';
+import { YouTubeLinkService } from 'src/app/services/youTubeLink.service';
 
 @Component({
   selector: 'app-feed',
@@ -21,12 +22,15 @@ export class FeedComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private mainFeedService: MainFeedService,
     private router: Router,
-    private toast: ToastService) { }
+    private toast: ToastService,
+    private ytLinkService: YouTubeLinkService) { }
 
   ngOnInit(): void {
     this.userUUIDEncoded = btoa(this.feed.userUUID);
-    this.youTubeLinkSearch(0);
-    this.youTubeFrameSearch(0);
+    // this.youTubeLinkSearch(0);
+    // this.youTubeFrameSearch(0);
+    this.ytLinkService.youTubeLinkSearch(this.ytLinks, this.feed.text, 0);
+    this.ytLinkService.youTubeFrameSearch(this.ytLinks, this.feed.text, 0);
   }
 
   deleteFeed(): void {

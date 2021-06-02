@@ -39,9 +39,10 @@ import { LightboxViewerComponent } from './utils/components/lightbox-viewer/ligh
 import { FileDisplayComponent } from './utils/components/file-display/file-display.component';
 import { SpinnerComponent } from './utils/components/spinner/spinner.component';
 import { AuthorizationInterceptor } from './utils/interceptors/authorization.interceptor';
-import { MatLinkPreviewModule } from '@angular-material-extensions/link-preview';
 import { NgxLinkifyjsModule } from 'ngx-linkifyjs';
 import { YouTubePlayerModule } from "@angular/youtube-player";
+import { PublicChatCommentComponent } from './components/users-main/public-chat/public-chat-comment/public-chat-comment.component';
+import { PrivateChatCommentComponent } from './components/users-main/chat-window/private-chat-comment/private-chat-comment.component';
 
 const routes: Routes = [
   {
@@ -91,7 +92,9 @@ const routes: Routes = [
     UserOptionsComponent,
     SpinnerComponent,
     FooterComponent,
-    TimePipe
+    TimePipe,
+    PublicChatCommentComponent,
+    PrivateChatCommentComponent
   ],
   imports: [
     BrowserModule,
@@ -104,7 +107,6 @@ const routes: Routes = [
     MatProgressBarModule,
     YouTubePlayerModule,
     NgxLinkifyjsModule.forRoot(),
-    MatLinkPreviewModule.forRoot(),
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,

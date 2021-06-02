@@ -78,6 +78,10 @@ export class PublicChatComponent implements OnInit, AfterViewInit, AfterViewChec
     this.message = '';
   }
 
+  chatBallonClass(uuid: string): boolean {
+    return this.authenticationService.isTheSameId(uuid);
+  }
+
   ngOnDestroy(): void {
     this.publicSubscription.unsubscribe();
   }
